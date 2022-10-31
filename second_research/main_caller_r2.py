@@ -13,7 +13,6 @@ from sklearn.model_selection import cross_val_score
 def select_best_model(X_train, y_train)->tuple:
     """Given X and y (dfs), returning  a 2-sized tuple (model,score) where model is the model name and score is an accuracy score,
     out of a dictionary models_to_scores """
-    print("here")
     models_to_scores = get_model_names_to_model_accuracy_scores_dict(X_train,y_train)
     #selecting the model with the highest score:
     tmp = None
@@ -116,6 +115,8 @@ for y_name in y_names:
     X_train, X_test,y_train, y_test = train_test_split(X_specific, y, test_size=0.2,random_state = 0) #rs is seed
     # split ceated successfuly 31.10 (82 train/21 test/103 total (I think))
     # Step 2: select classification model with k fold cross validation  
+    
+    print("continue to debug from here")
     selected_model = select_best_model(X_train,y_train ) # selecting best classification model with cross validation. using 80% of data
     # one shot preditciton:
     selected_model.fit(X_train,y_train)
