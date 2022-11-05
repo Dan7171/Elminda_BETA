@@ -1,5 +1,4 @@
 import numeric_df_initializer
-import models_runner_r2
 import numpy as np
 import pandas as pd
 import sklearn
@@ -9,38 +8,86 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import metrics
 from sklearn.model_selection import cross_val_score
- 
+from sklearn.feature_selection import SelectKBest, f_classif, f_regression
+import warnings
+warnings.simplefilter(action='ignore')
+
+
 def select_best_model(X_train, y_train)->tuple:
     """Given X and y (dfs), returning  a 2-sized tuple (model,score) where model is the model name and score is an accuracy score,
     out of a dictionary models_to_scores """
     models_to_scores = get_model_names_to_model_accuracy_scores_dict(X_train,y_train)
     #selecting the model with the highest score:
-    tmp = None
+    tmp_score = -1 #tmp_best_score
     for model in models_to_scores:
-        score = models_to_scores[model]
-        if (tmp == None) or (score > tmp): # found a higher model score than we had
-            tmp = (model,score)
-    return tmp 
+        configuration_list  = models_to_scores[model]
+        for configuration in configuration_list:
+            score = configuration[0]
+            if score > tmp_score: # found a higher model score than we had
+                tmp_score = score
+                tmp_configuration = configuration
+                tmp_model = model
+    ans = (tmp_model,tmp_configuration)
+    print(ans)
+    return ans
 
 
 def get_model_names_to_model_accuracy_scores_dict(X,y)->dict:
     """Given X and y (dfs), returing a dictionary of key = model name and val =average model accuracy score, after trying a few
     classification models to train X on y, with k-fold cross validation for each model."""
-    model_to_accuracy = {"dt":-1, "knn":-1}
-    k_fold_validation = KFold(10) # 10 fold validation
-    for k in range(2,5): # k of select best k
-        for model in model_to_accuracy: 
-            if model == 'knn': # k nearest neighbors classifier
-                for neighbors_num in range(1,5):
-                    model = KNeighborsClassifier(X,y,n_neighbors=neighbors_num) #
-            if model == 'dt':
-                model = DecisionTreeClassifier() # decision tree classifier
-            results = cross_val_score(model,X,y,cv=k_fold_validation) # list of k accuracy scores, each score of a trial on a different partition to train and test
-            average_model_score = np.mean(results)
-            model_to_accuracy[model] = np.mean(average_model_score) #acerage model scores in k fold cv
-    
-    return model_to_accuracy
 
+    #pseudo code for the whole algorithm::
+    #1. Split for train & test and save X_test for later
+    
+    #2. Run the following proccess only on X_train:
+    #  
+    # for model in models:
+    #     for k in some range :
+    #         X =  k best features features   # selectKbest
+    #         if model == Kneighbors Classifier: (not the k of row above)
+    #             for neighbors_num in some range:
+    #                 score = 10 fold cross validation avg score of the classifier with those params
+    #                 document the params configuration and score for later 
+    #                  (classifier type, k,neighbours_mum, score,k selected features) 
+    #         if model == decision tree
+    #             score = 10 fold cross validation avg score of the classifier with those params
+    #             document the params configuration and score for later   
+    #         if model ==  classifier 3:
+    #            score = ...
+    #            document ...
+    #         and so on...(for different classifiers)
+
+    #3. pick the best configuration found and run it on the test data (haven't tried yet)
+
+    model_name_to_configurations = {"dt":[], "knn":[]}
+    k_fold_validation = KFold(10) # 10 fold validation
+    
+    for model_name in model_name_to_configurations: #iterate over keys
+        for k in range(2,20): # k  of select k best
+            #Select k best features:
+            selector = SelectKBest(score_func=f_classif,k=k) 
+            selector.fit_transform(X,y) # best k features from X, without names
+            #best k features of X, with their original names (technical part only):
+            cols = selector.get_support(indices=True)
+            X_copy = X.iloc[:,cols] #X after selelect k best with the original column names again
+            #Train model on k selected features with cross validation and save the result and arguments(avg_score,k,n) in the dictionary:
+            if model_name == 'knn': # k nearest neighbors classifier
+                for neighbors_num in range(1,10):
+                    model = KNeighborsClassifier(neighbors_num) 
+                    results = cross_val_score(model,X_copy,y,cv=k_fold_validation) # list of k accuracy scores, each score of a trial on a different partition to train and test
+                    average_model_score = np.mean(results)
+                    configuration = (average_model_score, k,neighbors_num, list(X_copy.columns))
+                    model_name_to_configurations[model_name].append(configuration) #acerage model scores in k fold cv
+            
+            if model_name == 'dt':
+                model = DecisionTreeClassifier() # decision tree classifier
+                results = cross_val_score(model,X_copy,y,cv=k_fold_validation) # list of k accuracy scores, each score of a trial on a different partition to train and test
+                average_model_score = np.mean(results)
+                configuration = (average_model_score,k, list(X_copy.columns))
+                model_name_to_configurations[model_name].append(configuration) #acerage model scores in k fold cv
+ 
+    return model_name_to_configurations
+     
 
 
 def get_y_column(X,y_name):
@@ -52,7 +99,7 @@ def get_y_column(X,y_name):
         X = X[X[end].notna()] 
 
     if y_name == '6-weeks_HARS_class':
-        base = 'Baseline_HARS_totalscore'
+        base = ' Baseline_HARS_totalscore'
         end = '6-weeks HARS_totalscore'  
     
     change = '%_change_rate'
@@ -65,7 +112,7 @@ def get_y_column(X,y_name):
     #print(y[y_name].value_counts())
     X.drop(change,axis=1,inplace=True) # 1650 cols to 1649. remove col from X since it was just a helpfer col to get out y col (and can effect prediction negatively)
     return y
-    # finished
+    
 
     
 def convert_change_rate_to_class(change_rate,end):
@@ -88,46 +135,38 @@ def specify_X_to_y(X,y_name):
     """Based on the y, Removing redundant columns and subjects with missing values in this y"""
 
     if y_name == '6-weeks_HDRS21_class':
-        end = '6-weeks_HDRS21_totalscore'
-        cols_to_drop = ['6-weeks HARS_totalscore']
-
+        end = '6-weeks_HDRS21_totalscore'  
     if y_name == '6-weeks_HARS_class':
         end = '6-weeks HARS_totalscore' 
-        cols_to_drop = ['6-weeks_HDRS21_totalscore']
-
-    X= X[X[end].notna()] #removing missing values: keeping only subjects with not-None week 'end' values (end = week 6 HDRS score or week 6 HARS score)
-    for col in cols_to_drop:
-        X.drop(col,axis=1,inplace=True)
-    print(X)
-    print("just built this function")
+    X= X[X[end].notna()] #removing missing values: keeping only subjects with not-None 'end' values (end = week 6 HDRS score or week 6 HARS score)  
+    X.to_csv('second_research/X_specific_check_if_contains_missing_vals.csv',index = False)
     return X
     
 #*Main*:
-bna_path = 'second_research\EYEC_Cordance_Gamma.csv'
-clinical_path = 'second_research\BW_clinical_data.csv'
-# Step 1: prepare X for model training
-X = numeric_df_initializer.generate_prediction_df(bna_path,clinical_path) #initial numeric-predicting data frame
-y_names = ['6-weeks_HDRS21_class', '6-weeks_HARS_class']
-for y_name in y_names:
-    # using different X for each different y, because we drop from each X the subjects does not have this 
-    X_specific = specify_X_to_y(X.copy(),y_name)  
+def main(y_name): #y_name = '6-weeks_HDRS21_class' or '6-weeks_HARS_class'
+    bna_path = 'second_research\EYEC_Cordance_Gamma.csv'
+    clinical_path = 'second_research\BW_clinical_data.csv'
+    # Step 1: prepare X for model training
+    X = numeric_df_initializer.generate_prediction_df(bna_path,clinical_path) #initial numeric-predicting data frame
+    print("y = ", y_name)
+    X_specific = specify_X_to_y(X.copy(),y_name) # remove the second y  columns  
     y = get_y_column(X_specific,y_name) 
+    X_specific.drop(['6-weeks_HDRS21_totalscore','6-weeks HARS_totalscore','Baseline_HDRS21_totalscore',' Baseline_HARS_totalscore'],axis=1,inplace=True) #we dont want week 6 features to effect the prdiction
     X_train, X_test,y_train, y_test = train_test_split(X_specific, y, test_size=0.2,random_state = 0) #rs is seed
     # split ceated successfuly 31.10 (82 train/21 test/103 total (I think))
     # Step 2: select classification model with k fold cross validation  
-    
-    print("continue to debug from here")
-    selected_model = select_best_model(X_train,y_train ) # selecting best classification model with cross validation. using 80% of data
+    selected_model = select_best_model(X_train,y_train) # selecting best classification model with cross validation. using 80% of data
     # one shot preditciton:
     selected_model.fit(X_train,y_train)
     y_pred = selected_model.predict(X_test) # real 1 shot prediction
     selected_model_accuracy_score = metrics.accuracy_score(y_test,y_pred)
+main('6-weeks_HARS_class')
+main('6-weeks_HDRS21_class')
 
 
-
-
-
-
+ 
+#  y_names = ['6-weeks_HDRS21_class', '6-weeks_HARS_class']    
+# code pieces to save for later:
 
 #X.to_csv('second_research/X_before prediction.csv',index = False)
 #X_1 = X.copy()
@@ -135,3 +174,13 @@ for y_name in y_names:
 # X_1['Z'] = X_1['age']  + X_1['y']
 # print(X_1['y'])
 # print(X_1['Z'])
+
+#pseudo main code
+# for model_name in models:
+#     for k in range skb:
+#         if model == knn:
+#             for neighbors_num in range n:
+#                 score = estimate score knn(n)
+#         if model == dt:
+#             score = estimate_score(dt)
+#     d[model_name] = max(d(m[d[model_name,score]]))
