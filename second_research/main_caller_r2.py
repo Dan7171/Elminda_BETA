@@ -11,6 +11,7 @@ from sklearn.model_selection import cross_val_score
 from sklearn.feature_selection import SelectKBest, f_classif, f_regression
 import warnings
 warnings.simplefilter(action='ignore')
+warnings.filterwarnings(action='ignore')
 
 
 def select_best_model(X_train, y_train)->tuple:
