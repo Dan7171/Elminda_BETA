@@ -36,33 +36,10 @@ def get_model_names_to_model_accuracy_scores_dict(X,y)->dict:
     """Given X and y (dfs), returing a dictionary of key = model name and val =average model accuracy score, after trying a few
     classification models to train X on y, with k-fold cross validation for each model."""
 
-    #pseudo code for the whole algorithm::
-    #1. Split for train & test and save X_test for later
-    
-    #2. Run the following proccess only on X_train:
-    #  
-    # for model in models:
-    #     for k in some range :
-    #         X =  k best features features   # selectKbest
-    #         if model == Kneighbors Classifier: (not the k of row above)
-    #             for neighbors_num in some range:
-    #                 score = 10 fold cross validation avg score of the classifier with those params
-    #                 document the params configuration and score for later 
-    #                  (classifier type, k,neighbours_mum, score,k selected features) 
-    #         if model == decision tree
-    #             score = 10 fold cross validation avg score of the classifier with those params
-    #             document the params configuration and score for later   
-    #         if model ==  classifier 3:
-    #            score = ...
-    #            document ...
-    #         and so on...(for different classifiers)
-
-    #3. pick the best configuration found and run it on the test data (haven't tried yet)
-
     model_name_to_configurations = {"dt":[], "knn":[]}
     k_fold_validation = KFold(10) # 10 fold validation
     
-    for model_name in model_name_to_configurations: #iterate over keys
+    for model_name in model_name_to_configurations: #iterate over keys  
         for k in range(2,20): # k  of select k best
             #Select k best features:
             selector = SelectKBest(score_func=f_classif,k=k) 
@@ -85,7 +62,7 @@ def get_model_names_to_model_accuracy_scores_dict(X,y)->dict:
                 average_model_score = np.mean(results)
                 configuration = (average_model_score,k, list(X_copy.columns))
                 model_name_to_configurations[model_name].append(configuration) #acerage model scores in k fold cv
- 
+
     return model_name_to_configurations
      
 
@@ -103,7 +80,7 @@ def get_y_column(X,y_name):
         end = '6-weeks HARS_totalscore'  
     
     change = '%_change_rate'
-    X[change] = ((X[end] - X[base]) / X[base])* 100  # increase in % in HDRS 21 total score 
+    X[change] = ((X[end] - X[base]) / X[base])* 100  # increase in % in  total score 
     #print("Avergage change rate = ", X[change].mean())
     #print("Num of subjects with target score = ",X.shape[0]) 
     y = pd.DataFrame()
@@ -117,15 +94,11 @@ def get_y_column(X,y_name):
     
 def convert_change_rate_to_class(change_rate,end):
     """Given change rate in % from baseline and week 6 score, return the class(state) due to that score and change rate """
-    
     state = None
-    if 0 <= end <= 7:
-        state = "remission" #also called normal state
+    if change_rate < -50: # drop of 50 percents of more from the baseline
+        state = "responsive"
     else:
-        if change_rate < -50: # drop of 50 percents of more from the baseline
-            state = "responsive"
-        else:
-            state = "non_responsive"
+        state = "non_responsive"
     return state
 
 
@@ -148,7 +121,7 @@ def main(y_name): #y_name = '6-weeks_HDRS21_class' or '6-weeks_HARS_class'
     clinical_path = 'second_research\BW_clinical_data.csv'
     # Step 1: prepare X for model training
     X = numeric_df_initializer.generate_prediction_df(bna_path,clinical_path) #initial numeric-predicting data frame
-    print("y = ", y_name)
+    #print("y = ", y_name)
     X_specific = specify_X_to_y(X.copy(),y_name) # remove the second y  columns  
     y = get_y_column(X_specific,y_name) 
     X_specific.drop(['6-weeks_HDRS21_totalscore','6-weeks HARS_totalscore','Baseline_HDRS21_totalscore',' Baseline_HARS_totalscore'],axis=1,inplace=True) #we dont want week 6 features to effect the prdiction
@@ -160,27 +133,18 @@ def main(y_name): #y_name = '6-weeks_HDRS21_class' or '6-weeks_HARS_class'
     selected_model.fit(X_train,y_train)
     y_pred = selected_model.predict(X_test) # real 1 shot prediction
     selected_model_accuracy_score = metrics.accuracy_score(y_test,y_pred)
-main('6-weeks_HARS_class')
-main('6-weeks_HDRS21_class')
+#main('6-weeks_HARS_class')
+#main('6-weeks_HDRS21_class')
 
 
  
-#  y_names = ['6-weeks_HDRS21_class', '6-weeks_HARS_class']    
-# code pieces to save for later:
-
-#X.to_csv('second_research/X_before prediction.csv',index = False)
-#X_1 = X.copy()
-# X_1['y'] = X_1['age']  - X_1['age']
-# X_1['Z'] = X_1['age']  + X_1['y']
-# print(X_1['y'])
-# print(X_1['Z'])
-
-#pseudo main code
-# for model_name in models:
-#     for k in range skb:
-#         if model == knn:
-#             for neighbors_num in range n:
-#                 score = estimate score knn(n)
-#         if model == dt:
-#             score = estimate_score(dt)
-#     d[model_name] = max(d(m[d[model_name,score]]))
+def get_X_y (y_name): # for use in GSCVrunner
+    bna_path = 'second_research\EYEC_Cordance_Gamma.csv'
+    clinical_path = 'second_research\BW_clinical_data.csv'
+    # Step 1: prepare X for model training
+    X = numeric_df_initializer.generate_prediction_df(bna_path,clinical_path) #initial numeric-predicting data frame
+    #print("y = ", y_name)
+    X_specific = specify_X_to_y(X.copy(),y_name) # remove the second y  columns  
+    y = get_y_column(X_specific,y_name) 
+    X_specific.drop(['6-weeks_HDRS21_totalscore','6-weeks HARS_totalscore','Baseline_HDRS21_totalscore',' Baseline_HARS_totalscore'],axis=1,inplace=True) #we dont want week 6 features to effect the prdiction
+    return X_specific,y
