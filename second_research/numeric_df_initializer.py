@@ -118,6 +118,6 @@ def generate_prediction_df(bna_path, clinical_path):
     restricted_cols_bna = set(['site','subject.elm_id','ageV1','taskData.elm_id','visit','taskData.acqSysId','taskClass.elm_id','key']) #'remove added to visits
     cols_to_drop = restricted_cols_bna.union(restricted_cols_clinical) #all the columns we want to remove 
     subjects_baseline = drop_cols(subjects_baseline, cols_to_drop) #dropping 
- 
+    bna.to_csv('second_research/subjects_baseline.csv',index = False) #26/11
     return subjects_baseline
     
