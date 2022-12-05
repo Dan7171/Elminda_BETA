@@ -20,6 +20,8 @@ from pandas.core.common import SettingWithCopyWarning
 warnings.simplefilter(action= "ignore", category= UserWarning)
 warnings.simplefilter(action= "ignore", category= SettingWithCopyWarning)
 
+
+debug = True
 def get_c_to_group_by_c_dict(df,c):
     """Given a df and a column namc c, creating a dictionary of grouping key= c values to vals = dfs of c values"""
     df_grouped_by_c = df.groupby([c])
@@ -113,7 +115,15 @@ def generate_prediction_df(bna_path, clinical_path):
     subjects_baseline= change_categorial_non_numeric_to_numeric(subjets_baseline)
     #Step 5 - remove non-predictive features (columns) we don't want to include the prediction (like Dates,ids,visit number and so on...)
     clinical_col_set = set(list(clinical.columns.values))
-    allowed_cols_clinical = ['Treatment_group','Baseline_HDRS21_totalscore',' Baseline_HARS_totalscore','6-weeks HARS_totalscore','6-weeks_HDRS21_totalscore']
+    
+
+    #==========Important! don't forget to remove subject from allowed cols clinical 5.12===========
+    #==========5.12 DEBUG===========
+    if(debug):
+        allowed_cols_clinical = ['subject','Treatment_group','Baseline_HDRS21_totalscore',' Baseline_HARS_totalscore','6-weeks HARS_totalscore','6-weeks_HDRS21_totalscore']
+    else:
+        allowed_cols_clinical = ['Treatment_group','Baseline_HDRS21_totalscore',' Baseline_HARS_totalscore','6-weeks HARS_totalscore','6-weeks_HDRS21_totalscore']
+    
     restricted_cols_clinical = get_set_without_items(clinical_col_set, items = allowed_cols_clinical)
     restricted_cols_bna = set(['site','subject.elm_id','ageV1','taskData.elm_id','visit','taskData.acqSysId','taskClass.elm_id','key']) #'remove added to visits
     cols_to_drop = restricted_cols_bna.union(restricted_cols_clinical) #all the columns we want to remove 

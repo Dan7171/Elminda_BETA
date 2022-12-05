@@ -22,6 +22,7 @@ from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import recall_score
 from sklearn.metrics import make_scorer
 from sklearn.datasets import load_iris
+from sklearn.utils import shuffle
 
 np.seterr(divide='ignore', invalid='ignore')
 warnings.filterwarnings(action='ignore')
@@ -37,28 +38,72 @@ def print_conclusions(pipe_name, search):
     #print("ALL SCORES:", search.cv_results_)
     print('\n')
 
-
-
-
-rs = 42 #random state
-# uncomment the row you want to use:
-
-#X,y = main_caller_r2.get_X_y(y_name='6-weeks_HDRS21_class', X_version = 1) # no filters on X
-#X,y = main_caller_r2.get_X_y(y_name='6-weeks_HDRS21_class', X_version = 2) # some filters on X, ( X_(basic_filter).csv )
-X,y = main_caller_r2.get_X_y(y_name='6-weeks_HDRS21_class', X_version = 3) # max filters on X, ( X_(features_only).csv )
-
-# X.to_csv('second_research/X_unfiltered.csv',index = False) used it so send to maya and tsipora for making the literature filtering 
-
+def run_all_cvs(exhaustive_grid_search,X_train, y_train,rs):
     
-# X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.15,random_state = rs) 
-# inspired by:
-#https://scikit-learn.org/stable/tutorial/statistical_inference/putting_together.html#open-problem-stock-market-structure
+    # train and test in CV for finding best classifier and classifier parameters: 
+    # option 1: for faster results, use RandimizedSearchCV:
+    # random cv searches in the greed: (picking configuragtions from the greed randonly n_iter times)
+    if not exhaustive_grid_search: #randomized
+        rand_search_1a = RandomizedSearchCV(pipe1a,param1a,n_iter=100,refit=True,cv=5,verbose=1,random_state=rs).fit(X_train,y_train.values.ravel())
+        print_conclusions("1a",rand_search_1a)
+        rand_search_1b = RandomizedSearchCV(pipe1b,param1b,n_iter=100,refit=True,cv=5,verbose=1,random_state=rs).fit(X_train,y_train.values.ravel())
+        print_conclusions("1b", rand_search_1b)
+        rand_search_2 = RandomizedSearchCV(pipe2,param2,n_iter=100,refit=True,cv=5,verbose=1,random_state=rs).fit(X_train,y_train.values.ravel())
+        print_conclusions("2",rand_search_2)
+        rand_search_3 = RandomizedSearchCV(pipe3,param3,n_iter=100,refit=True,cv=5,verbose=1,random_state=rs).fit(X_train,y_train.values.ravel())
+        print_conclusions("3",rand_search_3)
+        rand_search_4 = RandomizedSearchCV(pipe4,param4,n_iter=100,refit=True,cv=10,verbose=1,random_state=rs).fit(X_train,y_train.values.ravel())
+        print_conclusions("4", rand_search_4)
+        rand_search_5 = RandomizedSearchCV(pipe5,param5,n_iter=100,refit=True,cv=10,verbose=1,random_state=rs).fit(X_train,y_train.values.ravel())
+        print_conclusions("5", rand_search_5)
+        rand_search_6 = RandomizedSearchCV(pipe6,param6,n_iter=100,refit=True,cv=10,verbose=1,random_state=rs).fit(X_train,y_train.values.ravel())
+        print_conclusions("6", rand_search_6)
 
+    # Option 2: for accurate but slow results- use GridSearchCV:
+    # Exhaustive greed search: trying all the configurations in the greed
+    else: 
+        search1a= GridSearchCV(pipe1b, param1b,cv=5,n_jobs=4,refit=True).fit(X_train, y_train.values.ravel()) 
+        print_conclusions(search1a) 
+        search1b= GridSearchCV(pipe1b, param1b, n_jobs=4,refit=True).fit(X_train, y_train.values.ravel()) 
+        print_conclusions(search1b)
+        search2 = GridSearchCV(pipe2, param2, n_jobs=4,refit=True).fit(X_train, y_train.values.ravel())  
+        print_conclusions(search2)
+        search3 = GridSearchCV(pipe3, param3, n_jobs=4,refit=True,cv=3,verbose=3).fit(X_train, y_train.values.ravel())  
+        print_conclusions(search3)
+        search4 = GridSearchCV(pipe4, param4, n_jobs=4,refit=True,cv=3,verbose=3).fit(X_train, y_train.values.ravel())
+        print_conclusions(search4)
+        search5 = GridSearchCV(pipe5, param5, n_jobs=4,refit=True,cv=3,verbose=3).fit(X_train, y_train.values.ravel())
+        print_conclusions(search5)
+        search6 = GridSearchCV(pipe6, param6, n_jobs=4,refit=True,cv=3,verbose=3).fit(X_train, y_train.values.ravel())
+        print_conclusions(search6)
+
+
+
+
+
+# ****MAIN****
+debug = True
+input_args= {"X_version": 3, "split_rows": 1, "rs" : 42 } 
+rs = input_args["rs"] #random state
+X_version = input_args["X_version"] # 1 = no dimension reduction (1000 features), 2 = medium dimension reduction (500 features), 3 = significant reduction (100-200 features)
+split_rows = input_args["split_rows"] # 1 = don't split rows, 2 = split to h1 and h7
+X,y = main_caller_r2.get_X_y('6-weeks_HDRS21_class',X_version) 
+if(debug):
+    debug_file_2 = X.join(y)
+    debug_file_2.to_csv('second_research\output_csvs\debug_file_2.csv',index = False) 
+
+#shuffle order of rows
+shuffled = shuffle(X.join(y) , random_state=rs)
+#print(shuffled.head())
+X=shuffled.iloc[:,:-1]
+y= shuffled.iloc[: , -1:]
+
+
+# create the piplelines and greeds:
 #models (not classifiers) to use in pipelines:
 pca = PCA()
 scaler = StandardScaler()
 kBest_selector = SelectKBest()
-
 #classifiers (estimators for the piplene-final step)
 clf1 = LogisticRegression(max_iter=10000,random_state=rs)
 clf2 = KNeighborsClassifier()
@@ -66,11 +111,10 @@ clf3 = SVC(probability=True, random_state=rs)
 clf4 = DecisionTreeClassifier(random_state=rs)
 clf5 = RandomForestClassifier(random_state=rs)
 clf6 = GradientBoostingClassifier(random_state=rs)
-
 #The 'greeds' (dictionaries)
 # note: parameters of different models pipelines can be set using '__' separated parameter names. modelname__parameter name = options to try ing gscv:
 param1a = { #LOGISTIC REGRESSION with pca, no selectkbest 
-    "pca__n_components": range(2,35),
+    "pca__n_components": range(2,10),
     "classifier__C": np.logspace(-4, 4,50),
     "classifier__penalty": ['l1','l2'],
     "classifier" : [clf1]
@@ -96,8 +140,8 @@ param3 = { #SVC
     "classifier" : [clf3]    
 }
 param4 = { # DECISION TREE
-           'classifier__max_leaf_nodes': list(range(2, 100)), 
-           'classifier__min_samples_split': [2, 3, 4], #reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
+        'classifier__max_leaf_nodes': list(range(2, 100)), 
+        'classifier__min_samples_split': [2, 3, 4], #reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
             "kBest__k": [i for i in range(4)],
             "kBest__score_func" : [mutual_info_classif,f_classif],
             "classifier" : [clf4]   
@@ -134,67 +178,73 @@ pipe5 = Pipeline(steps=[("scaler", scaler),("kBest",kBest_selector),("classifier
 pipe6 = Pipeline(steps=[("scaler", scaler),("kBest",kBest_selector),("classifier", param6["classifier"][0])])
 
 
-#random cv searches in the greed: (picking configuragtions from the greed randonly n_iter times)
-# rand_search_1a = RandomizedSearchCV(pipe1a,param1a,n_iter=100,refit=True,cv=5,verbose=1,random_state=rs,scoring = 'f1').fit(X_train,y_train.values.ravel())
-# print_conclusions("1a",rand_search_1a)
-# rand_search_1b = RandomizedSearchCV(pipe1b,param1b,n_iter=100,refit=True,cv=5,verbose=1,random_state=rs,scoring = 'f1').fit(X_train,y_train.values.ravel())
-# print_conclusions("1b", rand_search_1b)
-# rand_search_2 = RandomizedSearchCV(pipe2,param2,n_iter=100,refit=True,cv=5,verbose=1,random_state=rs,scoring = 'f1').fit(X_train,y_train.values.ravel())
-# print_conclusions("2",rand_search_2)
-# rand_search_3 = RandomizedSearchCV(pipe3,param3,n_iter=100,refit=True,cv=5,verbose=1,random_state=rs).fit(X_train,y_train.values.ravel())
-# print_conclusions("3",rand_search_3)
-# rand_search_4 = RandomizedSearchCV(pipe4,param4,n_iter=100,refit=True,cv=10,verbose=1,random_state=rs).fit(X_train,y_train.values.ravel())
-# print_conclusions("4", rand_search_4)
-# rand_search_5 = RandomizedSearchCV(pipe5,param5,n_iter=100,refit=True,cv=10,verbose=1,random_state=rs).fit(X_train,y_train.values.ravel())
-# print_conclusions("5", rand_search_5)
-# rand_search_6 = RandomizedSearchCV(pipe6,param6,n_iter=100,refit=True,cv=10,verbose=1,random_state=rs).fit(X_train,y_train.values.ravel())
-# print_conclusions("6", rand_search_6)
+
+# Split:
+if(split_rows == 1): #regular split=  don't drop subjects:    
+    X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.15,random_state = rs) 
+    run_all_cvs(False,X_train,y_train,rs)
 
 
-# Exhaustive greed search: trying all the configurations in the greed
-#search1a= GridSearchCV(pipe1b, param1b,cv=5,n_jobs=4,refit=True).fit(X_train, y_train.values.ravel()) 
-#print_conclusions(search1a) 
-#search1b= GridSearchCV(pipe1b, param1b, n_jobs=4,refit=True).fit(X_train, y_train.values.ravel()) 
-#print_conclusions(search1b)
-#search2 = GridSearchCV(pipe2, param2, n_jobs=4,refit=True).fit(X_train, y_train.values.ravel())  
-#print_conclusions(search2)
-#search3 = GridSearchCV(pipe3, param3, n_jobs=4,refit=True,cv=3,verbose=3).fit(X_train, y_train.values.ravel())  
-#print_conclusions(search3)
-#search4 = GridSearchCV(pipe4, param4, n_jobs=4,refit=True,cv=3,verbose=3).fit(X_train, y_train.values.ravel())
-#print_conclusions(search4)
-#search5 = GridSearchCV(pipe5, param5, n_jobs=4,refit=True,cv=3,verbose=3).fit(X_train, y_train.values.ravel())
-#print_conclusions(search5)
-#search6 = GridSearchCV(pipe6, param6, n_jobs=4,refit=True,cv=3,verbose=3).fit(X_train, y_train.values.ravel())
-#print_conclusions(search6)
+if(split_rows == 2): #  split by 'Treatment_group' (device - h1/h7)
+    print("splitting by h1 h7 : ")
+
+    df1 = X[X['Treatment_group'] == 0].join(y, how = "inner")
+    print("new data- only the rows where column 'Treatment_group is 0:") 
+    X = df1.iloc[:, :-1]
+    y = df1.iloc[:, -1]
+    # print("X")
+    # print(X)
+    # print("y")
+    # print(y)
+    X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.15,random_state = rs) 
+    run_all_cvs(False, X_train,y_train,rs)
+    
+    df2 = X[X['Treatment_group'] == 1].join(y, how = "inner")
+    print("new data- only the rows where column 'Treatment_group is 1:") 
+    X = df2.iloc[:, :-1]
+    y = df2.iloc[:, -1]
+    # print("X")
+    # print(X)
+    # print("y")
+    # print(y)
+    run_all_cvs(False, X_train,y_train,rs)
 
 
+# 6. 
 #after that:
 #1. choose hights score for i in all 'serchi' values
 #since used refit=true, after picking best hyperparametes, 'searchi' after picking them- trained the model with those hyperparams on data train(x_train,y_train) 
 #2. predict searchi.(X,y)
 
+ 
+
+def toy_data_run():
+
+    # *** TOY DATA PROCESSING ***:
+    # used that part of code to verify the pipeplines can scre well. they do. scores of randsearch cv's were around 0.95
+
+    iris = load_iris()
+    X_toy=iris.data
+    y_toy=iris.target
+    print(X_toy)
+    print(y_toy)
+    X_train, X_test,y_train, y_test = train_test_split(X_toy, y_toy, test_size=0.15,random_state = rs) 
+
+    rand_search_1a_iris = RandomizedSearchCV(pipe1a,param1a,n_iter=100,refit=True,cv=5,verbose=1,random_state=rs).fit(X_train,y_train.ravel())
+    print_conclusions("1a",rand_search_1a_iris)
+    rand_search_1b_iris = RandomizedSearchCV(pipe1b,param1b,n_iter=100,refit=True,cv=5,verbose=1,random_state=rs).fit(X_train,y_train.ravel())
+    print_conclusions("1b", rand_search_1b_iris)
+    rand_search_2_iris = RandomizedSearchCV(pipe2,param2,n_iter=100,refit=True,cv=5,verbose=1,random_state=rs).fit(X_train,y_train.ravel())
+    print_conclusions("2",rand_search_2_iris)
+    rand_search_3_iris = RandomizedSearchCV(pipe3,param3,n_iter=100,refit=True,cv=5,verbose=1,random_state=rs).fit(X_train,y_train.ravel())
+    print_conclusions("3",rand_search_3_iris)
+    rand_search_4_iris = RandomizedSearchCV(pipe4,param4,n_iter=100,refit=True,cv=10,verbose=1,random_state=rs).fit(X_train,y_train.ravel())
+    print_conclusions("4", rand_search_4_iris)
+    rand_search_5_iris = RandomizedSearchCV(pipe5,param5,n_iter=100,refit=True,cv=10,verbose=1,random_state=rs).fit(X_train,y_train.ravel())
+    print_conclusions("5", rand_search_5_iris)
+    rand_search_6_iris = RandomizedSearchCV(pipe6,param6,n_iter=100,refit=True,cv=10,verbose=1,random_state=rs).fit(X_train,y_train.ravel())
+    print_conclusions("6", rand_search_6_iris)
 
 
-# TOY DATA:
-iris = load_iris()
-X_toy=iris.data
-y_toy=iris.target
-# print(X_toy)
-# print(y_toy)
 
-X_train, X_test,y_train, y_test = train_test_split(X_toy, y_toy, test_size=0.15,random_state = rs) 
-
-rand_search_1a_iris = RandomizedSearchCV(pipe1a,param1a,n_iter=100,refit=True,cv=5,verbose=1,random_state=rs).fit(X_train,y_train.ravel())
-print_conclusions("1a",rand_search_1a_iris)
-rand_search_1b_iris = RandomizedSearchCV(pipe1b,param1b,n_iter=100,refit=True,cv=5,verbose=1,random_state=rs).fit(X_train,y_train.ravel())
-print_conclusions("1b", rand_search_1b_iris)
-rand_search_2_iris = RandomizedSearchCV(pipe2,param2,n_iter=100,refit=True,cv=5,verbose=1,random_state=rs).fit(X_train,y_train.ravel())
-print_conclusions("2",rand_search_2_iris)
-rand_search_3_iris = RandomizedSearchCV(pipe3,param3,n_iter=100,refit=True,cv=5,verbose=1,random_state=rs).fit(X_train,y_train.ravel())
-print_conclusions("3",rand_search_3_iris)
-rand_search_4_iris = RandomizedSearchCV(pipe4,param4,n_iter=100,refit=True,cv=10,verbose=1,random_state=rs).fit(X_train,y_train.ravel())
-print_conclusions("4", rand_search_4_iris)
-rand_search_5_iris = RandomizedSearchCV(pipe5,param5,n_iter=100,refit=True,cv=10,verbose=1,random_state=rs).fit(X_train,y_train.ravel())
-print_conclusions("5", rand_search_5_iris)
-rand_search_6_iris = RandomizedSearchCV(pipe6,param6,n_iter=100,refit=True,cv=10,verbose=1,random_state=rs).fit(X_train,y_train.ravel())
-print_conclusions("6", rand_search_6_iris)
+#toy_data_run()

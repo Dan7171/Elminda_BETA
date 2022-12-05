@@ -13,61 +13,7 @@ import warnings
 warnings.simplefilter(action='ignore')
 warnings.filterwarnings(action='ignore')
 
-
-# def select_best_model(X_train, y_train)->tuple:
-#     """Given X and y (dfs), returning  a 2-sized tuple (model,score) where model is the model name and score is an accuracy score,
-#     out of a dictionary models_to_scores """
-#     models_to_scores = get_model_names_to_model_accuracy_scores_dict(X_train,y_train)
-#     #selecting the model with the highest score:
-#     tmp_score = -1 #tmp_best_score
-#     for model in models_to_scores:
-#         configuration_list  = models_to_scores[model]
-#         for configuration in configuration_list:
-#             score = configuration[0]
-#             if score > tmp_score: # found a higher model score than we had
-#                 tmp_score = score
-#                 tmp_configuration = configuration
-#                 tmp_model = model
-#     ans = (tmp_model,tmp_configuration)
-#     print(ans)
-#     return ans
-
-
-# def get_model_names_to_model_accuracy_scores_dict(X,y)->dict:
-#     """Given X and y (dfs), returing a dictionary of key = model name and val =average model accuracy score, after trying a few
-#     classification models to train X on y, with k-fold cross validation for each model."""
-
-#     model_name_to_configurations = {"dt":[], "knn":[]}
-#     k_fold_validation = KFold(10) # 10 fold validation
-    
-#     for model_name in model_name_to_configurations: #iterate over keys  
-#         for k in range(2,20): # k  of select k best
-#             #Select k best features:
-#             selector = SelectKBest(score_func=f_classif,k=k) 
-#             selector.fit_transform(X,y) # best k features from X, without names
-#             #best k features of X, with their original names (technical part only):
-#             cols = selector.get_support(indices=True)
-#             X_copy = X.iloc[:,cols] #X after selelect k best with the original column names again
-#             #Train model on k selected features with cross validation and save the result and arguments(avg_score,k,n) in the dictionary:
-#             if model_name == 'knn': # k nearest neighbors classifier
-#                 for neighbors_num in range(1,10):
-#                     model = KNeighborsClassifier(neighbors_num) 
-#                     results = cross_val_score(model,X_copy,y,cv=k_fold_validation) # list of k accuracy scores, each score of a trial on a different partition to train and test
-#                     average_model_score = np.mean(results)
-#                     configuration = (average_model_score, k,neighbors_num, list(X_copy.columns))
-#                     model_name_to_configurations[model_name].append(configuration) #acerage model scores in k fold cv
-            
-#             if model_name == 'dt':
-#                 model = DecisionTreeClassifier() # decision tree classifier
-#                 results = cross_val_score(model,X_copy,y,cv=k_fold_validation) # list of k accuracy scores, each score of a trial on a different partition to train and test
-#                 average_model_score = np.mean(results)
-#                 configuration = (average_model_score,k, list(X_copy.columns))
-#                 model_name_to_configurations[model_name].append(configuration) #acerage model scores in k fold cv
-
-#     return model_name_to_configurations
-     
-
-
+debug = True
 def get_y_column(X,y_name):
     """Given a df X and a string y_name, returning a column y of it, corresponding to X rows"""
 
@@ -82,8 +28,10 @@ def get_y_column(X,y_name):
     
     change = '%_change_rate'
     X[change] = ((X[end] - X[base]) / X[base])* 100  # increase in % in  total score 
-    #print("Avergage change rate = ", X[change].mean())
-    #print("Num of subjects with target score = ",X.shape[0]) 
+    if(debug):
+        print_X = X[['subject',base,end,change,'age']]
+        print(print_X)
+        print_X.to_csv('second_research\output_csvs\debug_file.csv',index = False)  
     y = pd.DataFrame()
     y[y_name] = X.apply(lambda k: convert_change_rate_to_class(k[change],k[end]),axis=1) #apply function using more than one column.https://stackoverflow.com/questions/13331698/how-to-apply-a-function-to-two-columns-of-pandas-dataframe
     #print("counts of y's y_name column" 
@@ -127,18 +75,20 @@ def get_X_y (y_name,X_version): # for use in GSCVrunner
     #print("y = ", y_name)
     X_specific = specify_X_to_y(X.copy(),y_name) # remove the second y  columns
     #X_specific.to_csv('second_research/X_specfic_before_dropping.csv',index = False)  
-    y = get_y_column(X_specific,y_name) # for technical reasons - y is always produced based on the original no-filte X (as seeing here), even if we chose to use filtered X (it's ok, no changing resuluts)
+    y = get_y_column(X_specific,y_name).reset_index(drop = True) # for technical reasons - y is always produced based on the original no-filte X (as seeing here), even if we chose to use filtered X (it's ok, no changing resuluts)
+
+    
+
     X_specific.drop(['6-weeks_HDRS21_totalscore','6-weeks HARS_totalscore','Baseline_HDRS21_totalscore',' Baseline_HARS_totalscore'],axis=1,inplace=True) #we dont want week 6 features to effect the prdiction
     #X_specific.to_csv('second_research/X_specfic_after_dropping.csv',index = False)
     
 
     # Part b: replace X to be a filtered version if the argument X_version is not set to 1
-     
     # if X_version == 1: # no filtering, remain with the basic version
     #    do nothing
     if(X_version == 2): # basic filtering
         X_specific = pd.read_csv("second_research\X_(basic_filter).csv")
     if(X_version == 3): # hard filtering- predictors only
         X_specific = pd.read_csv("second_research\X_(predictors_only).csv")
-
+    
     return X_specific,y
