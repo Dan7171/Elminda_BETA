@@ -20,8 +20,8 @@ from pandas.core.common import SettingWithCopyWarning
 warnings.simplefilter(action= "ignore", category= UserWarning)
 warnings.simplefilter(action= "ignore", category= SettingWithCopyWarning)
 
+from runArguments import args
 
-debug = True
 def get_c_to_group_by_c_dict(df,c):
     """Given a df and a column namc c, creating a dictionary of grouping key= c values to vals = dfs of c values"""
     df_grouped_by_c = df.groupby([c])
@@ -119,7 +119,7 @@ def generate_prediction_df(bna_path, clinical_path):
 
     #==========Important! don't forget to remove subject from allowed cols clinical 5.12===========
     #==========5.12 DEBUG===========
-    if(debug):
+    if(args["debug"]):
         allowed_cols_clinical = ['subject','Treatment_group','Baseline_HDRS21_totalscore',' Baseline_HARS_totalscore','6-weeks HARS_totalscore','6-weeks_HDRS21_totalscore']
     else:
         allowed_cols_clinical = ['Treatment_group','Baseline_HDRS21_totalscore',' Baseline_HARS_totalscore','6-weeks HARS_totalscore','6-weeks_HDRS21_totalscore']
@@ -128,6 +128,6 @@ def generate_prediction_df(bna_path, clinical_path):
     restricted_cols_bna = set(['site','subject.elm_id','ageV1','taskData.elm_id','visit','taskData.acqSysId','taskClass.elm_id','key']) #'remove added to visits
     cols_to_drop = restricted_cols_bna.union(restricted_cols_clinical) #all the columns we want to remove 
     subjects_baseline = drop_cols(subjects_baseline, cols_to_drop) #dropping 
-    bna.to_csv('second_research/subjects_baseline.csv',index = False) #26/11
+    #bna.to_csv('second_research/subjects_baseline.csv',index = False) #26/11 lost gamma
     return subjects_baseline
     

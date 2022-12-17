@@ -1,3 +1,6 @@
+
+
+
 import numeric_df_initializer
 import numpy as np
 import pandas as pd
@@ -13,7 +16,9 @@ import warnings
 warnings.simplefilter(action='ignore')
 warnings.filterwarnings(action='ignore')
 
-debug = True
+from runArguments import args
+
+
 def get_y_column(X,y_name):
     """Given a df X and a string y_name, returning a column y of it, corresponding to X rows"""
 
@@ -28,12 +33,14 @@ def get_y_column(X,y_name):
     
     change = '%_change_rate'
     X[change] = ((X[end] - X[base]) / X[base])* 100  # increase in % in  total score 
-    if(debug):
+    if args["debug"]:
         print_X = X[['subject',base,end,change,'age']]
         print(print_X)
         print_X.to_csv('second_research\output_csvs\debug_file.csv',index = False)  
     y = pd.DataFrame()
-    y[y_name] = X.apply(lambda k: convert_change_rate_to_class(k[change],k[end]),axis=1) #apply function using more than one column.https://stackoverflow.com/questions/13331698/how-to-apply-a-function-to-two-columns-of-pandas-dataframe
+
+    y[y_name] = X.apply(lambda subject: convert_change_rate_to_class(subject[change]),axis=1) #apply function using more than one column.https://stackoverflow.com/questions/13331698/how-to-apply-a-function-to-two-columns-of-pandas-dataframe
+       
     #print("counts of y's y_name column" 
     #print(y[y_name].value_counts())
     X.drop(change,axis=1,inplace=True) # 1650 cols to 1649. remove col from X since it was just a helpfer col to get out y col (and can effect prediction negatively)
@@ -41,17 +48,24 @@ def get_y_column(X,y_name):
     
 
     
-def convert_change_rate_to_class(change_rate,end):
+def convert_change_rate_to_class(change_rate):
     """Given change rate in % from baseline and week 6 score, return the class(state) due to that score and change rate """
     state = None
-    if change_rate < -50: # drop of 50 percents of more from the baseline
-        state = "responsive"
-    else:
-        state = "non_responsive"
+    if args["classification_type"] == "normal": # normal calssification, as was in the code all the time 
+        if change_rate < -50: # drop of 50 percents of more from the baseline
+            state = "responsive"
+        else:
+            state = "non_responsive"
+
+    elif args["classification_type"] == "extreme": # super responders vs super non responders
+        if change_rate < -70: # drop of 50 percents of more from the
+            state = "extremely_responsive"
+        elif -70 <= change_rate <= -30:
+            state = "extremely_not_responsive"
+        else: # > -30
+            state = "mid_range_responsive"
     return state
 
-
- 
 
 def specify_X_to_y(X,y_name):
     """Based on the y, Removing redundant columns and subjects with missing values in this y"""
