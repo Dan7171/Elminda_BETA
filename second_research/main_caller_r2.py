@@ -100,9 +100,11 @@ def get_X_y (y_name,X_version): # for use in GSCVrunner
     # Part b: replace X to be a filtered version if the argument X_version is not set to 1
     # if X_version == 1: # no filtering, remain with the basic version
     #    do nothing
+     
     if(X_version == 2): # basic filtering
         X_specific = pd.read_csv("second_research\X_(basic_filter).csv")
     if(X_version == 3): # hard filtering- predictors only
         X_specific = pd.read_csv("second_research\X_(predictors_only).csv")
     
     return X_specific,y
+    

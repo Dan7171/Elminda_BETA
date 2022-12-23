@@ -118,7 +118,6 @@ def generate_prediction_df(bna_path, clinical_path):
     
 
     #==========Important! don't forget to remove subject from allowed cols clinical 5.12===========
-    #==========5.12 DEBUG===========
     if(args["debug"]):
         allowed_cols_clinical = ['subject','Treatment_group','Baseline_HDRS21_totalscore',' Baseline_HARS_totalscore','6-weeks HARS_totalscore','6-weeks_HDRS21_totalscore']
     else:
