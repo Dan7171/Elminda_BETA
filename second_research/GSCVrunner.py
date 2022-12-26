@@ -58,31 +58,86 @@ def toy_data_run():
     print_conclusions("6", rand_search_6_iris)
 
 # to add as a transformer to the pipelines (dropping corellated features after kbest)
-class CorrelationDropper(BaseEstimator, TransformerMixin):
+class CorrelationDropper(BaseEstimator, TransformerMixin): # this one works, dont delete it
     def __init__(self, threshold=0.9):
         self.threshold = threshold
         
     def fit(self, X, y=None):
         # Compute the correlation matrix
-        corr_matrix = np.corrcoef(X, rowvar=False)
-        
-        # Select upper triangle of correlation matrix
-        upper = np.triu(np.ones(corr_matrix.shape), k=1)
-        correlated_features = np.where(upper * np.abs(corr_matrix) > self.threshold)
-        
-        # Drop all but one of the correlated features
-        self.to_drop = []
-        for i, j in zip(*correlated_features):
-            if i in self.to_drop:
-                continue
-            self.to_drop.append(j)
-        
+        if args["drop_out_correlated"]:
+            corr_matrix = np.corrcoef(X, rowvar=False)
+            # Select upper triangle of correlation matrix
+            upper = np.triu(np.ones(corr_matrix.shape), k=1)
+            correlated_features = np.where(upper * np.abs(corr_matrix) > self.threshold)
+            
+            # Drop all but one of the correlated features
+            self.to_drop = []
+            for i, j in zip(*correlated_features):
+                if i in self.to_drop:
+                    continue
+                self.to_drop.append(j)
+            
         return self
     
     def transform(self, X, y=None):
         # Drop the correlated features
-        return np.delete(X, self.to_drop, axis=1)
+        if args["drop_out_correlated"]:
+            return np.delete(X, self.to_drop, axis=1)
+        return X
 
+class CorrelationDropper2(BaseEstimator, TransformerMixin):
+    def __init__(self, threshold=0.9):
+        self.threshold = threshold
+        self.indices_to_keep = []
+    
+    def _find_correlated_groups(self, correlations):
+        correlated_groups = [None]*correlations.shape[1]
+        visited_features = set()
+        
+        for i in range(correlations.shape[0]):
+            marked = False
+            for j in range(i+1, correlations.shape[1]):
+                if abs(correlations[i, j]) > self.threshold:
+                    marked = True
+                    # Add correlated features to the same group
+                    group = correlated_groups[i] if i in visited_features else correlated_groups[j] if j in visited_features else set()
+                    group.add(i)
+                    group.add(j)
+                    visited_features.add(i)
+                    visited_features.add(j)
+                    correlated_groups[i] = group
+                    correlated_groups[j] = group
+            if not marked:
+                group = set()
+                group.add(i)
+                visited_features.add(i)
+                correlated_groups[i] = group
+        
+        print(correlated_groups)
+        return correlated_groups
+    
+    def fit(self, X, y=None):
+        if args["drop_out_correlated"]:
+            # Calculate pairwise correlations between features
+            correlations = np.corrcoef(X, rowvar=False)
+            print(correlations)
+            # Identify correlated groups
+            correlated_groups = self._find_correlated_groups(correlations)
+            
+            # Drop all correlated features but one from each group
+            self.indices_to_keep = []
+            for group in correlated_groups:
+                if len(group) >= 1:
+                    self.indices_to_keep.append(list(group)[0])
+            print(self.indices_to_keep)
+        return self
+    
+    def transform(self, X, y=None):
+        if args["drop_out_correlated"]:
+            # Select desired features from array
+            X_transformed = np.take(X, self.indices_to_keep, axis=1)
+            return X_transformed
+        return X
 #toy_data_run()
 def print_conclusions(df,pipe,search):
     print("=== user arguments === \n \n ",args,'\n')
@@ -91,14 +146,7 @@ def print_conclusions(df,pipe,search):
     print("=== best hyperparametes picked in cv (cv's best score) === \n \n",search.best_params_,'\n')
     # Get the feature names kBest selected (before corellation drop)
     print("=== feature selection proccess (cv's best score) === ")
-    
     # get the features after select ones with high corellation to y value
-    
-    # if 'pca' in pipe.named_steps:
-    #     selector = search.best_estimator_.named_steps['pca'] # Get the  transformer from the pipeline
-    #     selected_features = df.columns[selector.get_support()].tolist()
-    #     print("Pca selected: \n ", selected_features)
-
     if 'kBest' in pipe.named_steps:
         print("first feature selection (high corellation to y)")
         selector = search.best_estimator_.named_steps['kBest'] 
@@ -107,27 +155,14 @@ def print_conclusions(df,pipe,search):
     print('\n')
    
     # Get the final feature names of the estimator (after dropping features with corellation to each other)
-    # if 'corr_drop' in pipe.named_steps:
-    #     selector = search.best_estimator_.named_steps['corr_drop']
-    #     selected_features = df.columns[selector.get_support()].tolist()
-    #     print("second feature selection (after dropping features with high corellation to each other, the final features classifier trained on) : \n",selected_features)
-    # Get the mean and standard deviation of the F1 score
+    if args["drop_out_correlated"]:
+        if 'corr_drop' in pipe.named_steps:
+            print("second feature selection (after dropping features with high corellation to each other, the final features classifier trained on) : \n")
+            print(pipe.named_steps['corr_drop'].indices_to_keep)
+        
     score_mean = search.cv_results_['mean_test_score'][search.best_index_]
     score_std = search.cv_results_['std_test_score'][search.best_index_]
     print("=== score (cv's best score): %.3f +/- %.3f === " % (score_mean, score_std),"\n\n")
-
-    # # Get the mean and standard deviation of the precision, accuracy, and recall scores
-    # precision_mean = search.cv_results_['mean_test_precision'][search.best_index_]
-    # precision_std = search.cv_results_['std_test_precision'][search.best_index_]
-    # accuracy_mean = search.cv_results_['mean_test_accuracy'][search.best_index_]
-    # accuracy_std = search.cv_results_['std_test_accuracy'][search.best_index_]
-    # recall_mean = search.cv_results_['mean_test_recall'][search.best_index_]
-    # recall_std = search.cv_results_['std_test_recall'][search.best_index_]
-
-    # print("Precision: %.3f +/- %.3f" % (precision_mean, precision_std))
-    # print("Accuracy: %.3f +/- %.3f" % (accuracy_mean, accuracy_std))
-    # print("Recall: %.3f +/- %.3f" % (recall_mean, recall_std))
-    # print('\n')
 
 
 # ==================== Offir's code: ===============
@@ -154,23 +189,22 @@ def run_all_cvs(exhaustive_grid_search,X_train, y_train):
     rs = args["rs"]
     print(X)
     if not exhaustive_grid_search: #randomized
-        rand_search_1a = RandomizedSearchCV(pipe1a,param1a,n_iter=args["n_iter"],cv =args["cv"],verbose=1 ,random_state= rs,scoring=args['scoring_method'], refit=True).fit(X_train.astype(float),y_train.astype(str))
- 
-        print_conclusions(X_train,pipe1a,rand_search_1a)
-        rand_search_1b = RandomizedSearchCV(pipe1b,param1b,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state=rs,scoring=args['scoring_method'], refit=True).fit(X_train.astype(float),y_train.astype(str))
-        print_conclusions(X_train,pipe1b, rand_search_1b)
+        #rand_search_1a = RandomizedSearchCV(pipe1a,param1a,n_iter=args["n_iter"],cv =args["cv"],verbose=1 ,random_state= rs,scoring=args['scoring_method'], refit=True).fit(X_train.astype(float),y_train.astype(str))
+        #print_conclusions(X_train,pipe1a,rand_search_1a)
+        #rand_search_1b = RandomizedSearchCV(pipe1b,param1b,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state=rs,scoring=args['scoring_method'], refit=True).fit(X_train.astype(float),y_train.astype(str))
+        #print_conclusions(X_train,pipe1b, rand_search_1b)
         rand_search_2 = RandomizedSearchCV(pipe2,param2,n_iter=args["n_iter"],cv =args["cv"],verbose=2,random_state= rs,scoring=args['scoring_method'], refit=True).fit(X_train.astype(float),y_train.astype(str))
-        print_conclusions(pipe2,rand_search_2)
+        print_conclusions(X_train,pipe2,rand_search_2)
         rand_search_3 = RandomizedSearchCV(pipe3,param3,n_iter=args["n_iter"],cv =args["cv"],verbose=2,random_state= rs,scoring=args['scoring_method'], refit=True).fit(X_train.astype(float),y_train.astype(str))
-        print_conclusions(pipe3,rand_search_3)
+        print_conclusions(X_train,pipe3,rand_search_3)
         rand_search_4 = RandomizedSearchCV(pipe4,param4,n_iter=args["n_iter"],cv =args["cv"],verbose=2,random_state= rs,scoring=args['scoring_method'], refit=True).fit(X_train.astype(float),y_train.astype(str))
-        print_conclusions(pipe4, rand_search_4)
+        print_conclusions(X_train,pipe4, rand_search_4)
         rand_search_5 = RandomizedSearchCV(pipe5,param5,n_iter=args["n_iter"],cv =args["cv"],verbose=2,random_state= rs,scoring=args['scoring_method'], refit=True).fit(X_train.astype(float),y_train.astype(str))
-        print_conclusions(pipe5, rand_search_5)
+        print_conclusions(X_train,pipe5, rand_search_5)
         rand_search_6 = RandomizedSearchCV(pipe6,param6,n_iter=args["n_iter"],cv =args["cv"],verbose=2,random_state= rs,scoring=args['scoring_method'], refit=True).fit(X_train.astype(float),y_train.astype(str))
-        print_conclusions(pipe6, rand_search_6)
+        print_conclusions(X_train,pipe6, rand_search_6)
         rand_search_7 = RandomizedSearchCV(pipe7,param7,n_iter=20,refit=True,cv =args["cv"],verbose=0,random_state=rs,scoring=scoring_method).fit(X_train.astype(float),y_train.astype(str))
-        print_conclusions(pipe7, rand_search_7)
+        print_conclusions(X_train,pipe7, rand_search_7)
 
     # Option 2: for accurate but slow results- use GridSearchCV:
     # Exhaustive greed search: trying all the configurations in the greed
@@ -325,14 +359,14 @@ param7 = { #CATBOOST CLASSIFIER
 }
 
 # tune parameters with gscv and train model:
-pipe1a = Pipeline(steps=[("scaler", scaler), ("pca", pca),('corr_drop', CorrelationDropper(threshold=0.9)),("classifier", param1a["classifier"][0])])
-pipe1b = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper(threshold=0.9)),("classifier", param1b["classifier"][0])])
-pipe2 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper(threshold=0.9)),("classifier", param2["classifier"][0])])
-pipe3 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper(threshold=0.9)),("classifier", param3["classifier"][0])])
-pipe4 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper(threshold=0.9)),("classifier",param4["classifier"][0])])
-pipe5 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper(threshold=0.9)),("classifier", param5["classifier"][0])])
-pipe6 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper(threshold=0.9)),("classifier", param6["classifier"][0])])
-pipe7 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper(threshold=0.9)),("classifier", param7["classifier"][0])])
+pipe1a = Pipeline(steps=[("scaler", scaler), ("pca", pca),('corr_drop', CorrelationDropper2(threshold=0.9)),("classifier", param1a["classifier"][0])])
+pipe1b = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper2(threshold=0.9)),("classifier", param1b["classifier"][0])])
+pipe2 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper2(threshold=0.9)),("classifier", param2["classifier"][0])])
+pipe3 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper2(threshold=0.9)),("classifier", param3["classifier"][0])])
+pipe4 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper2(threshold=0.9)),("classifier",param4["classifier"][0])])
+pipe5 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper2(threshold=0.9)),("classifier", param5["classifier"][0])])
+pipe6 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper2(threshold=0.9)),("classifier", param6["classifier"][0])])
+pipe7 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper2(threshold=0.9)),("classifier", param7["classifier"][0])])
 
 
 
