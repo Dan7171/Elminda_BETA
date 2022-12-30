@@ -4,6 +4,7 @@ from sklearn.svm import SVC
 import numpy as np
 import pandas as pd
 import sklearn
+import datetime
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -29,7 +30,7 @@ warnings.filterwarnings(action='ignore')
 warnings.simplefilter(action='ignore')
 from sklearn.metrics import precision_score
 from sklearn.base import BaseEstimator, TransformerMixin
-
+import os
 from runArguments import args
 def toy_data_run():
 
@@ -138,7 +139,7 @@ class CorrelationDropper2(BaseEstimator, TransformerMixin):
             X_transformed = np.take(X, self.indices_to_keep, axis=1)
             return X_transformed
         return X
-#toy_data_run()
+ 
 def print_conclusions(df,pipe,search):
     print("=== user arguments === \n \n ",args,'\n')
     print("=== Pipe === \n \n", str(pipe),'\n')
@@ -147,6 +148,7 @@ def print_conclusions(df,pipe,search):
     # Get the feature names kBest selected (before corellation drop)
     print("=== feature selection proccess (cv's best score) === ")
     # get the features after select ones with high corellation to y value
+    selected_features = ""
     if 'kBest' in pipe.named_steps:
         print("first feature selection (high corellation to y)")
         selector = search.best_estimator_.named_steps['kBest'] 
@@ -162,8 +164,35 @@ def print_conclusions(df,pipe,search):
         
     score_mean = search.cv_results_['mean_test_score'][search.best_index_]
     score_std = search.cv_results_['std_test_score'][search.best_index_]
-    print("=== score (cv's best score): %.3f +/- %.3f === " % (score_mean, score_std),"\n\n")
+    print("=== score (cv's best score): %.3f +/- %.3f === " % (score_mean, score_std),"\n")
+    
+    d = {"date":str(datetime.date.today()),
+    "classifier": str(pipe.named_steps),
+    "best_params":str(search.best_params_),
+    "selected_features":str(selected_features),
+    "user_inputs":str(args),
+    "score_mean":str(score_mean),
+     "score_std":str(score_std)}
+    tmp = pd.DataFrame(d,index=[d.keys()])
+    # Check if the file exists
+    
+    file_path = 'tuning.csv'
+    
+    if not os.path.exists(file_path):
+    # If the file does not exist, create a new empty CSV file
+        open(file_path, 'a').close()
+        tmp.to_csv(file_path,index=False)     
+        return
+    df = pd.read_csv(file_path)
+    df = pd.concat([df,tmp])
+    print(df)
+    df.to_csv(file_path,index=False)
+    print("END",'\n'*3)
 
+
+def reset_column_to_original_labels(df,col,original_lables):
+    df[col] = original_lables[df[col]]
+    return df
 
 # ==================== Offir's code: ===============
 def CV_Score(y_true,y_pred):
@@ -189,21 +218,21 @@ def run_all_cvs(exhaustive_grid_search,X_train, y_train):
     rs = args["rs"]
     print(X)
     if not exhaustive_grid_search: #randomized
-        #rand_search_1a = RandomizedSearchCV(pipe1a,param1a,n_iter=args["n_iter"],cv =args["cv"],verbose=1 ,random_state= rs,scoring=args['scoring_method'], refit=True).fit(X_train.astype(float),y_train.astype(str))
-        #print_conclusions(X_train,pipe1a,rand_search_1a)
-        #rand_search_1b = RandomizedSearchCV(pipe1b,param1b,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state=rs,scoring=args['scoring_method'], refit=True).fit(X_train.astype(float),y_train.astype(str))
-        #print_conclusions(X_train,pipe1b, rand_search_1b)
-        rand_search_2 = RandomizedSearchCV(pipe2,param2,n_iter=args["n_iter"],cv =args["cv"],verbose=2,random_state= rs,scoring=args['scoring_method'], refit=True).fit(X_train.astype(float),y_train.astype(str))
+        rand_search_1a = RandomizedSearchCV(pipe1a,param1a,n_iter=args["n_iter"],cv =args["cv"],verbose=1 ,random_state= rs,scoring=args['scoring_method'], refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.astype(str).squeeze())
+        print_conclusions(X_train,pipe1a,rand_search_1a)
+        rand_search_1b = RandomizedSearchCV(pipe1b,param1b,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state=rs,scoring=args['scoring_method'], refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.astype(str).squeeze())
+        print_conclusions(X_train,pipe1b, rand_search_1b)
+        rand_search_2 = RandomizedSearchCV(pipe2,param2,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state= rs,scoring=args['scoring_method'], refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.astype(str).squeeze())
         print_conclusions(X_train,pipe2,rand_search_2)
-        rand_search_3 = RandomizedSearchCV(pipe3,param3,n_iter=args["n_iter"],cv =args["cv"],verbose=2,random_state= rs,scoring=args['scoring_method'], refit=True).fit(X_train.astype(float),y_train.astype(str))
+        rand_search_3 = RandomizedSearchCV(pipe3,param3,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state= rs,scoring=args['scoring_method'], refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.astype(str).squeeze())
         print_conclusions(X_train,pipe3,rand_search_3)
-        rand_search_4 = RandomizedSearchCV(pipe4,param4,n_iter=args["n_iter"],cv =args["cv"],verbose=2,random_state= rs,scoring=args['scoring_method'], refit=True).fit(X_train.astype(float),y_train.astype(str))
+        rand_search_4 = RandomizedSearchCV(pipe4,param4,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state= rs,scoring=args['scoring_method'], refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.astype(str).squeeze())
         print_conclusions(X_train,pipe4, rand_search_4)
-        rand_search_5 = RandomizedSearchCV(pipe5,param5,n_iter=args["n_iter"],cv =args["cv"],verbose=2,random_state= rs,scoring=args['scoring_method'], refit=True).fit(X_train.astype(float),y_train.astype(str))
+        rand_search_5 = RandomizedSearchCV(pipe5,param5,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state= rs,scoring=args['scoring_method'], refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.astype(str).squeeze())
         print_conclusions(X_train,pipe5, rand_search_5)
-        rand_search_6 = RandomizedSearchCV(pipe6,param6,n_iter=args["n_iter"],cv =args["cv"],verbose=2,random_state= rs,scoring=args['scoring_method'], refit=True).fit(X_train.astype(float),y_train.astype(str))
+        rand_search_6 = RandomizedSearchCV(pipe6,param6,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state= rs,scoring=args['scoring_method'], refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.astype(str).squeeze())
         print_conclusions(X_train,pipe6, rand_search_6)
-        rand_search_7 = RandomizedSearchCV(pipe7,param7,n_iter=20,refit=True,cv =args["cv"],verbose=0,random_state=rs,scoring=scoring_method).fit(X_train.astype(float),y_train.astype(str))
+        rand_search_7 = RandomizedSearchCV(pipe7,param7,n_iter=args["n_iter"],cv =args["cv"],verbose=0,random_state=rs,scoring=args['scoring_method'],refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.astype(str))
         print_conclusions(X_train,pipe7, rand_search_7)
 
     # Option 2: for accurate but slow results- use GridSearchCV:
@@ -298,63 +327,63 @@ clf7 = CatBoostClassifier(random_state=args["rs"], logging_level = 'Silent')
 #The 'greeds' (dictionaries)
 # note: parameters of different models pipelines can be set using '__' separated parameter names. modelname__parameter name = options to try ing gscv:
 param1a = { #LOGISTIC REGRESSION with pca, no selectkbest 
-    "pca__n_components": range(2,10),
-    "classifier__C": np.logspace(-4, 4,50),
-    "classifier__penalty": ['l1','l2'],
+    "pca__n_components": range(7,10),
+    "classifier__C": [5,50,5],
+    "classifier__penalty": ['l2'],
     "classifier" : [clf1]
 }
 param1b = {#LOGISTIC REGRESSION with selectkbest, no pca
-    "classifier__C": np.logspace(-4, 4, 4), #classifier (logistic regression) param 'C' for tuning
-    "kBest__k": [12], #selctKbest param 'k'for tuning. must be  <= num of features
-    "kBest__score_func" : [mutual_info_classif,f_classif], #selctKbest param 'score_func'for tuning
+    "classifier__C":[5,50,3], #classifier (logistic regression) param 'C' for tuning
+    "kBest__k": range(10,12), #selctKbest param 'k'for tuning. must be  <= num of features
+    "kBest__score_func" : [mutual_info_classif], #selctKbest param 'score_func'for tuning
     "classifier" : [clf1] # the classifier clf1 (LogisticRegression) will use as the final step in pipleine- the 'estimator'
 }
 param2 = { #KNN 
-    "classifier__n_neighbors" : [5,10,15],
-    "kBest__k": [i for i in range(4)],
-    "kBest__score_func" : [mutual_info_classif,f_classif],
+    "classifier__n_neighbors" :range(8,13),
+    "kBest__k": range(4,8),
+    "kBest__score_func" : [f_classif],
     "classifier" : [clf2]    
 }
 param3 = { #SVC
-    'classifier__gamma': [0.1,0.5,1,1.5,2],#old =  [10,6,3,1, 0.1, 0.01, 0.001, 0.0001]-> selcted = 1, score =0.6529411764705882 
-    'classifier__kernel': ['rbf','sigmoid','linear','poly'],
-    'classifier__C':[0.1,1.10,100,1000],
-    "kBest__k": [2,5,8,12,16,20,30,45], #  k should be smaller than num of features always 
-    "kBest__score_func" : [mutual_info_classif,f_classif],
+    'classifier__gamma': [0.5,0.8,1,1.2,1.5], 
+    'classifier__kernel': ['linear','poly'],
+    'classifier__C':[0.1,0.2,0.3,0.4,0.5],
+    "kBest__k": range(5,25,2), #  k should be smaller than num of features always 
+    "kBest__score_func" : [mutual_info_classif],
     "classifier" : [clf3]    
 }
 param4 = { # DECISION TREE
-        'classifier__max_leaf_nodes': list(range(2, 100)), 
-        'classifier__min_samples_split': [2, 3, 4], #reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
-            "kBest__k": [2,5,8,12,16,20,30,45],
-            "kBest__score_func" : [mutual_info_classif,f_classif],
+        'classifier__max_leaf_nodes': range(1,7), 
+        'classifier__min_samples_split': range(4,9,2), #reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
+            "kBest__k": range(5,25,2),
+            "kBest__score_func" : [f_classif],
             "classifier" : [clf4]   
 }
 param5 = { # RANDOM FOREST 
 # reason I tried this classifier params:
 # https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74
         'classifier__bootstrap': [True],
-        'classifier__max_depth': [10, 50, 100, 200],
-        'classifier__max_features': [2,5,10,20,50],
-        'classifier__min_samples_leaf': [2, 5,10],
+        'classifier__max_depth': range(70,90,2),
+        'classifier__max_features': range(15,25,2),
+        'classifier__min_samples_leaf': range(7,15,2),
         'classifier__min_samples_split': [2,3,4],
-        'classifier__n_estimators': [10,50,80,120,300,1000], #reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
-        "kBest__k": [2,5,8,12,16,20,30,45],
-        "kBest__score_func" : [mutual_info_classif,f_classif],
+        'classifier__n_estimators': range(130,150,2), #reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
+        "kBest__k": range(25,40,2),
+        "kBest__score_func" : [mutual_info_classif],
         "classifier" : [clf5]   
 }
 
 param6 = { #GRADIENT BOOSTING 
 # reason I tried this classifier params:
 #https://www.analyticsvidhya.com/blog/2016/02/complete-guide-parameter-tuning-gradient-boosting-gbm-python/
-    'classifier_max_depth':range(5,16,2),
-    'classifier_min_samples_split':range(200,1001,200),
+    'classifier__max_depth':range(5,16,2),
+    'classifier__min_samples_split':range(200,1001,200),
     "classifier": [clf6]
 }
 param7 = { #CATBOOST CLASSIFIER 
-    'classifier__depth': [3,7,10],
-    'classifier__learning_rate': [0.1],
-    "kBest__k": [5,10,15],
+    'classifier__depth': range(7,15,2),
+    'classifier__learning_rate': [0.05,0.1,0.5],
+    "kBest__k": range(7,15,2),
     "classifier": [clf7]
 }
 
@@ -386,11 +415,7 @@ if(args["split_rows"] == 2): # split by 'Treatment_group' (device - h1/h7)
     print("new data- only the rows where column 'Treatment_group is 0:") 
     X = df1.iloc[:, :-1]
     y = df1.iloc[:, -1]
-    # print("X")
-    # print(X)
-    # print("y")
-    # print(y)
-    X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.15,random_state = args["rs"]) 
+    X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"]) 
     run_all_cvs(False, X_train,y_train)
     
     # for treatment group 2
@@ -405,11 +430,10 @@ if(args["split_rows"] == 2): # split by 'Treatment_group' (device - h1/h7)
 
     
 
-# 6. 
-#after that:
-#1. choose hights score for i in all 'serchi' values
-#since used refit=true, after picking best hyperparametes, 'searchi' after picking them- trained the model with those hyperparams on data train(x_train,y_train) 
-#2. predict searchi.(X,y)
+    # 6. 
+    #after that:
+    #1. choose hights score for i in all 'serchi' values
+    #since used refit=true, after picking best hyperparametes, 'searchi' after picking them- trained the model with those hyperparams on data train(x_train,y_train) 
+    #2. predict searchi.(X,y)
 
- 
 

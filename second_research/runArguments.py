@@ -11,6 +11,7 @@ args = {
 "classification_type": "normal", # "normal" =2 classes:  <50% , >50% change /"extreme" = 3 classes:  <30% , 30-70% , >70% change
 "scoring_method": "accuracy", # "accuracy" / "precision"/"recall'/"all_scores".
 "both": False, # True- train on both research 1 and research 2 data , False- train on research 2 only.IMPORTANT: if set to True, use X_version = 1 only!!!
-"cv":4, # param for cv
-"n_iter": 50 # param for cv
+"cv":5, # param for cv
+"n_iter": 100, # param for cv
+"n_jobs":10 # num of threads each model is generating to speed up grid search
 }
