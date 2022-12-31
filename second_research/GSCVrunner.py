@@ -32,6 +32,8 @@ from sklearn.metrics import precision_score
 from sklearn.base import BaseEstimator, TransformerMixin
 import os
 from runArguments import args
+yt,yp = [],[]
+
 def toy_data_run():
 
     # *** TOY DATA PROCESSING ***:
@@ -140,44 +142,79 @@ class CorrelationDropper2(BaseEstimator, TransformerMixin):
             return X_transformed
         return X
  
-def print_conclusions(df,pipe,search):
-    print("=== user arguments === \n \n ",args,'\n')
-    print("=== Pipe === \n \n", str(pipe),'\n')
-    # print("=== Pipe's classifier === \n\n",pipe[-1])
-    print("=== best hyperparametes picked in cv (cv's best score) === \n \n",search.best_params_,'\n')
-    # Get the feature names kBest selected (before corellation drop)
-    print("=== feature selection proccess (cv's best score) === ")
-    # get the features after select ones with high corellation to y value
+def print_conclusions(df,pipe,search,yt_cv=None,yp_cv=None):
+    print("-----------------------\n New CV report \n-----------------------")
+    print("* Classifier: \n", pipe.named_steps['classifier'])
+    print("* User arguments: \n",args)
+    print("* Pipeline details: \n" , str(pipe))
+    print("* Best Hyperparametes picked in cross validation: (cv's best score): \n",search.best_params_)    
+    
+    # features Kbest selected
     selected_features = ""
     if 'kBest' in pipe.named_steps:
-        print("first feature selection (high corellation to y)")
         selector = search.best_estimator_.named_steps['kBest'] 
         selected_features = df.columns[selector.get_support()].tolist()
-        print("K best selected: \n", selected_features)
-    print('\n')
-   
-    # Get the final feature names of the estimator (after dropping features with corellation to each other)
-    if args["drop_out_correlated"]:
-        if 'corr_drop' in pipe.named_steps:
-            print("second feature selection (after dropping features with high corellation to each other, the final features classifier trained on) : \n")
-            print(pipe.named_steps['corr_drop'].indices_to_keep)
-        
+    print("* Best features by (selectKbest): \n", selected_features)
+
+    # score 
+    print("* Scorer_used:", args['scoring_method']) # scoring method used for cv as scorer param
     score_mean = search.cv_results_['mean_test_score'][search.best_index_]
     score_std = search.cv_results_['std_test_score'][search.best_index_]
-    print("=== score (cv's best score): %.3f +/- %.3f === " % (score_mean, score_std),"\n")
+    print("* CV Score (cv's best score for best hyperparametes): %.3f +/- %.3f (see score func in hyperparams) " % (score_mean, score_std),"\n")
+
+
+    if args['scoring_method'] == 'custom_f1_scorer':
+        cm = confusion_matrix(yt_cv, yp_cv)
+        print("* Confusion matrix: \n",cm) 
+        # confusion matrix plot making: 
+        fig = metrics.ConfusionMatrixDisplay.from_predictions(yt_cv, yp_cv)
+        fig.ax_.set_title(pipe.named_steps['classifier'])
+
+        # calculate Response rate: 
+        y_train_responders_cnt = 0
+        positive_label = 'responsive' # can vary in different expirements
+        for y_val in y_train.values:
+            if y_val == positive_label:
+                y_train_responders_cnt += 1
+        
+        print("* Response rate: ",y_train_responders_cnt / len(y_train))
+        true_count = cm[0][0] + cm[1][1]
+        false_count = cm[0][1] + cm[1][0]
+        total = true_count + false_count
+        precision = cm[1][1] / (cm[1][1] + cm[0][1])
+        recall = cm[1][1] / (cm[1][1] + cm[1][0])
+        accuracy =  true_count /total
+        f1 = 2 * (precision * recall) / (precision + recall)
+        print("* CV Precision: ", precision)
+        print("* CV Recall: ", recall)
+        print("* CV Accuracy: ", accuracy)
+        print("* CV F1: ",f1) 
+   
     
-    d = {"date":str(datetime.date.today()),
-    "classifier": str(pipe.named_steps),
-    "best_params":str(search.best_params_),
+
+    # save cross val scores and params in tuning.csv for tracking
+    # csv column names and values in a row:
+    d = {
+    "date":str(datetime.date.today()), # date
+    "classifier":pipe.named_steps['classifier'], 
+    "pipe_named_steps": str(pipe.named_steps), # all pipe steps, including the classifier as estimator
+    "best_params":str(search.best_params_), 
     "selected_features":str(selected_features),
-    "user_inputs":str(args),
-    "score_mean":str(score_mean),
-     "score_std":str(score_std)}
+    "user_inputs":str(args), # runArguments.args
+    "scorer_used": args['scoring_method'], # scoring method used for cv as scorer param
+    "scorer_score_mean":str(score_mean),  # should be one of (accuracy,precission,recall,f1 (if scorer_used = custom_f1_scorer))
+    "scorer_score_std":str(score_std)
+    }
+    if d['scorer_used'] == 'custom_f1_scorer':
+        d["accuracy"] = accuracy
+        d["precision"] = precision
+        d["recall"]=recall
+        d["f1"] = f1
+        d["confusion_matrix"] =  str(cm)
+    
+    # save to cv:
     tmp = pd.DataFrame(d,index=[d.keys()])
-    # Check if the file exists
-    
     file_path = 'tuning.csv'
-    
     if not os.path.exists(file_path):
     # If the file does not exist, create a new empty CSV file
         open(file_path, 'a').close()
@@ -185,124 +222,100 @@ def print_conclusions(df,pipe,search):
         return
     df = pd.read_csv(file_path)
     df = pd.concat([df,tmp])
-    print(df)
     df.to_csv(file_path,index=False)
-    print("END",'\n'*3)
 
+    print("CV report saved to  ",file_path)
+    print("-----------------------\n End of CV report \n-----------------------",'\n'*3)
+
+ 
 
 def reset_column_to_original_labels(df,col,original_lables):
     df[col] = original_lables[df[col]]
     return df
 
+def extract_scoring_method(score_arg):
+    if score_arg == 'custom_f1_scorer':
+        return scorer()
+    return score_arg
+
 # ==================== Offir's code: ===============
 def CV_Score(y_true,y_pred):
-    global yt,yp
-    yt.append(y_true)
-    yp.append(y_pred)
-    cvscore = f1_score(y_true, y_pred)
+    global yt,yp 
+    yt.append(y_true) # y true
+    yp.append(y_pred) # y predicted
+    cvscore = f1_score(y_true, y_pred,pos_label='responsive')
     return cvscore
 
 def scorer():
     return make_scorer(CV_Score)
 # ===================================================
-def run_all_cvs(exhaustive_grid_search,X_train, y_train):
+def run_all_cvs(X_train, y_train):
     
-    # train and test in CV for finding best classifier and classifier parameters: 
-    # option 1: for faster results, use RandimizedSearchCV:
-    # random cv searches in the greed: (picking configuragtions from the greed randonly n_iter times)
-    if args["scoring_method"] != "all_scores": 
-        scoring_method = args["scoring_method"]
-    if args["scoring_method"] == "all_scores":
-        pass
-        # somehow needs to be here: scoring_method = get_scoring_method_for_all_scores() #(precision, recall, accuracy...)?
     rs = args["rs"]
-    print(X)
-    if not exhaustive_grid_search: #randomized
-        rand_search_1a = RandomizedSearchCV(pipe1a,param1a,n_iter=args["n_iter"],cv =args["cv"],verbose=1 ,random_state= rs,scoring=args['scoring_method'], refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.astype(str).squeeze())
-        print_conclusions(X_train,pipe1a,rand_search_1a)
-        rand_search_1b = RandomizedSearchCV(pipe1b,param1b,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state=rs,scoring=args['scoring_method'], refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.astype(str).squeeze())
-        print_conclusions(X_train,pipe1b, rand_search_1b)
-        rand_search_2 = RandomizedSearchCV(pipe2,param2,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state= rs,scoring=args['scoring_method'], refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.astype(str).squeeze())
-        print_conclusions(X_train,pipe2,rand_search_2)
-        rand_search_3 = RandomizedSearchCV(pipe3,param3,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state= rs,scoring=args['scoring_method'], refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.astype(str).squeeze())
-        print_conclusions(X_train,pipe3,rand_search_3)
-        rand_search_4 = RandomizedSearchCV(pipe4,param4,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state= rs,scoring=args['scoring_method'], refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.astype(str).squeeze())
-        print_conclusions(X_train,pipe4, rand_search_4)
-        rand_search_5 = RandomizedSearchCV(pipe5,param5,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state= rs,scoring=args['scoring_method'], refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.astype(str).squeeze())
-        print_conclusions(X_train,pipe5, rand_search_5)
-        rand_search_6 = RandomizedSearchCV(pipe6,param6,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state= rs,scoring=args['scoring_method'], refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.astype(str).squeeze())
-        print_conclusions(X_train,pipe6, rand_search_6)
-        rand_search_7 = RandomizedSearchCV(pipe7,param7,n_iter=args["n_iter"],cv =args["cv"],verbose=0,random_state=rs,scoring=args['scoring_method'],refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.astype(str))
-        print_conclusions(X_train,pipe7, rand_search_7)
-
+    if not args['exhaustive_grid_search']: #randomized
+        global yt,yp
+        #rand_search_1a = RandomizedSearchCV(pipe1a,param1a,n_iter=args["n_iter"],cv =args["cv"],verbose=1 ,random_state= rs,scoring=extract_scoring_method(args['scoring_method']), refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.squeeze())
+        # print_conclusions_2(X_train,pipe1a,rand_search_1a,yt,yp)
+        # yt, yp = [], []
+        # rand_search_1b = RandomizedSearchCV(pipe1b,param1b,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state=rs,scoring=extract_scoring_method(args['scoring_method']), refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.squeeze())
+        # print_conclusions(X_train,pipe1b, rand_search_1b)
+        # yt, yp = [], []
+        # rand_search_2 = RandomizedSearchCV(pipe2,param2,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state= rs,scoring=extract_scoring_method(args['scoring_method']), refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.squeeze())
+        # print_conclusions(X_train,pipe2,rand_search_2)
+        # rand_search_3 = RandomizedSearchCV(pipe3,param3,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state= rs,scoring=extract_scoring_method(args['scoring_method']), refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.squeeze())
+        # print_conclusions(X_train,pipe3,rand_search_3)
+        # rand_search_4 = RandomizedSearchCV(pipe4,param4,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state= rs,scoring=extract_scoring_method(args['scoring_method']), refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.squeeze())
+        # print_conclusions(X_train,pipe4, rand_search_4)
+        # rand_search_5 = RandomizedSearchCV(pipe5,param5,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state= rs,scoring=extract_scoring_method(args['scoring_method']), refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.squeeze())
+        # print_conclusions(X_train,pipe5, rand_search_5)
+        # rand_search_6 = RandomizedSearchCV(pipe6,param6,n_iter=args["n_iter"],cv =args["cv"],verbose=1,random_state= rs,scoring=extract_scoring_method(args['scoring_method']), refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.squeeze())
+        # print_conclusions(X_train,pipe6, rand_search_6)
+        # rand_search_7 = RandomizedSearchCV(pipe7,param7,n_iter=args["n_iter"],cv =args["cv"],verbose=0,random_state=rs,scoring=extract_scoring_method(args['scoring_method']),refit=True,n_jobs=args['n_jobs']).fit(X_train.astype(float),y_train.squeeze())
+        # print_conclusions(X_train,pipe7, rand_search_7)
+        print(1)
     # Option 2: for accurate but slow results- use GridSearchCV:
     # Exhaustive greed search: trying all the configurations in the greed
     else: 
-        search1a= GridSearchCV(pipe1b, param1b,cv =args["cv"],n_jobs=4,refit=True,scoring=scoring_method).fit(X_train, y_train.values.ravel()) 
-        print_conclusions(search1a) 
-        search1b= GridSearchCV(pipe1b, param1b, n_jobs=4,refit=True,scoring=scoring_method).fit(X_train, y_train.values.ravel()) 
-        print_conclusions(search1b)
-        search2 = GridSearchCV(pipe2, param2, n_jobs=4,refit=True,scoring=scoring_method).fit(X_train, y_train.values.ravel())  
+        # search1a= GridSearchCV(pipe1b, param1b,cv =args["cv"],n_jobs=4,refit=True,scoring=scoring_method).fit(X_train, y_train.values.ravel()) 
+        # print_conclusions(search1a) 
+        # search1b= GridSearchCV(pipe1b, param1b, n_jobs=4,refit=True,scoring=scoring_method).fit(X_train, y_train.values.ravel()) 
+        # print_conclusions(search1b)
+        search2 = GridSearchCV(pipe2, param2, n_jobs=args['n_jobs'],refit=True,scoring=extract_scoring_method(args['scoring_method'])).fit(X_train, y_train.values.ravel(),)
         print_conclusions(search2)
-        search3 = GridSearchCV(pipe3, param3, n_jobs=4,refit=True,cv =args["cv"],verbose=3,scoring=scoring_method).fit(X_train, y_train.values.ravel())  
-        print_conclusions(search3)
-        search4 = GridSearchCV(pipe4, param4, n_jobs=4,refit=True,cv =args["cv"],verbose=3,scoring=scoring_method).fit(X_train, y_train.values.ravel())
-        print_conclusions(search4)
-        search5 = GridSearchCV(pipe5, param5, n_jobs=4,refit=True,cv =args["cv"],verbose=3,scoring=scoring_method).fit(X_train, y_train.values.ravel())
-        print_conclusions(search5)
-        search6 = GridSearchCV(pipe6, param6, n_jobs=4,refit=True,cv =args["cv"],verbose=3,scoring=scoring_method).fit(X_train, y_train.values.ravel())
-        print_conclusions(search6)
-        search7 = GridSearchCV(pipe7,param7,n_jobs=4,refit=True,cv =args["cv"],verbose=0,scoring=scoring_method).fit(X_train,y_train.values.ravel())
-        print_conclusions(search7)
+        # search3 = GridSearchCV(pipe3, param3, n_jobs=4,refit=True,cv =args["cv"],verbose=3,scoring=scoring_method).fit(X_train, y_train.values.ravel())  
+        # print_conclusions(search3)
+        # search4 = GridSearchCV(pipe4, param4, n_jobs=4,refit=True,cv =args["cv"],verbose=3,scoring=scoring_method).fit(X_train, y_train.values.ravel())
+        # print_conclusions(search4)
+        # search5 = GridSearchCV(pipe5, param5, n_jobs=4,refit=True,cv =args["cv"],verbose=3,scoring=scoring_method).fit(X_train, y_train.values.ravel())
+        # print_conclusions(search5)
+        # search6 = GridSearchCV(pipe6, param6, n_jobs=4,refit=True,cv =args["cv"],verbose=3,scoring=scoring_method).fit(X_train, y_train.values.ravel())
+        # print_conclusions(search6)
+        # search7 = GridSearchCV(pipe7,param7,n_jobs=4,refit=True,cv =args["cv"],verbose=0,scoring=scoring_method).fit(X_train,y_train.values.ravel())
+        # print_conclusions(search7)
 
 
     
 
-# def drop_out_highly_correlated_features(df):
-#     """https://stackoverflow.com/questions/29294983/how-to-calculate-correlation-between-all-columns-and-remove-highly-correlated-on"""  
-#     threshold = 0.7
-#     if args["drop_out_correlated"]:
-#         # Create correlation matrix
-#         corr_matrix = df.corr(method='pearson').abs()
-#         print(corr_matrix)
-#         # Select upper triangle of correlation matrix
-#         upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(np.bool))
-#         to_drop = [column for column in upper.columns if any(upper[column] > threshold)]
-#         # Drop features 
-#         df.drop(to_drop, axis=1, inplace=True)
-#         if args["debug"]:
-#             print("head after drop out")
-#             print(df.head)
-#     return df
-
+ 
 
 # *****************************************************************************************************
 # ******************************************* MAIN ****************************************************
 # *****************************************************************************************************
-
+y_name = '6-weeks_HDRS21_class'
 # chose both reseach1 + rreseach12 as train dta or only reseach12
 if not args["both"]: # use research 2 only
-    X,y = main_caller_r2.get_X_y('6-weeks_HDRS21_class',args["X_version"]) #X and y's creationa and processing
+    X,y = main_caller_r2.get_X_y(y_name,args["X_version"]) #X and y's creationa and processing
+
 if args["both"]: # use both research 1 and research 2
     all_data = pd.read_csv('all_data.csv')
     X = all_data.iloc[:,:-1]
     y = all_data.iloc[: , -1:]
 
-# dropping collumns with correlation over some threshold
-# if args["drop_out_correlated"]:
-#     if args["debug"]:
-#         print("before drop out correlated columns: X shape = ", X.shape)
-#     X = drop_out_highly_correlated_features(X) 
-#     if args["debug"]:    
-#         print("after drop out correlated columns: X shape = ", X.shape)
-
-#shuffle order of rows to reduce noise in cross validation
-shuffled = shuffle(X.join(y) , random_state=args["rs"])
-shuffled = shuffled.reset_index(drop=True)
-X=shuffled.iloc[:,:-1]
-y= shuffled.iloc[: , -1:]
-
-
+# change from stings to codes
+# print(y)
+# y['6-weeks_HDRS21_class'] =  pd.Categorical(y['6-weeks_HDRS21_class'])
+# y['6-weeks_HDRS21_class'] = y['6-weeks_HDRS21_class'].cat.codes
+# print(y)
 if args["age_under_50"]: # using only candidated under age of 50 
     df = X.join(y)
     df = df[df['age'] < 50]
@@ -327,49 +340,59 @@ clf7 = CatBoostClassifier(random_state=args["rs"], logging_level = 'Silent')
 #The 'greeds' (dictionaries)
 # note: parameters of different models pipelines can be set using '__' separated parameter names. modelname__parameter name = options to try ing gscv:
 param1a = { #LOGISTIC REGRESSION with pca, no selectkbest 
-    "pca__n_components": range(7,10),
-    "classifier__C": [5,50,5],
+    "pca__n_components": range(2,10,2),
+    "classifier__C": range(1,3),
     "classifier__penalty": ['l2'],
     "classifier" : [clf1]
 }
-param1b = {#LOGISTIC REGRESSION with selectkbest, no pca
-    "classifier__C":[5,50,3], #classifier (logistic regression) param 'C' for tuning
-    "kBest__k": range(10,12), #selctKbest param 'k'for tuning. must be  <= num of features
-    "kBest__score_func" : [mutual_info_classif], #selctKbest param 'score_func'for tuning
+param1b = { #LOGISTIC REGRESSION with selectkbest, no pca
+    "classifier__C":range(1,3), #classifier (logistic regression) param 'C' for tuning
+    "kBest__k": range(16,24,3), #selctKbest param 'k'for tuning. must be  <= num of features
+    "kBest__score_func" : [f_classif], #selctKbest param 'score_func'for tuning
+    "classifier" : [clf1] # the classifier clf1 (LogisticRegression) will use as the final step in pipleine- the 'estimator'
+}
+param1b_offir_scoring_debug = { #LOGISTIC REGRESSION with selectkbest, no pca
+    "classifier__C":[30], #classifier (logistic regression) param 'C' for tuning
+    "kBest__k":[5], #selctKbest param 'k'for tuning. must be  <= num of features
+    "kBest__score_func" : [f_classif], #selctKbest param 'score_func'for tuning
     "classifier" : [clf1] # the classifier clf1 (LogisticRegression) will use as the final step in pipleine- the 'estimator'
 }
 param2 = { #KNN 
-    "classifier__n_neighbors" :range(8,13),
-    "kBest__k": range(4,8),
+    "classifier__n_neighbors" :range(1,4),
+    "classifier__weights":['uniform','distance'],
+    #"classifier__algorithm": ['auto', 'ball_tree', 'kd_tree', 'brute'],
+    "classifier__leaf_size": range(22,28,2),
+    "classifier__p":[2],
+    "kBest__k": range(11,19,2),
     "kBest__score_func" : [f_classif],
     "classifier" : [clf2]    
 }
 param3 = { #SVC
-    'classifier__gamma': [0.5,0.8,1,1.2,1.5], 
-    'classifier__kernel': ['linear','poly'],
-    'classifier__C':[0.1,0.2,0.3,0.4,0.5],
-    "kBest__k": range(5,25,2), #  k should be smaller than num of features always 
-    "kBest__score_func" : [mutual_info_classif],
+    'classifier__gamma': [1.5,2,2.5], 
+    'classifier__kernel': ['linear'],
+    'classifier__C':[0.35,0.4,0.45],
+    "kBest__k": range(29,36,3), #  k should be smaller than num of features always 
+    "kBest__score_func" : [f_classif],
     "classifier" : [clf3]    
 }
 param4 = { # DECISION TREE
-        'classifier__max_leaf_nodes': range(1,7), 
-        'classifier__min_samples_split': range(4,9,2), #reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
-            "kBest__k": range(5,25,2),
-            "kBest__score_func" : [f_classif],
+        'classifier__max_leaf_nodes': range(1,20,3), 
+        'classifier__min_samples_split': range(2,40,5), #reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
+            "kBest__k": range(5,25,5),
+            "kBest__score_func" :[mutual_info_classif,mutual_info_classif],
             "classifier" : [clf4]   
 }
 param5 = { # RANDOM FOREST 
 # reason I tried this classifier params:
 # https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74
         'classifier__bootstrap': [True],
-        'classifier__max_depth': range(70,90,2),
-        'classifier__max_features': range(15,25,2),
+        'classifier__max_depth': range(20,90,15),
+        'classifier__max_features': range(15,25,3),
         'classifier__min_samples_leaf': range(7,15,2),
         'classifier__min_samples_split': [2,3,4],
-        'classifier__n_estimators': range(130,150,2), #reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
+        'classifier__n_estimators': range(50,150,10), #reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
         "kBest__k": range(25,40,2),
-        "kBest__score_func" : [mutual_info_classif],
+        "kBest__score_func" : [mutual_info_classif], # maybe takes longer than f_classif
         "classifier" : [clf5]   
 }
 
@@ -389,7 +412,7 @@ param7 = { #CATBOOST CLASSIFIER
 
 # tune parameters with gscv and train model:
 pipe1a = Pipeline(steps=[("scaler", scaler), ("pca", pca),('corr_drop', CorrelationDropper2(threshold=0.9)),("classifier", param1a["classifier"][0])])
-pipe1b = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper2(threshold=0.9)),("classifier", param1b["classifier"][0])])
+pipe1b = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier", param1b["classifier"][0])])
 pipe2 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper2(threshold=0.9)),("classifier", param2["classifier"][0])])
 pipe3 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper2(threshold=0.9)),("classifier", param3["classifier"][0])])
 pipe4 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper2(threshold=0.9)),("classifier",param4["classifier"][0])])
@@ -398,42 +421,75 @@ pipe6 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop
 pipe7 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),('corr_drop', CorrelationDropper2(threshold=0.9)),("classifier", param7["classifier"][0])])
 
 
+splitted_congifs = [] # each list is a list of X_train, X_test,y_train, y_test to run cv and fit on
 
-# Split:
-if(args["split_rows"] == 1): # regular split=  don't drop subjects:    
-    X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.15,random_state = args["rs"]) 
-    run_all_cvs(False,X_train,y_train)
+# Split data by rows into categories (or not):
+if(args["split_rows"] == 'normal'): # regular test train split  =  don't drop subjects:    
+    X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"],shuffle=True) 
+    splitted_congifs.append([X_train, X_test,y_train, y_test])
 
-
-if(args["split_rows"] == 2): # split by 'Treatment_group' (device - h1/h7)
+if(args["split_rows"] in ['h1','h7','h1h7']): # split by 'Treatment_group' (device - h1/h7)
     print("splitting by h1 h7 : ")
-
-    #run seperately for each treatment group
     
-    # for treatment group 1
-    df1 = X[X['Treatment_group'] == 0].join(y, how = "inner")
-    print("new data- only the rows where column 'Treatment_group is 0:") 
-    X = df1.iloc[:, :-1]
-    y = df1.iloc[:, -1]
-    X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"]) 
-    run_all_cvs(False, X_train,y_train)
+    if args['split_rows'] in ['h1','h1h7']: #use h1
+        # for treatment group 1 - h1 ('Treatment_group' is 0)
+        # h1 subjects only
+        df1 = X[X['Treatment_group'] == 0].join(y, how = "inner") # H1
+        print("new data- only the rows where column 'Treatment_group is 0:") 
+        X_tmp = df1.iloc[:, :-1]
+        y_tmp = df1.iloc[:, -1]
+        X_train, X_test,y_train, y_test = train_test_split(X_tmp, y_tmp, test_size=0.2,random_state = args["rs"],shuffle=True) 
+        splitted_congifs.append([X_train, X_test,y_train, y_test])
     
-    # for treatment group 2
-    df2 = X[X['Treatment_group'] == 1].join(y, how = "inner")
-    print("new data- only the rows where column 'Treatment_group is 1:") 
-    X = df2.iloc[:, :-1]
-    y = df2.iloc[:, -1]
+    if args['split_rows'] in ['h7', 'h1h7']:   #use h7
+        # for treatment group 2 - h7 ('Treatment_group' is 1) 
+        # h7 subjects only
+        df2 = X[X['Treatment_group'] == 1].join(y, how = "inner") #H7
+        print("new data- only the rows where column 'Treatment_group is 1:") 
+        X = df2.iloc[:, :-1]
+        y = df2.iloc[:, -1]
+        X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"],shuffle=True) 
+        splitted_congifs.append([X_train, X_test,y_train, y_test])
+
+
+
+# run the full process of cv, and test on the sets
+for config in splitted_congifs:
     
-    run_all_cvs(False, X_train,y_train)
+    X_train, X_test,y_train, y_test = config[0],config[1],config[2],config[3]
+    
+    lite_mode = False # use for debuging only. using one small grid
+    if not lite_mode: # full grid search , all models
+        param_pipe_list = [[param1a,pipe1a],[param1b,pipe1b],[param2,pipe2],[param3,pipe3],
+        [param4,pipe4],[param5,pipe5],[param6,pipe6],[param7,pipe7]]
+
+
+    if lite_mode: # just for debugging
+        param_pipe_list = [[param1b_offir_scoring_debug,pipe1b]]
+
+    for pair in param_pipe_list:
+        yt,yp = [],[]
+        param = pair[0]
+        pipe = pair[1]
+        search = RandomizedSearchCV(pipe,param,n_iter=args["n_iter"],cv =args["cv"],verbose=3 ,random_state= args['rs'],scoring=extract_scoring_method(args['scoring_method']), refit=True).fit(X_train.astype(float),y_train.squeeze())
+        if args['scoring_method'] =='custom_f1_scorer':
+            cnt_splits = args['cv']
+            best_ind = search.best_index_
+            chooseThese = range(best_ind*cnt_splits,best_ind*cnt_splits+cnt_splits,1) # the exact range of the 5 test scores of the best index configuration
+            yp_best = [yp[index] for index in chooseThese]
+            #print("indexes range - folds of best configuration (chooseThese): ",chooseThese)
+            yp_cv = np.concatenate(yp_best)
+            yt_best = [yt[index] for index in chooseThese]
+            yt_cv = np.concatenate(yt_best)    # print some more conclusions and details about the winning cv parmas and pipe and save them to csv          
+            print_conclusions(X_train,pipe,search,yt_cv,yp_cv)
+        else:
+            print_conclusions(X_train,pipe,search)
+
+   
+
+ 
 
 
 
     
-
-    # 6. 
-    #after that:
-    #1. choose hights score for i in all 'serchi' values
-    #since used refit=true, after picking best hyperparametes, 'searchi' after picking them- trained the model with those hyperparams on data train(x_train,y_train) 
-    #2. predict searchi.(X,y)
-
-
+plt.show()

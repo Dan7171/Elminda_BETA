@@ -81,26 +81,20 @@ def specify_X_to_y(X,y_name):
 def get_X_y (y_name,X_version): # for use in GSCVrunner
 
     # Part a: generate X without filtering and y (y is same for X with or without filtering)
-    
-    bna_path = 'second_research\EYEC_Cordance_Gamma.csv'
+    if args['use_gamma_columns']:
+        bna_path = 'second_research\EYEC_Cordance_Gamma_no_missing_vals.csv'
+    else:
+        bna_path = 'second_research\EYEC_Cordance_Gamma.csv'
     clinical_path = 'second_research\BW_clinical_data.csv'
-    # Step 1: prepare X for model training
+    # prepare X for model training
     X = numeric_df_initializer.generate_prediction_df(bna_path,clinical_path) #initial numeric-predicting data frame
-    #print("y = ", y_name)
     X_specific = specify_X_to_y(X.copy(),y_name) # remove the second y  columns
-    #X_specific.to_csv('second_research/X_specfic_before_dropping.csv',index = False)  
     y = get_y_column(X_specific,y_name).reset_index(drop = True) # for technical reasons - y is always produced based on the original no-filte X (as seeing here), even if we chose to use filtered X (it's ok, no changing resuluts)
-
-    
-
     X_specific.drop(['6-weeks_HDRS21_totalscore','6-weeks HARS_totalscore','Baseline_HDRS21_totalscore',' Baseline_HARS_totalscore'],axis=1,inplace=True) #we dont want week 6 features to effect the prdiction
-    #X_specific.to_csv('second_research/X_specfic_after_dropping.csv',index = False)
     
-
     # Part b: replace X to be a filtered version if the argument X_version is not set to 1
     # if X_version == 1: # no filtering, remain with the basic version
     #    do nothing
-     
     if(X_version == 2): # basic filtering
         X_specific = pd.read_csv("second_research\X_(basic_filter).csv")
     if(X_version == 3): # hard filtering- predictors only

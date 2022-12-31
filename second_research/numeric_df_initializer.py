@@ -12,13 +12,13 @@ from math import sqrt
 import pandas as pd
 import numpy as np
 import datetime as dt
-import seaborn as sns
+#import seaborn as sns
 import warnings
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import r2_score
-from pandas.core.common import SettingWithCopyWarning
+#from pandas.core.common import SettingWithCopyWarning
 warnings.simplefilter(action= "ignore", category= UserWarning)
-warnings.simplefilter(action= "ignore", category= SettingWithCopyWarning)
+#warnings.simplefilter(action= "ignore", category= SettingWithCopyWarning)
 
 from runArguments import args
 
@@ -97,14 +97,9 @@ def generate_prediction_df(bna_path, clinical_path):
     clinical.dropna(axis=0, how='all', thresh=None, subset=None, inplace=True) # for some reason when opening this csv it is adding many Nan rows and cols
     clinical.dropna(axis=1, how='all', thresh=None, subset=None, inplace=True) # so in these two rows we remove them
     bna = pd.read_csv(bna_path)
-    #continue from here 2.11
-    # supposed to drop all columns with missing values (mostly the cordance ones)
-    # run next row and check at home what is the new bna df (with saving file),
-    # the goal is that it won't harm number of valid subjects (103)
-    bna.dropna(axis=1, how='any',inplace=True) # removing all cordance missing values and any other missing values
-    #bna.to_csv('second_research/bna.csv',index = False)
-
-    
+    if not args['use_gamma_columns']:
+        bna.dropna(axis=1, how='any',inplace=True) # removing all cordance missing values and any other missing values
+    print(bna)
     #Step 1 -  merge dfs by the column 'subject':
     visits = clinical.merge(bna, how = 'inner',on = ['subject']) #leaving in the df all pairs with the same subject
     #Step 2 - drop out illegal subjects- subjcets with two visits of the same kind (1,1 or 2,2):

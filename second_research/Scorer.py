@@ -34,7 +34,7 @@ def print_precission_and_recall(search,cv)
     print("Response rate:",y_train.values.mean())
     print("CV Precision:", cm[1][1] / (cm[1][1] + cm[0][1]))
     print("CV Recall:", cm[1][1] / (cm[1][1] + cm[1][0]))
-
+    
 
  
 
