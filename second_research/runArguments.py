@@ -11,7 +11,7 @@ args = {
 "age_under_50" : False , # use only subjects with age less than 50
 "debug" : False ,# never use
 "exhaustive_grid_search": False, #or randomized
-"classification_type": "normal", # "normal" =2 classes: < 50% change, => 50% change / "extreme" = 3 classes:  <30% , 30-70% , >70% change
+"classification_type": "normal", # " normal" =2 classes: < 50% change, => 50% change / "extreme" = 3 classes:  <30% , 30-70% , >70% change
 "scoring_method": 'accuracy', # "accuracy" /'f1'/ 'roc_auc'
 "both": False, # True- train on both research 1 and research 2 data , False- train on research 2 only.IMPORTANT: if set to True, use X_version = 1 only!!!
 "cv":5, # param for cv
