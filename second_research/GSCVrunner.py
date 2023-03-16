@@ -451,7 +451,7 @@ for config in splitted_congifs:
         param_pipe_list = [[param1a,pipe1a],[param1b,pipe1b],[param2,pipe2],[param3,pipe3],
         [param4,pipe4],[param5,pipe5],[param6,pipe6],[param7,pipe7]]
 
-
+    randomized_search = False
     for pair in param_pipe_list:
         yt,yp = [],[]
         param = pair[0]
