@@ -263,15 +263,17 @@ def scorer():
 # ===================================================
  
 
- 
 
 # *****************************************************************************************************
 # ******************************************* MAIN ****************************************************
 # *****************************************************************************************************
+
+
 y_name = '6-weeks_HDRS21_class'
+
 # chose both reseach1 + rreseach12 as train dta or only reseach12
 if not args["both"]: # use research 2 only
-    X,y = main_caller_r2.get_X_y(y_name,args["X_version"]) #X and y's creationa and processing
+    X,y = main_caller_r2.get_X_y(y_name,args["X_version"]) # X and y's creationa and processing
 
 if args["both"]: # use both research 1 and research 2
     all_data = pd.read_csv('all_data.csv')
@@ -287,14 +289,17 @@ if args["age_under_50"]: # using only candidated under age of 50
     X = df.iloc[:,:-1]
     y = df.iloc[: , -1:]
 
+
 # create the piplelines and greeds:
 
 #models (not classifiers) to use in pipelines
+
 pca = PCA()
 scaler = StandardScaler()
 kBest_selector = SelectKBest()
 
 #classifiers (estimators for the piplene-final step)
+
 clf1 = LogisticRegression(random_state=args["rs"])
 clf2 = KNeighborsClassifier()
 clf3 = SVC(probability=True, random_state=args["rs"])
@@ -303,8 +308,9 @@ clf5 = RandomForestClassifier(random_state=args["rs"])
 clf6 = GradientBoostingClassifier(random_state=args["rs"])
 clf7 = CatBoostClassifier(random_state=args["rs"], logging_level = 'Silent')
 
-#The param'greeds' 
+#The param 'grids' 
 # note: parameters of different models pipelines can be set using '__' separated parameter names. modelname__parameter name = options to try ing gscv:
+
 param1a = { #LOGISTIC REGRESSION with pca, no selectkbest 
     "pca__n_components": range(2,50,3),
     "classifier__C": [0.001,0.01,0.1,1,10,100],
@@ -321,6 +327,7 @@ param1b = { #LOGISTIC REGRESSION with selectkbest, no pca
     "classifier" : [clf1]
 
 }
+
 param1b_offir_scoring_debug = { #LOGISTIC REGRESSION with selectkbest, no pca
     "classifier__C":[30], #classifier (logistic regression) param 'C' for tuning
     "kBest__k":[5], #selctKbest param 'k'for tuning. must be  <= num of features
@@ -401,6 +408,7 @@ if args['balance_y_values']:
     data = data.drop(data[data['6-weeks_HDRS21_class'] == 1].sample(frac=.3).index)
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
+
 ############
 splitted_congifs = [] # each list is a list of X_train, X_test,y_train, y_test to run cv and fit on
 
@@ -436,8 +444,6 @@ if(args["split_rows"] in ['h1','h7','h1h7']): # split by 'Treatment_group' (devi
         splitted_congifs.append([X_train, X_test,y_train, y_test])
         
 
- 
-
 # run the full process of cv, and test on the sets
 for config in splitted_congifs:
     X_train, X_test,y_train, y_test = config[0],config[1],config[2],config[3] #8.1 - from ofir- here add stratified param on rate of responders
@@ -448,10 +454,12 @@ for config in splitted_congifs:
         param_pipe_list = [[param2,pipe2]]
 
     if not lite_mode: # full grid search , all models
+
+        # pipe is represent the steps we want to execute, param represents which args we want to execute with
         param_pipe_list = [[param1a,pipe1a],[param1b,pipe1b],[param2,pipe2],[param3,pipe3],
         [param4,pipe4],[param5,pipe5],[param6,pipe6],[param7,pipe7]]
 
-    randomized_search = False
+    # randomized_search = False
     for pair in param_pipe_list:
         yt,yp = [],[]
         param = pair[0]
