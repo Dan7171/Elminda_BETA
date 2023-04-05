@@ -20,23 +20,23 @@ args = {
 
 "classification_type": "normal", # "normal" = 2 classes: < 50% change, => 50% change / "extreme" = 3 classes:  <30% , 30-70% , >70% change
 
-"scoring_method": 'precision', # "accuracy" /'f1'/ 'roc_auc' /'precision' /'recall' (sklearn metrics score funcs)
+"scoring_method": 'accuracy', # "accuracy" /'f1'/ 'roc_auc' /'precision' /'recall' (sklearn metrics score funcs)
 
 "both": False, # (for now works on classificatin only) True- train on both research 1 and research 2 data , False- train on research 2 only.IMPORTANT: if set to True, use X_version = 1 only!!!
 
-"cv":8, # param for cv
+"cv":5, # param for cv
 
 "balance_y_values" : True
     , # working for clasification only. balancing the number of responsive and non responsive (y categories)
 
-"n_iter": 10, # param for randomized cv - num of combinations to try in randomized search
+"n_iter": 1000, # param for randomized cv - num of combinations to try in randomized search
 
 "n_jobs":1, # num of threads each model is generating to speed up grid search,
 
 "use_gamma_columns":True, # True: using Gamma columns. False: not using them. IMPORTANT: for True, use with X_version = 1 only
 
-"classification": True # true - classification cv train, false- regression cv train
-
+"classification": True, # true - classification cv train, false- regression cv train
+"lite_mode": False # True for running search on one model only, False for running on more models (one after the next)
 }
 if args["both"] or args["balance_y_values"]:
     args['classification'] = True
@@ -44,3 +44,28 @@ if args["both"] or args["balance_y_values"]:
 if not args['classification']:
     args["balance_y_values"] = False
     args["both"] = False
+
+
+
+# todo
+# 1. regressors?
+# 2. normaliztion?
+
+# normalize a series (checked)
+
+    # from sklearn.preprocessing import MinMaxScaler
+    # scaler = MinMaxScaler()
+    # # Normalize the Series using MinMaxScaler
+    # normalized_s = scaler.fit_transform(df.values.reshape(-1, 1))
+    # # Convert the normalized values back to a Series
+    # normalized_s = pd.Series(normalized_s.reshape(-1))
+    #
+
+# # normalize a df
+    # import pandas as pd
+    # from sklearn import preprocessing
+    #
+    # x = df.values #returns a numpy array
+    # min_max_scaler = preprocessing.MinMaxScaler()
+    # x_scaled = min_max_scaler.fit_transform(x)
+    # df = pd.DataFrame(x_scaled)

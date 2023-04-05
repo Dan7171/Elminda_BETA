@@ -296,6 +296,9 @@ def CV_Score(y_true, y_pred):
     print("fold's true y \n", y_true)
     print("fold's predicted y\n", y_pred)
     print(f"scoring metric: {my_scorer}, score: {cvscore} ")
+    if cvscore == nan:
+        print("problem - cvscore is nan.check y_true, y_pred...")
+        exit()
 
     return cvscore
 
@@ -339,10 +342,17 @@ if args["age_under_50"]: # using only candidated under age of 50
 
 # create the piplelines and greeds:
 
-#models (not classifiers) to use in pipelines
+#models to use in pipelines
 
+#Principal component analysis (PCA)
 pca = PCA()
+
+# Standardize features by removing the mean and scaling to unit variance.
+# The standard score of a sample x is calculated as:
+# z = (x - u) / s
 scaler = StandardScaler()
+
+# Select features according to the k highest scores
 kBest_selector = SelectKBest()
 
 
@@ -439,11 +449,12 @@ if args['classification']:
         "classifier": [clf7]
     }
     param8 = { # MLPClassifier (neural network)
-        "pca__n_components": [1,2,3],
-        'classifier__hidden_layer_sizes': [ (5),(5,3), (10, 5), (20, 10, 5)],
-        'classifier__activation': ['relu', 'logistic'],
+        "pca__n_components": [1,2,3,5,10],
+        'classifier__hidden_layer_sizes': [  (2),(5),(10),(5,3),(50,50,50),(30,30,30),(50,100,50), (100,), (10, 5), (20, 10, 5)],
+        'classifier__activation': ['relu', 'logistic','tanh'],
         'classifier__solver': ['adam', 'sgd'],
         'classifier__alpha': [0.0001, 0.001, 0.01],
+        'classifier__learning_rate': ['constant', 'adaptive'],
         "classifier": [clf8]
     }
 
@@ -492,7 +503,7 @@ if args['balance_y_values']: #classification only
     data = X.join(y)
     print("balancing y values...")
     print(f"before balancing: {X.shape[0]} y values\nvalue counts:\n{y.value_counts()}")
-    data = data.drop(data[data[y_name] == 1].sample(frac=.5).index) # drop a fraction of the responders to equalize num of responders and non responders
+    data = data.drop(data[data[y_name] == 1].sample(frac=.3).index) # drop a fraction of the responders to equalize num of responders and non responders
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
     print(f"after balancing: {data.shape[0]} y values\nvalue counts:\n{y.value_counts()}")
@@ -553,21 +564,20 @@ for config in splitted_congifs:
     for i in range(4):
         if isinstance(config[i],pd.Series): #convert to data frame to make scorer work
             config[i] = config[i].to_frame()
+
     X_train, X_test,y_train, y_test = config[0],config[1],config[2],config[3] #8.1 - from ofir- here add stratified param on rate of responders
 
-    lite_mode = True # use for debbuging only. using one small grid
-    
     if args['classification']:
-        if lite_mode: # just for debugging. using one small grid
+        if args['lite_mode']: # just for debugging. using one small grid
             param_pipe_list = [[param8,pipe8]]
 
-        if not lite_mode: # full grid search , all models
+        if not args['lite_mode']: # full grid search , all models
 
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
             param_pipe_list = [[param1a,pipe1a],[param1b,pipe1b],[param2,pipe2],[param3,pipe3],
             [param4,pipe4],[param5,pipe5],[param6,pipe6],[param7,pipe7]]
     else: # regression
-        if lite_mode: # just for debugging. using one small grid
+        if args['lite_mode']: # just for debugging. using one small grid
             param_pipe_list = [[param8_reg,pipe8_reg]]
     # randomized_search = False
     for pair in param_pipe_list:
@@ -579,7 +589,9 @@ for config in splitted_congifs:
 
         total_splits = args["n_iter"] * args["cv"] # num of iterations in search * num of folds
 
+        # cross validation search
         search = RandomizedSearchCV(pipe, param,n_iter=args["n_iter"],cv =args["cv"],verbose=3 ,random_state = args['rs'],scoring = scorer(), refit=True).fit(X_train.astype(float),y_train)
+
         n_splits = args['cv'] # num of splits in cv_iter (cv parameter n_splits)
         best_cv_iter_idx = search.best_index_ # index of the iteration in cross val search which had best parsms (0<=best_cv_iter_idx <=niter)
         best_cv_iter_first_split_idx = best_cv_iter_idx * n_splits
