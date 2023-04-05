@@ -8,6 +8,7 @@ import datetime
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
 from sklearn import metrics
 from sklearn.model_selection import cross_val_score
 from sklearn.feature_selection import SelectKBest, f_classif, f_regression, mutual_info_classif
@@ -16,6 +17,7 @@ from sklearn.decomposition import PCA
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
+from sklearn.neural_network import MLPRegressor
 from catboost import CatBoostClassifier
 import warnings
 import main_caller_r2
@@ -154,7 +156,12 @@ class CorrelationDropper2(BaseEstimator, TransformerMixin):
  
 def print_conclusions(df,pipe,search,yt_cv=None,yp_cv=None):
     print("-----------------------\n New CV report \n-----------------------")
-    print("* Classifier: \n", pipe.named_steps['classifier'])
+    if args['classification']:
+        name = pipe.named_steps['classifier']
+        print("* Classifier: \n", name)
+    else:
+        name = pipe.named_steps['regressor']
+        print("* Regressor: \n", name)
     print("* User arguments: \n",args)
     print("* Pipeline details: \n" , str(pipe))
     print("* Best Hyperparametes picked in cross validation: (cv's best score): \n",search.best_params_)    
@@ -177,14 +184,22 @@ def print_conclusions(df,pipe,search,yt_cv=None,yp_cv=None):
     print("* Confusion matrix: \n",cm) 
     # confusion matrix plot making: 
     fig = metrics.ConfusionMatrixDisplay.from_predictions(yt_cv, yp_cv)
-    fig.ax_.set_title(pipe.named_steps['classifier'])
+    
+    fig.ax_.set_title(name)
 
     # calculate Response rate: 
     y_train_responders_cnt = 0
-    positive_label = 1 # can vary in different expirements
-    for y_val in y_train.values:
-        if y_val == positive_label:
-            y_train_responders_cnt += 1
+    
+    if args['classification']:
+        positive_label = 1 # can vary in different expirements
+        for y_val in y_train.values:
+            if y_val == positive_label:
+                y_train_responders_cnt += 1
+    
+    else: # regression
+        for y_val in y_train.values:
+            if y_val <-50: 
+                y_train_responders_cnt += 1
     
     print("* Response rate: ",y_train_responders_cnt / len(y_train))
     true_count = cm[0][0] + cm[1][1]
@@ -267,27 +282,40 @@ def scorer():
 # *****************************************************************************************************
 # ******************************************* MAIN ****************************************************
 # *****************************************************************************************************
+print(args)
 
-
-y_name = '6-weeks_HDRS21_class'
+if args['classification']:
+    y_name = '6-weeks_HDRS21_class' # classification problem (prediciting change rate class)
+else:
+    y_name = "6-weeks_HDRS21_change_rate" # regression problem
 
 # chose both reseach1 + rreseach12 as train dta or only reseach12
-if not args["both"]: # use research 2 only
-    X,y = main_caller_r2.get_X_y(y_name,args["X_version"]) # X and y's creationa and processing
+# if not args["both"]: # use research 2 only
+#     X,y = main_caller_r2.get_X_y(y_name,args["X_version"]) # X and y's creationa and processing
 
-if args["both"]: # use both research 1 and research 2
-    all_data = pd.read_csv('all_data.csv')
-    X = all_data.iloc[:,:-1]
-    y = all_data.iloc[: , -1:]
+# if args["both"]: # use both research 1 and research 2,for now works in classification only
+#     all_data = pd.read_csv('all_data.csv')
+#     X = all_data.iloc[:,:-1]
+#     y = all_data.iloc[: , -1:]
+
+
+X,y = main_caller_r2.get_X_y(y_name,args["X_version"]) # X and y's creationa and processing
+
+
+
 
 X.reset_index(inplace=True,drop=True)
-y['6-weeks_HDRS21_class'] = y['6-weeks_HDRS21_class'].replace({"responsive": 1, "non_responsive": 0})
+if args['classification']:
+    y[y_name] = y[y_name].replace({"responsive": 1, "non_responsive": 0})
 
 if args["age_under_50"]: # using only candidated under age of 50 
     df = X.join(y)
     df = df[df['age'] < 50]
     X = df.iloc[:,:-1]
     y = df.iloc[: , -1:]
+
+
+
 
 
 # create the piplelines and greeds:
@@ -298,123 +326,165 @@ pca = PCA()
 scaler = StandardScaler()
 kBest_selector = SelectKBest()
 
+
+##################### CLASSIFICATION ##############################
+
 #classifiers (estimators for the piplene-final step)
+if args['classification']:
+    clf1 = LogisticRegression(random_state=args["rs"])
+    clf2 = KNeighborsClassifier()
+    clf3 = SVC(probability=True, random_state=args["rs"])
+    clf4 = DecisionTreeClassifier(random_state=args["rs"])
+    clf5 = RandomForestClassifier(random_state=args["rs"])
+    clf6 = GradientBoostingClassifier(random_state=args["rs"])
+    clf7 = CatBoostClassifier(random_state=args["rs"], logging_level = 'Silent')
+    clf8 = MLPClassifier(random_state=args["rs"])
+    #The param 'grids' 
+    # note: parameters of different models pipelines can be set using '__' separated parameter names. modelname__parameter name = options to try ing gscv:
 
-clf1 = LogisticRegression(random_state=args["rs"])
-clf2 = KNeighborsClassifier()
-clf3 = SVC(probability=True, random_state=args["rs"])
-clf4 = DecisionTreeClassifier(random_state=args["rs"])
-clf5 = RandomForestClassifier(random_state=args["rs"])
-clf6 = GradientBoostingClassifier(random_state=args["rs"])
-clf7 = CatBoostClassifier(random_state=args["rs"], logging_level = 'Silent')
+    param1a = { #LOGISTIC REGRESSION with pca, no selectkbest 
+        "pca__n_components": range(2,50,3),
+        "classifier__C": [0.001,0.01,0.1,1,10,100],
+        "classifier__penalty": ['l2'],
+        "classifier" : [clf1]
+    }
+    # tune 3. c=0.5, k = 16, penalty= l2,mutual_info
+    param1b = { #LOGISTIC REGRESSION with selectkbest, no pca
+        
+        "classifier__C":[0.45,0.47,0.5,0.52,0.55,0.6], #classifier (logistic regression) param 'C' for tuning
+        "kBest__k": range(15,17), #selctKbest param 'k'for tuning. must be  <= num of features
+        'classifier__penalty' : ['l2'],
+        "kBest__score_func" : [mutual_info_classif], #selctKbest param 'score_func'for tuning
+        "classifier" : [clf1]
 
-#The param 'grids' 
-# note: parameters of different models pipelines can be set using '__' separated parameter names. modelname__parameter name = options to try ing gscv:
+    }
 
-param1a = { #LOGISTIC REGRESSION with pca, no selectkbest 
-    "pca__n_components": range(2,50,3),
-    "classifier__C": [0.001,0.01,0.1,1,10,100],
-    "classifier__penalty": ['l2'],
-    "classifier" : [clf1]
-}
-# tune 3. c=0.5, k = 16, penalty= l2,mutual_info
-param1b = { #LOGISTIC REGRESSION with selectkbest, no pca
-     
-    "classifier__C":[0.45,0.47,0.5,0.52,0.55,0.6], #classifier (logistic regression) param 'C' for tuning
-    "kBest__k": range(15,17), #selctKbest param 'k'for tuning. must be  <= num of features
-    'classifier__penalty' : ['l2'],
-    "kBest__score_func" : [mutual_info_classif], #selctKbest param 'score_func'for tuning
-    "classifier" : [clf1]
+    param1b_offir_scoring_debug = { #LOGISTIC REGRESSION with selectkbest, no pca
+        "classifier__C":[30], #classifier (logistic regression) param 'C' for tuning
+        "kBest__k":[5], #selctKbest param 'k'for tuning. must be  <= num of features
+        "kBest__score_func" : [f_classif], #selctKbest param 'score_func'for tuning
+        "classifier" : [clf1] # the classifier clf1 (LogisticRegression) will use as the final step in pipleine- the 'estimator'
+    }
+    param2 = { #KNN 
+        "classifier__n_neighbors" :range(1,90,3),
+        "classifier__weights":['uniform','distance'],
+        "classifier__algorithm": ['auto', 'ball_tree', 'kd_tree', 'brute'],
+        "classifier__leaf_size": range(3,80,3),
+        "classifier__p":[2],
+        "kBest__k": range(4,100,3),
+        "kBest__score_func" : [f_classif,mutual_info_classif], #selctKbest param 'score_func'for tuning
+        "classifier" : [clf2]    
+    }
+    param3 = { #SVC
+        'classifier__gamma':   [60,65,70,75,80], 
+        'classifier__kernel': ['linear', 'rbf', 'sigmoid'],
+        'classifier__C' : [900,950,1000,1100,1200,1400],
+        "kBest__k": range(40,70,5), #  k should be smaller than num of features in X 
+        "classifier" : [clf3]    
+    }
+    param4 = { # DECISION TREE
+            'classifier__max_leaf_nodes': range(1,25,3), 
+            'classifier__max_depth':[2,4,6,8,10,12],
+            'classifier__criterion':['gini', 'entropy'],
+            'classifier__min_samples_split': range(2,40,5), #reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
+            "kBest__k": range(4,40,8),
+            "classifier" : [clf4]   
+    }
+    param5 = { # RANDOM FOREST 
+    # reason I tried this classifier params:
+    # https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74
+            'classifier__bootstrap': [True,False],
+            "classifier__max_depth": range(2,50,2),
+            "classifier__min_samples_split": range(2,50,3),
+            "classifier__min_samples_leaf":  range(2,50,3),
+            "classifier__max_features":  range(2,30,3),
+            "kBest__k": range(4,80,3),
+            "classifier" : [clf5]   
+    }
 
-}
-
-param1b_offir_scoring_debug = { #LOGISTIC REGRESSION with selectkbest, no pca
-    "classifier__C":[30], #classifier (logistic regression) param 'C' for tuning
-    "kBest__k":[5], #selctKbest param 'k'for tuning. must be  <= num of features
-    "kBest__score_func" : [f_classif], #selctKbest param 'score_func'for tuning
-    "classifier" : [clf1] # the classifier clf1 (LogisticRegression) will use as the final step in pipleine- the 'estimator'
-}
-param2 = { #KNN 
-    "classifier__n_neighbors" :range(1,90,3),
-    "classifier__weights":['uniform','distance'],
-    "classifier__algorithm": ['auto', 'ball_tree', 'kd_tree', 'brute'],
-    "classifier__leaf_size": range(3,80,3),
-    "classifier__p":[2],
-    "kBest__k": range(4,100,3),
-    "kBest__score_func" : [f_classif,mutual_info_classif], #selctKbest param 'score_func'for tuning
-    "classifier" : [clf2]    
-}
-param3 = { #SVC
-    'classifier__gamma':   [60,65,70,75,80], 
-    'classifier__kernel': ['linear', 'rbf', 'sigmoid'],
-    'classifier__C' : [900,950,1000,1100,1200,1400],
-    "kBest__k": range(40,70,5), #  k should be smaller than num of features in X 
-    "classifier" : [clf3]    
-}
-param4 = { # DECISION TREE
-        'classifier__max_leaf_nodes': range(1,25,3), 
-        'classifier__max_depth':[2,4,6,8,10,12],
-        'classifier__criterion':['gini', 'entropy'],
-        'classifier__min_samples_split': range(2,40,5), #reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
+    param6 = { #GRADIENT BOOSTING 
+    # reason I tried this classifier params:
+    #https://www.analyticsvidhya.com/blog/2016/02/complete-guide-parameter-tuning-gradient-boosting-gbm-python/
+        "classifier__n_estimators":[5,10,30,50,100,150,250,400,500],
+        'classifier__max_depth':range(4,80,3),
+        "classifier__learning_rate":[0.01,0.1,1,10,100],
+        "kBest__k":range(4,80,3),
+        "classifier": [clf6]
+    }
+    param7 = { #CATBOOST CLASSIFIER 
+        'classifier__n_estimators' : [3,10,30, 50, 100, 500],
+        "classifier__learning_rate":[0.01,0.1,1,10,100],
+        'classifier__subsample':[0.1,0.3,0.5, 0.7, 1.0],
+        'classifier__max_depth': range(3,10,3),
+        'classifier__learning_rate': [0.05,0.1,0.5],
         "kBest__k": range(4,40,8),
-        "classifier" : [clf4]   
-}
-param5 = { # RANDOM FOREST 
-# reason I tried this classifier params:
-# https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74
-        'classifier__bootstrap': [True,False],
-        "classifier__max_depth": range(2,50,2),
-        "classifier__min_samples_split": range(2,50,3),
-        "classifier__min_samples_leaf":  range(2,50,3),
-        "classifier__max_features":  range(2,30,3),
-        "kBest__k": range(4,80,3),
-        "classifier" : [clf5]   
-}
+        "classifier": [clf7]
+    }
+    param8 = { # MLPClassifier (neural network)
+        "pca__n_components": [1,2,3],
+        'classifier__hidden_layer_sizes': [(10, 5), (20, 10, 5)],
+        'classifier__activation': ['relu', 'tanh', 'logistic'],
+        'classifier__solver': ['adam', 'sgd'],
+        'classifier__alpha': [0.0001, 0.001, 0.01],
+        "classifier": [clf8]
+    }
 
-param6 = { #GRADIENT BOOSTING 
-# reason I tried this classifier params:
-#https://www.analyticsvidhya.com/blog/2016/02/complete-guide-parameter-tuning-gradient-boosting-gbm-python/
-    "classifier__n_estimators":[5,10,30,50,100,150,250,400,500],
-    'classifier__max_depth':range(4,80,3),
-    "classifier__learning_rate":[0.01,0.1,1,10,100],
-    "kBest__k":range(4,80,3),
-    "classifier": [clf6]
-}
-param7 = { #CATBOOST CLASSIFIER 
-    'classifier__n_estimators' : [3,10,30, 50, 100, 500],
-    "classifier__learning_rate":[0.01,0.1,1,10,100],
-    'classifier__subsample':[0.1,0.3,0.5, 0.7, 1.0],
-    'classifier__max_depth': range(3,10,3),
-    'classifier__learning_rate': [0.05,0.1,0.5],
-    "kBest__k": range(4,40,8),
-    "classifier": [clf7]
-}
-
-# define the pipelines
-pipe1a = Pipeline(steps=[("scaler", scaler), ("pca", pca),("classifier", param1a["classifier"][0])])
-pipe1b = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier", param1b["classifier"][0])])
-pipe2 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier", param2["classifier"][0])])
-pipe3 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier", param3["classifier"][0])])
-pipe4 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier",param4["classifier"][0])])
-pipe5 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier", param5["classifier"][0])])
-pipe6 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier", param6["classifier"][0])])
-pipe7 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier", param7["classifier"][0])])
+    # define the pipelines
+    pipe1a = Pipeline(steps=[("scaler", scaler), ("pca", pca),("classifier", param1a["classifier"][0])])
+    pipe1b = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier", param1b["classifier"][0])])
+    pipe2 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier", param2["classifier"][0])])
+    pipe3 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier", param3["classifier"][0])])
+    pipe4 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier",param4["classifier"][0])])
+    pipe5 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier", param5["classifier"][0])])
+    pipe6 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier", param6["classifier"][0])])
+    pipe7 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier", param7["classifier"][0])])
+    pipe8  = Pipeline(steps=[("scaler", scaler), ("pca", pca),("classifier", param8["classifier"][0])])
 
 
+
+########################## regression ####################################
+
+else: # regression
+
+    # neural network regression
+    regressor8 = MLPRegressor(random_state=args['rs'])
+    param8_reg = {
+        'regressor__hidden_layer_sizes': [(10,), (20, 10)],
+        'regressor__activation': ['relu', 'tanh', 'logistic'],
+        'regressor__solver': ['adam', 'sgd'],
+        'regressor__alpha': [0.0001, 0.001, 0.01],
+        'pca__n_components': [2, 4, 6],
+        'scaler': [None, scaler],
+        'regressor':[regressor8]
+    }
+    pipe8_reg = Pipeline(steps=[("scaler", scaler), ("pca", pca),("regressor", param8_reg["regressor"][0])])
+    
+   
+ 
+        
 #############
 # 9.1 - try with less responsive subjets:
-if args['balance_y_values']:
+if args['balance_y_values']: #classification only
     data = X.join(y)
     data = data.drop(data[data['6-weeks_HDRS21_class'] == 1].sample(frac=.3).index)
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
 
 ############
+
+
+print("XXXXXXXXXXXXXXXXXXXXXXXX")
+print(X)
+print("YYYYYYYYYYYYYYYYYYYYYYYY")
+print(y)
 splitted_congifs = [] # each list is a list of X_train, X_test,y_train, y_test to run cv and fit on
 
 # Split data by rows into categories (or not):
 if(args["split_rows"] == 'normal'): # regular test train split  =  don't drop subjects: 
-    X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y) 
+    if args['classification']:
+        X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y) 
+    else:
+        X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"])
     splitted_congifs.append([X_train, X_test,y_train, y_test])
 
 if(args["split_rows"] in ['h1','h7','h1h7']): # split by 'Treatment_group' (device - h1/h7)
@@ -428,7 +498,11 @@ if(args["split_rows"] in ['h1','h7','h1h7']): # split by 'Treatment_group' (devi
         print("new data- only the rows where column 'Treatment_group is 0:") 
         X_tmp = df1.iloc[:, :-1]
         y_tmp = df1.iloc[:, -1]
-        X_train, X_test,y_train, y_test = train_test_split(X_tmp, y_tmp, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y_tmp) 
+        # X_train, X_test,y_train, y_test = train_test_split(X_tmp, y_tmp, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y_tmp) 
+        if args['classification']:
+            X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y_tmp) 
+        else:
+            X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"])
         splitted_congifs.append([X_train, X_test,y_train, y_test])
     
     if args['split_rows'] in ['h7', 'h1h7']:   #use h7
@@ -440,7 +514,13 @@ if(args["split_rows"] in ['h1','h7','h1h7']): # split by 'Treatment_group' (devi
         print("new data- only the rows where column 'Treatment_group is 1:") 
         X_tmp2 = df2.iloc[:, :-1]
         y_tmp2 = df2.iloc[:, -1]
-        X_train, X_test,y_train, y_test = train_test_split(X_tmp2, y_tmp2, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y_tmp2) 
+        #X_train, X_test,y_train, y_test = train_test_split(X_tmp2, y_tmp2, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y_tmp2) 
+              # X_train, X_test,y_train, y_test = train_test_split(X_tmp, y_tmp, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y_tmp) 
+        if args['classification']:
+            X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y_tmp2) 
+        else:
+            X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"])
+        
         splitted_congifs.append([X_train, X_test,y_train, y_test])
         
 
@@ -450,15 +530,18 @@ for config in splitted_congifs:
     
     lite_mode = True # use for debbuging only. using one small grid
     
-    if lite_mode: # just for debugging. using one small grid
-        param_pipe_list = [[param2,pipe2]]
+    if args['classification']:
+        if lite_mode: # just for debugging. using one small grid
+            param_pipe_list = [[param8,pipe8]]
 
-    if not lite_mode: # full grid search , all models
+        if not lite_mode: # full grid search , all models
 
-        # pipe is represent the steps we want to execute, param represents which args we want to execute with
-        param_pipe_list = [[param1a,pipe1a],[param1b,pipe1b],[param2,pipe2],[param3,pipe3],
-        [param4,pipe4],[param5,pipe5],[param6,pipe6],[param7,pipe7]]
-
+            # pipe is represent the steps we want to execute, param represents which args we want to execute with
+            param_pipe_list = [[param1a,pipe1a],[param1b,pipe1b],[param2,pipe2],[param3,pipe3],
+            [param4,pipe4],[param5,pipe5],[param6,pipe6],[param7,pipe7]]
+    else: # regression
+        if lite_mode: # just for debugging. using one small grid
+            param_pipe_list = [[param8_reg,pipe8_reg]]
     # randomized_search = False
     for pair in param_pipe_list:
         yt,yp = [],[]
