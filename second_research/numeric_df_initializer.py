@@ -19,7 +19,7 @@ from sklearn.metrics import r2_score
 #from pandas.core.common import SettingWithCopyWarning
 warnings.simplefilter(action= "ignore", category= UserWarning)
 #warnings.simplefilter(action= "ignore", category= SettingWithCopyWarning)
-
+import os
 from runArguments import args
 
 def get_c_to_group_by_c_dict(df,c):
@@ -92,7 +92,7 @@ def generate_prediction_df(bna_path, clinical_path):
     subjects will return with one entry (row) for each subject, 'clean' from
     non-predictive data (like dates,strings...) so will only contain numerical data for prediction,
     each row is a baseline visit of a subject.""" 
-    clinical = pd.read_csv(clinical_path)
+    clinical = pd.read_csv(os.path.abspath(clinical_path))
     #technical step: remove all-Nan rows and all-Nan cols (for some reason they where added when openning clinical as csv):
     clinical.dropna(axis=0, how='all', thresh=None, subset=None, inplace=True) # for some reason when opening this csv it is adding many Nan rows and cols
     clinical.dropna(axis=1, how='all', thresh=None, subset=None, inplace=True) # so in these two rows we remove them

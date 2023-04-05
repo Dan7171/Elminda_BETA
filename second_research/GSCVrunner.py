@@ -282,6 +282,7 @@ def scorer():
 # *****************************************************************************************************
 # ******************************************* MAIN ****************************************************
 # *****************************************************************************************************
+# <<<<<<< Updated upstream
 print(args)
 
 if args['classification']:
@@ -301,7 +302,15 @@ else:
 
 X,y = main_caller_r2.get_X_y(y_name,args["X_version"]) # X and y's creationa and processing
 
-
+#
+# =======
+#
+#
+# y_name = '6-weeks_HDRS21_class'
+# # chose both reseach1 + rreseach12 as train dta or only reseach12
+# if not args["both"]: # use research 2 only
+#     X,y = main_caller_r2.get_X_y(y_name,args["X_version"]) #X and y's creationa and processing
+# >>>>>>> Stashed changes
 
 
 X.reset_index(inplace=True,drop=True)
@@ -411,18 +420,17 @@ if args['classification']:
         "kBest__k":range(4,80,3),
         "classifier": [clf6]
     }
-    param7 = { #CATBOOST CLASSIFIER 
+    param7 = { #CATBOOST CLASSIFIER
         'classifier__n_estimators' : [3,10,30, 50, 100, 500],
         "classifier__learning_rate":[0.01,0.1,1,10,100],
         'classifier__subsample':[0.1,0.3,0.5, 0.7, 1.0],
         'classifier__max_depth': range(3,10,3),
-        'classifier__learning_rate': [0.05,0.1,0.5],
         "kBest__k": range(4,40,8),
         "classifier": [clf7]
     }
     param8 = { # MLPClassifier (neural network)
         "pca__n_components": [1,2,3],
-        'classifier__hidden_layer_sizes': [(10, 5), (20, 10, 5)],
+        'classifier__hidden_layer_sizes': [ (2),(2,5), (10, 5), (20, 10, 5)],
         'classifier__activation': ['relu', 'tanh', 'logistic'],
         'classifier__solver': ['adam', 'sgd'],
         'classifier__alpha': [0.0001, 0.001, 0.01],
@@ -487,7 +495,7 @@ if(args["split_rows"] == 'normal'): # regular test train split  =  don't drop su
         X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"])
     splitted_congifs.append([X_train, X_test,y_train, y_test])
 
-if(args["split_rows"] in ['h1','h7','h1h7']): # split by 'Treatment_group' (device - h1/h7)
+if args["split_rows"] in ['h1', 'h7', 'h1h7']: # split by 'Treatment_group' (device - h1/h7)
     print("splitting by h1 h7 : ")
     
     if args['split_rows'] in ['h1','h1h7']: #use h1
@@ -500,7 +508,7 @@ if(args["split_rows"] in ['h1','h7','h1h7']): # split by 'Treatment_group' (devi
         y_tmp = df1.iloc[:, -1]
         # X_train, X_test,y_train, y_test = train_test_split(X_tmp, y_tmp, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y_tmp) 
         if args['classification']:
-            X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y_tmp) 
+            X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"],shuffle=True, stratify=y_tmp)
         else:
             X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"])
         splitted_congifs.append([X_train, X_test,y_train, y_test])
@@ -521,7 +529,7 @@ if(args["split_rows"] in ['h1','h7','h1h7']): # split by 'Treatment_group' (devi
         else:
             X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"])
         
-        splitted_congifs.append([X_train, X_test,y_train, y_test])
+        splitted_congifs.append([X_train, X_test, y_train, y_test])
         
 
 # run the full process of cv, and test on the sets
@@ -547,7 +555,7 @@ for config in splitted_congifs:
         yt,yp = [],[]
         param = pair[0]
         pipe = pair[1]
-        search = RandomizedSearchCV(pipe,param,n_iter=args["n_iter"],cv =args["cv"],verbose=3 ,random_state = args['rs'],scoring = scorer(), refit=True).fit(X_train.astype(float),y_train)
+        search = RandomizedSearchCV(pipe, param,n_iter=args["n_iter"],cv =args["cv"],verbose=3 ,random_state = args['rs'],scoring = scorer(), refit=True).fit(X_train.astype(float),y_train)
         #search = RandomizedSearchCV(pipe,param,n_iter=args["n_iter"],cv =args["cv"],verbose=3 ,random_state = args['rs'],scoring = scorer(), refit=True).fit(X_train.astype(float),y_train.squeeze())
         cnt_splits = args['cv']
         best_ind = search.best_index_
