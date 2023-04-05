@@ -23,7 +23,7 @@ import warnings
 import main_caller_r2
 from sklearn.exceptions import DataConversionWarning
 from sklearn.model_selection import RandomizedSearchCV
-from sklearn.metrics import confusion_matrix, f1_score, accuracy_score, roc_auc_score
+from sklearn.metrics import confusion_matrix, f1_score, accuracy_score, roc_auc_score, precision_score, recall_score
 from sklearn.metrics import make_scorer
 from sklearn.datasets import load_iris
 from sklearn.utils import shuffle
@@ -43,7 +43,7 @@ with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     fxn()
 
-yt,yp = [],[]
+all_splits_yts,all_splits_yps = [],[]
 my_scorer = args['scoring_method']
 
 def toy_data_run():
@@ -154,7 +154,7 @@ class CorrelationDropper2(BaseEstimator, TransformerMixin):
             return X_transformed
         return X
  
-def print_conclusions(df,pipe,search,yt_cv=None,yp_cv=None):
+def print_conclusions(df,pipe,search,best_cv_iter_yts_list_ndarray=None,best_cv_iter_yps_list_ndarray=None):
     print("-----------------------\n New CV report \n-----------------------")
     if args['classification']:
         name = pipe.named_steps['classifier']
@@ -179,11 +179,12 @@ def print_conclusions(df,pipe,search,yt_cv=None,yp_cv=None):
     score_std = search.cv_results_['std_test_score'][search.best_index_]
     print("* CV Score (cv's best score for best hyperparametes): %.3f +/- %.3f (see score func in hyperparams) " % (score_mean, score_std),"\n")
 
+    cm = confusion_matrix(best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray)
+    cm_with_legend = str(cm) + "\n"+ "[[TN FP\n[FN TP]]"
+    print("* Confusion matrix: \n",cm_with_legend)
 
-    cm = confusion_matrix(yt_cv, yp_cv)
-    print("* Confusion matrix: \n",cm) 
     # confusion matrix plot making: 
-    fig = metrics.ConfusionMatrixDisplay.from_predictions(yt_cv, yp_cv)
+    fig = metrics.ConfusionMatrixDisplay.from_predictions(best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray)
     
     fig.ax_.set_title(name)
 
@@ -234,7 +235,7 @@ def print_conclusions(df,pipe,search,yt_cv=None,yp_cv=None):
     "precision": precision,
     "recall":recall,
     "f1":f1,
-    "confusion_matrix":str(cm)
+    "confusion_matrix":cm_with_legend
     }
     # save to cv:
     tmp = pd.DataFrame(d,index=[d.keys()])
@@ -257,20 +258,45 @@ def reset_column_to_original_labels(df,col,original_lables):
     df[col] = original_lables[df[col]]
     return df
 
- 
-# ==================== Offir's code: ===============
-def CV_Score(y_true,y_pred):
-    global my_scorer
-    global yt,yp 
-    yt.append(y_true) # y true
-    yp.append(y_pred) # y predicted
+
+def CV_Score(y_true, y_pred):
+    """
+    calculates score in specific split out of n_splits in specific iteration of n_iteratins in search
+
+    :y_true: split's true values of y (validation values)
+    :y_pred: y values in split as predicted by model
+    """
+
+    global my_scorer # scorer user selected
+    global all_splits_yts, all_splits_yps
+    total_folds[0] += 1 # splits counter
+
+    y_true = y_true[y_name].values  # change from df to ndarray for printing nicely
+
+    all_splits_yts.append(y_true)
+    all_splits_yps.append(y_pred)
+
+    # input check
+    if my_scorer not in ['accuracy' , 'f1', 'roc_auc' ,'precision' , 'recall']:
+        print('invalid score func from user')
+        exit()
     if my_scorer == 'roc_auc':
         cvscore = roc_auc_score(y_true, y_pred)
-    if my_scorer == 'accuracy':
+    elif my_scorer == 'accuracy':
         cvscore = accuracy_score(y_true, y_pred)
-        #cvscore = accuracy_score(y_true, y_pred,pos_label=1)
-    if my_scorer == 'f1':
+    elif my_scorer == 'f1':
         cvscore = f1_score(y_true, y_pred)
+    elif my_scorer == 'precision':
+        cvscore = precision_score(y_true, y_pred)
+    elif my_scorer == 'recall':
+        cvscore = recall_score(y_true, y_pred)
+
+    # y_true = y_true[y_name].values  # change from df to ndarray for printing nicely
+    print(f"{total_folds[0]} / {total_splits} splits counted in cross val search ")
+    print("fold's true y \n", y_true)
+    print("fold's predicted y\n", y_pred)
+    print(f"scoring metric: {my_scorer}, score: {cvscore} ")
+
     return cvscore
 
 def scorer():
@@ -282,7 +308,7 @@ def scorer():
 # *****************************************************************************************************
 # ******************************************* MAIN ****************************************************
 # *****************************************************************************************************
-# <<<<<<< Updated upstream
+
 print(args)
 
 if args['classification']:
@@ -290,27 +316,11 @@ if args['classification']:
 else:
     y_name = "6-weeks_HDRS21_change_rate" # regression problem
 
-# chose both reseach1 + rreseach12 as train dta or only reseach12
-# if not args["both"]: # use research 2 only
-#     X,y = main_caller_r2.get_X_y(y_name,args["X_version"]) # X and y's creationa and processing
-
-# if args["both"]: # use both research 1 and research 2,for now works in classification only
-#     all_data = pd.read_csv('all_data.csv')
-#     X = all_data.iloc[:,:-1]
-#     y = all_data.iloc[: , -1:]
 
 
 X,y = main_caller_r2.get_X_y(y_name,args["X_version"]) # X and y's creationa and processing
 
-#
-# =======
-#
-#
-# y_name = '6-weeks_HDRS21_class'
-# # chose both reseach1 + rreseach12 as train dta or only reseach12
-# if not args["both"]: # use research 2 only
-#     X,y = main_caller_r2.get_X_y(y_name,args["X_version"]) #X and y's creationa and processing
-# >>>>>>> Stashed changes
+
 
 
 X.reset_index(inplace=True,drop=True)
@@ -430,8 +440,8 @@ if args['classification']:
     }
     param8 = { # MLPClassifier (neural network)
         "pca__n_components": [1,2,3],
-        'classifier__hidden_layer_sizes': [ (2),(2,5), (10, 5), (20, 10, 5)],
-        'classifier__activation': ['relu', 'tanh', 'logistic'],
+        'classifier__hidden_layer_sizes': [ (5),(5,3), (10, 5), (20, 10, 5)],
+        'classifier__activation': ['relu', 'logistic'],
         'classifier__solver': ['adam', 'sgd'],
         'classifier__alpha': [0.0001, 0.001, 0.01],
         "classifier": [clf8]
@@ -473,29 +483,34 @@ else: # regression
 #############
 # 9.1 - try with less responsive subjets:
 if args['balance_y_values']: #classification only
+    if not args['classification']:
+        print("balancing y values supported only in calassification mode")
+        print("change args['classification'] to True and try over ")
+        exit()
+
+    print(y.value_counts())
     data = X.join(y)
-    data = data.drop(data[data['6-weeks_HDRS21_class'] == 1].sample(frac=.3).index)
+    print("balancing y values...")
+    print(f"before balancing: {X.shape[0]} y values\nvalue counts:\n{y.value_counts()}")
+    data = data.drop(data[data[y_name] == 1].sample(frac=.5).index) # drop a fraction of the responders to equalize num of responders and non responders
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
+    print(f"after balancing: {data.shape[0]} y values\nvalue counts:\n{y.value_counts()}")
 
 ############
 
 
-print("XXXXXXXXXXXXXXXXXXXXXXXX")
-print(X)
-print("YYYYYYYYYYYYYYYYYYYYYYYY")
-print(y)
 splitted_congifs = [] # each list is a list of X_train, X_test,y_train, y_test to run cv and fit on
 
 # Split data by rows into categories (or not):
 if(args["split_rows"] == 'normal'): # regular test train split  =  don't drop subjects: 
     if args['classification']:
-        X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y) 
+        X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state=args["rs"],shuffle=True,stratify=y)
     else:
-        X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"])
+        X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state=args["rs"])
     splitted_congifs.append([X_train, X_test,y_train, y_test])
 
-if args["split_rows"] in ['h1', 'h7', 'h1h7']: # split by 'Treatment_group' (device - h1/h7)
+elif args["split_rows"] in ['h1', 'h7', 'h1h7']: # split by 'Treatment_group' (device - h1/h7)
     print("splitting by h1 h7 : ")
     
     if args['split_rows'] in ['h1','h1h7']: #use h1
@@ -510,7 +525,7 @@ if args["split_rows"] in ['h1', 'h7', 'h1h7']: # split by 'Treatment_group' (dev
         if args['classification']:
             X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"],shuffle=True, stratify=y_tmp)
         else:
-            X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"])
+            X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"],shuffle=True)
         splitted_congifs.append([X_train, X_test,y_train, y_test])
     
     if args['split_rows'] in ['h7', 'h1h7']:   #use h7
@@ -522,8 +537,7 @@ if args["split_rows"] in ['h1', 'h7', 'h1h7']: # split by 'Treatment_group' (dev
         print("new data- only the rows where column 'Treatment_group is 1:") 
         X_tmp2 = df2.iloc[:, :-1]
         y_tmp2 = df2.iloc[:, -1]
-        #X_train, X_test,y_train, y_test = train_test_split(X_tmp2, y_tmp2, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y_tmp2) 
-              # X_train, X_test,y_train, y_test = train_test_split(X_tmp, y_tmp, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y_tmp) 
+
         if args['classification']:
             X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y_tmp2) 
         else:
@@ -534,8 +548,13 @@ if args["split_rows"] in ['h1', 'h7', 'h1h7']: # split by 'Treatment_group' (dev
 
 # run the full process of cv, and test on the sets
 for config in splitted_congifs:
+    print("configs types debug")
+    print([type(config[i]) for i in range(4)])
+    for i in range(4):
+        if isinstance(config[i],pd.Series): #convert to data frame to make scorer work
+            config[i] = config[i].to_frame()
     X_train, X_test,y_train, y_test = config[0],config[1],config[2],config[3] #8.1 - from ofir- here add stratified param on rate of responders
-    
+
     lite_mode = True # use for debbuging only. using one small grid
     
     if args['classification']:
@@ -552,20 +571,30 @@ for config in splitted_congifs:
             param_pipe_list = [[param8_reg,pipe8_reg]]
     # randomized_search = False
     for pair in param_pipe_list:
-        yt,yp = [],[]
+
+        total_folds = [0] # counter
+        all_splits_yts,all_splits_yps = [],[] # all_splits_yts and all_splits_yps are lists of all all_splits_yts and all_splits_yps vectors, one vector for each split (n_iter * n_splits len).
         param = pair[0]
         pipe = pair[1]
+
+        total_splits = args["n_iter"] * args["cv"] # num of iterations in search * num of folds
+
         search = RandomizedSearchCV(pipe, param,n_iter=args["n_iter"],cv =args["cv"],verbose=3 ,random_state = args['rs'],scoring = scorer(), refit=True).fit(X_train.astype(float),y_train)
-        #search = RandomizedSearchCV(pipe,param,n_iter=args["n_iter"],cv =args["cv"],verbose=3 ,random_state = args['rs'],scoring = scorer(), refit=True).fit(X_train.astype(float),y_train.squeeze())
-        cnt_splits = args['cv']
-        best_ind = search.best_index_
-        chooseThese = range(best_ind*cnt_splits,best_ind*cnt_splits+cnt_splits,1) # the exact range of the 5 test scores of the best index configuration
-        yp_best = [yp[index] for index in chooseThese]
-        #print("indexes range - folds of best configuration (chooseThese): ",chooseThese)
-        yp_cv = np.concatenate(yp_best)
-        yt_best = [yt[index] for index in chooseThese]
-        yt_cv = np.concatenate(yt_best)    # print some more conclusions and details about the winning cv parmas and pipe and save them to csv          
-        print_conclusions(X_train,pipe,search,yt_cv,yp_cv)
+        n_splits = args['cv'] # num of splits in cv_iter (cv parameter n_splits)
+        best_cv_iter_idx = search.best_index_ # index of the iteration in cross val search which had best parsms (0<=best_cv_iter_idx <=niter)
+        best_cv_iter_first_split_idx = best_cv_iter_idx * n_splits
+        best_cv_iter_all_splits_indices = range(best_cv_iter_first_split_idx, best_cv_iter_first_split_idx+n_splits,1) # the exact range of the 5 test scores of the best index configuration
+
+        # best_cv_iter_yps_list is a list in length (n_splits (n folds)) contains vectors from the best iteration in cv
+        best_cv_iter_yps_list = [all_splits_yps[i] for i in best_cv_iter_all_splits_indices]
+        
+        #print("indexes range - folds of best configuration (best_cv_iter_splits_indices): ",best_cv_iter_splits_indices)
+        best_cv_iter_yps_list_ndarray = np.concatenate(best_cv_iter_yps_list) # turn to nd_array
+
+        # best_cv_iter_yts_list is a list in length (n_splits (n folds)) contains vectors from the best iteration in cv
+        best_cv_iter_yts_list = [all_splits_yts[index] for index in best_cv_iter_all_splits_indices]
+        best_cv_iter_yts_list_ndarray = np.concatenate(best_cv_iter_yts_list)    # print some more conclusions and details about the winning cv parmas and pipe and save them to csv
+        print_conclusions(X_train,pipe,search,best_cv_iter_yts_list_ndarray,best_cv_iter_yps_list_ndarray)
      
 
 

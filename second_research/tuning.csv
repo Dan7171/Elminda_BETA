@@ -4,5 +4,201 @@ date,classifier,pipe_named_steps,best_params,selected_features,user_inputs,respo
               random_state=42, solver='sgd')}","{'pca__n_components': 3, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.0001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', hidden_layer_sizes=(20, 10, 5),
               random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'f1', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 50, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,f1,0.784940984940985,0.0166569112072167,0.6463414634146342,0.6463414634146342,1.0,0.7851851851851851,"[[ 0 29]
  [ 0 53]]"
-2023-04-05,"MLPClassifier(activation='tanh', hidden_layer_sizes=2, random_state=42)","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='tanh', hidden_layer_sizes=2, random_state=42)}","{'pca__n_components': 2, 'classifier__solver': 'adam', 'classifier__hidden_layer_sizes': 2, 'classifier__alpha': 0.0001, 'classifier__activation': 'tanh', 'classifier': MLPClassifier(activation='tanh', hidden_layer_sizes=2, random_state=42)}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 15, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,0.5178787878787878,0.08594742878197836,0.5853658536585366,0.6610169491525424,0.7358490566037735,0.6964285714285713,"[[ 9 20]
+2023-04-05,"MLPClassifier(activation='tanh', hidden_layer_sizes=2, random_state=42)","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='tanh', hidden_layer_sizes=2, random_state=42)}","{'pca__n_components': 2, 'classifier__solver': 'adam', 'classifier__hidden_layer_sizes': 2, 'classifier__alpha': 0.0001, 'classifier__activation': 'tanh', 'classifier': MLPClassifier(activation='tanh', hidden_layer_sizes=2, random_state=42)}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 15, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,0.5178787878787878,0.0859474287819783,0.5853658536585366,0.6610169491525424,0.7358490566037735,0.6964285714285713,"[[ 9 20]
  [14 39]]"
+2023-04-05,"MLPClassifier(activation='tanh', hidden_layer_sizes=2, random_state=42)","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='tanh', hidden_layer_sizes=2, random_state=42)}","{'pca__n_components': 2, 'classifier__solver': 'adam', 'classifier__hidden_layer_sizes': 2, 'classifier__alpha': 0.0001, 'classifier__activation': 'tanh', 'classifier': MLPClassifier(activation='tanh', hidden_layer_sizes=2, random_state=42)}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 15, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,0.5178787878787878,0.0859474287819783,0.5853658536585366,0.6610169491525424,0.7358490566037735,0.6964285714285713,"[[ 9 20]
+ [14 39]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,,,0.6463414634146342,0.6463414634146342,1.0,0.7851851851851851,"[[ 0 29]
+ [ 0 53]]
+[TN,FP]
+[FN,TP]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,,,0.6463414634146342,0.6463414634146342,1.0,0.7851851851851851,"[[ 0 29]
+ [ 0 53]]
+[TN,FP]
+[FN,TP]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,,,0.6463414634146342,0.6463414634146342,1.0,0.7851851851851851,"[[ 0 29]
+ [ 0 53]]
+[TN,FP]
+[FN,TP]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,,,0.6463414634146342,0.6463414634146342,1.0,0.7851851851851851,"[[ 0 29]
+ [ 0 53]]
+[TN,FP]
+[FN,TP]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,,,0.6463414634146342,0.6463414634146342,1.0,0.7851851851851851,"[[ 0 29]
+ [ 0 53]]
+[TN,FP]
+[FN,TP]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,,,0.6463414634146342,0.6463414634146342,1.0,0.7851851851851851,"[[ 0 29]
+ [ 0 53]]
+[TN,FP]
+[FN,TP]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,0.5,0.0,0.6463414634146342,0.6463414634146342,1.0,0.7851851851851851,"[[ 0 29]
+ [ 0 53]]
+[TN,FP]
+[FN,TP]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,0.5,0.0,0.6463414634146342,0.6463414634146342,1.0,0.7851851851851851,"[[ 0 29]
+ [ 0 53]]
+[TN,FP]
+[FN,TP]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,0.5,0.0,0.6463414634146342,0.6463414634146342,1.0,0.7851851851851851,"[TN,FP]
+[FN,TP]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,0.5,0.0,0.6463414634146342,0.6463414634146342,1.0,0.7851851851851851,"[[ 0 29]
+ [ 0 53]]
+[TN,FP]
+[FN,TP]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,0.5,0.0,0.6463414634146342,0.6463414634146342,1.0,0.7851851851851851,"[[ 0 29]
+ [ 0 53]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': True, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.5606060606060606,66,roc_auc,,,0.5606060606060606,0.5606060606060606,1.0,0.7184466019417475,"[[ 0 29]
+ [ 0 37]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': True, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.5606060606060606,66,roc_auc,,,0.5606060606060606,0.5606060606060606,1.0,0.7184466019417475,"[[ 0 29]
+ [ 0 37]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,0.5,0.0,0.6463414634146342,0.6463414634146342,1.0,0.7851851851851851,"[[ 0 29]
+ [ 0 53]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': True, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.5606060606060606,66,roc_auc,,,0.5606060606060606,0.5606060606060606,1.0,0.7184466019417475,"[[ 0 29]
+ [ 0 37]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': True, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.5606060606060606,66,roc_auc,,,0.5606060606060606,0.5606060606060606,1.0,0.7184466019417475,"[[ 0 29]
+ [ 0 37]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,0.5,0.0,0.6463414634146342,0.6463414634146342,1.0,0.7851851851851851,"[[ 0 29]
+ [ 0 53]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,0.5,0.0,0.6463414634146342,0.6463414634146342,1.0,0.7851851851851851,"[[ 0 29]
+ [ 0 53]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': False, 'cv': 5, 'balance_y_values': False, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.6463414634146342,82,roc_auc,0.5,0.0,0.6463414634146342,0.6463414634146342,1.0,0.7851851851851851,"[[ 0 29]
+ [ 0 53]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'f1', 'both': False, 'cv': 5, 'balance_y_values': True, 'n_iter': 3, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.5606060606060606,66,f1,0.7178354978354979,0.0244355326693632,0.5606060606060606,0.5606060606060606,1.0,0.7184466019417475,"[[ 0 29]
+ [ 0 37]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'f1', 'both': False, 'cv': 5, 'balance_y_values': True, 'n_iter': 10, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.5606060606060606,66,f1,0.7178354978354979,0.0244355326693632,0.5606060606060606,0.5606060606060606,1.0,0.7184466019417475,"[[ 0 29]
+ [ 0 37]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'accuracy', 'both': False, 'cv': 8, 'balance_y_values': True, 'n_iter': 10, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.4642857142857143,56,accuracy,,,0.4642857142857143,0.4642857142857143,1.0,0.6341463414634146,"[[ 0 30]
+ [ 0 26]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'accuracy', 'both': False, 'cv': 8, 'balance_y_values': True, 'n_iter': 10, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.4642857142857143,56,accuracy,,,0.4642857142857143,0.4642857142857143,1.0,0.6341463414634146,"[[ 0 30]
+ [ 0 26]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(alpha=0.01, hidden_layer_sizes=(10, 5), random_state=42,
+              solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(alpha=0.01, hidden_layer_sizes=(10, 5), random_state=42,
+              solver='sgd')}","{'pca__n_components': 3, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (10, 5), 'classifier__alpha': 0.01, 'classifier__activation': 'relu', 'classifier': MLPClassifier(alpha=0.01, hidden_layer_sizes=(10, 5), random_state=42,
+              solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'accuracy', 'both': False, 'cv': 8, 'balance_y_values': True, 'n_iter': 10, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.4642857142857143,56,accuracy,0.625,0.1881366741580846,0.625,0.631578947368421,0.4615384615384615,0.5333333333333333,"[[23  7]
+ [14 12]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'f1', 'both': False, 'cv': 8, 'balance_y_values': True, 'n_iter': 10, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.4642857142857143,56,f1,0.6318181818181818,0.0551107075135552,0.4642857142857143,0.4642857142857143,1.0,0.6341463414634146,"[[ 0 30]
+ [ 0 26]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'precsion_score', 'both': False, 'cv': 8, 'balance_y_values': True, 'n_iter': 10, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.4642857142857143,56,precsion_score,,,0.4642857142857143,0.4642857142857143,1.0,0.6341463414634146,"[[ 0 30]
+ [ 0 26]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}","{'pca__n_components': 1, 'classifier__solver': 'sgd', 'classifier__hidden_layer_sizes': (20, 10, 5), 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001,
+              hidden_layer_sizes=(20, 10, 5), random_state=42, solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'precision', 'both': False, 'cv': 8, 'balance_y_values': True, 'n_iter': 10, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.4642857142857143,56,precision,,,0.4642857142857143,0.4642857142857143,1.0,0.6341463414634146,"[[ 0 30]
+ [ 0 26]]
+[[TN FP
+[FN TP]]"
+2023-04-05,"MLPClassifier(activation='logistic', alpha=0.001, hidden_layer_sizes=5,
+              random_state=42)","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(activation='logistic', alpha=0.001, hidden_layer_sizes=5,
+              random_state=42)}","{'pca__n_components': 2, 'classifier__solver': 'adam', 'classifier__hidden_layer_sizes': 5, 'classifier__alpha': 0.001, 'classifier__activation': 'logistic', 'classifier': MLPClassifier(activation='logistic', alpha=0.001, hidden_layer_sizes=5,
+              random_state=42)}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'precision', 'both': False, 'cv': 8, 'balance_y_values': True, 'n_iter': 10, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True}",0.4642857142857143,56,precision,0.625,0.2975595178559521,0.625,0.6666666666666666,0.38461538461538464,0.4878048780487804,"[[25  5]
+ [16 10]]
+[[TN FP
+[FN TP]]"
