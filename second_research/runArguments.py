@@ -22,9 +22,9 @@ args = {
 
 "scoring_method": 'accuracy', # "accuracy" /'f1'/ 'roc_auc' /'precision' /'recall' (sklearn metrics score funcs)
 
-"both": False, # (for now works on classificatin only) True- train on both research 1 and research 2 data , False- train on research 2 only.IMPORTANT: if set to True, use X_version = 1 only!!!
+"both": True, # (for now works on classificatin only) True- train on both research 1 and research 2 data , False- train on research 2 only.IMPORTANT: if set to True, use X_version = 1 only!!!
 
-"cv":5, # param for cv
+"cv":8, # param for cv
 
 "balance_y_values" : True
     , # working for clasification only. balancing the number of responsive and non responsive (y categories)
@@ -36,7 +36,11 @@ args = {
 "use_gamma_columns":True, # True: using Gamma columns. False: not using them. IMPORTANT: for True, use with X_version = 1 only
 
 "classification": True, # true - classification cv train, false- regression cv train
-"lite_mode": False # True for running search on one model only, False for running on more models (one after the next)
+
+"lite_mode": True, # True for running search on one model only, False for running on more models (one after the next)
+
+"test_size": 0.1 # train test splits test size
+
 }
 if args["both"] or args["balance_y_values"]:
     args['classification'] = True

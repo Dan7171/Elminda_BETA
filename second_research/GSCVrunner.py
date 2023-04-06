@@ -296,7 +296,7 @@ def CV_Score(y_true, y_pred):
     print("fold's true y \n", y_true)
     print("fold's predicted y\n", y_pred)
     print(f"scoring metric: {my_scorer}, score: {cvscore} ")
-    if cvscore == nan:
+    if not cvscore:
         print("problem - cvscore is nan.check y_true, y_pred...")
         exit()
 
@@ -499,7 +499,6 @@ if args['balance_y_values']: #classification only
         print("change args['classification'] to True and try over ")
         exit()
 
-    print(y.value_counts())
     data = X.join(y)
     print("balancing y values...")
     print(f"before balancing: {X.shape[0]} y values\nvalue counts:\n{y.value_counts()}")
@@ -516,9 +515,9 @@ splitted_congifs = [] # each list is a list of X_train, X_test,y_train, y_test t
 # Split data by rows into categories (or not):
 if(args["split_rows"] == 'normal'): # regular test train split  =  don't drop subjects: 
     if args['classification']:
-        X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state=args["rs"],shuffle=True,stratify=y)
+        X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=args['test_size'],random_state=args["rs"],shuffle=True,stratify=y)
     else:
-        X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state=args["rs"])
+        X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=args['test_size'],random_state=args["rs"])
     splitted_congifs.append([X_train, X_test,y_train, y_test])
 
 elif args["split_rows"] in ['h1', 'h7', 'h1h7']: # split by 'Treatment_group' (device - h1/h7)
@@ -532,11 +531,11 @@ elif args["split_rows"] in ['h1', 'h7', 'h1h7']: # split by 'Treatment_group' (d
         print("new data- only the rows where column 'Treatment_group is 0:") 
         X_tmp = df1.iloc[:, :-1]
         y_tmp = df1.iloc[:, -1]
-        # X_train, X_test,y_train, y_test = train_test_split(X_tmp, y_tmp, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y_tmp) 
+        # X_train, X_test,y_train, y_test = train_test_split(X_tmp, y_tmp, test_size=args['test_size'],random_state = args["rs"],shuffle=True,stratify=y_tmp) 
         if args['classification']:
-            X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"],shuffle=True, stratify=y_tmp)
+            X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=args['test_size'],random_state = args["rs"],shuffle=True, stratify=y_tmp)
         else:
-            X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"],shuffle=True)
+            X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=args['test_size'],random_state = args["rs"],shuffle=True)
         splitted_congifs.append([X_train, X_test,y_train, y_test])
     
     if args['split_rows'] in ['h7', 'h1h7']:   #use h7
@@ -550,9 +549,9 @@ elif args["split_rows"] in ['h1', 'h7', 'h1h7']: # split by 'Treatment_group' (d
         y_tmp2 = df2.iloc[:, -1]
 
         if args['classification']:
-            X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"],shuffle=True,stratify=y_tmp2) 
+            X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=args['test_size'],random_state = args["rs"],shuffle=True,stratify=y_tmp2) 
         else:
-            X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=0.2,random_state = args["rs"])
+            X_train, X_test,y_train, y_test = train_test_split(X, y, test_size=args['test_size'],random_state = args["rs"])
         
         splitted_congifs.append([X_train, X_test, y_train, y_test])
         
@@ -576,6 +575,7 @@ for config in splitted_congifs:
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
             param_pipe_list = [[param1a,pipe1a],[param1b,pipe1b],[param2,pipe2],[param3,pipe3],
             [param4,pipe4],[param5,pipe5],[param6,pipe6],[param7,pipe7]]
+
     else: # regression
         if args['lite_mode']: # just for debugging. using one small grid
             param_pipe_list = [[param8_reg,pipe8_reg]]
