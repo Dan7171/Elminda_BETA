@@ -24,14 +24,14 @@ args = {
 
 "both": True, # (for now works on classificatin only) True- train on both research 1 and research 2 data , False- train on research 2 only.IMPORTANT: if set to True, use X_version = 1 only!!!
 
-"cv":8, # param for cv
+"cv":7, # param for cv
 
 "balance_y_values" : True
     , # working for clasification only. balancing the number of responsive and non responsive (y categories)
 
-"n_iter": 1000, # param for randomized cv - num of combinations to try in randomized search
+"n_iter": 1200, # param for randomized cv - num of combinations to try in randomized search
 
-"n_jobs":1, # num of threads each model is generating to speed up grid search,
+"n_jobs":1, # num of threads each model is generating to speed up grid search. Changes can cause unexpected behaviour
 
 "use_gamma_columns":True, # True: using Gamma columns. False: not using them. IMPORTANT: for True, use with X_version = 1 only
 
@@ -39,7 +39,9 @@ args = {
 
 "lite_mode": True, # True for running search on one model only, False for running on more models (one after the next)
 
-"test_size": 0.1 # train test splits test size
+"test_size": 0.15 , # train test splits test size
+
+"halving": False
 
 }
 if args["both"] or args["balance_y_values"]:

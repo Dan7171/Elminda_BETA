@@ -27,13 +27,21 @@ from sklearn.metrics import confusion_matrix, f1_score, accuracy_score, roc_auc_
 from sklearn.metrics import make_scorer
 from sklearn.datasets import load_iris
 from sklearn.utils import shuffle
+import random
 np.seterr(divide='ignore', invalid='ignore')
 warnings.filterwarnings(action='ignore')
 warnings.simplefilter(action='ignore')
+
 from sklearn.base import BaseEstimator, TransformerMixin
 import os
 from scipy.stats import randint
 from runArguments import args
+from imblearn.over_sampling import SMOTE
+from sklearn.experimental import enable_halving_search_cv  # noqa
+from sklearn.model_selection import HalvingRandomSearchCV
+from imblearn.over_sampling import SMOTE
+from sklearn.datasets import make_classification
+
 warnings.filterwarnings("ignore", category=DeprecationWarning) 
 
 def fxn():
@@ -46,114 +54,151 @@ with warnings.catch_warnings():
 all_splits_yts,all_splits_yps = [],[]
 my_scorer = args['scoring_method']
 
-def toy_data_run():
-
-    # *** TOY DATA PROCESSING ***:
-    # used that part of code to verify the pipeplines can scre well. they do. scores of randsearch cv's were around 0.95
-
-    iris = load_iris()
-    X_toy=iris.data
-    y_toy=iris.target
-    print(X_toy)
-    print(y_toy)
-    X_train, X_test,y_train, y_test = train_test_split(X_toy, y_toy, test_size=0.15,random_state = args["rs"]) 
-    rand_search_1a_iris = RandomizedSearchCV(pipe1a,param1a,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
-    print_conclusions("1a",rand_search_1a_iris)
-    rand_search_1b_iris = RandomizedSearchCV(pipe1b,param1b,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
-    print_conclusions("1b", rand_search_1b_iris)
-    rand_search_2_iris = RandomizedSearchCV(pipe2,param2,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
-    print_conclusions("2",rand_search_2_iris)
-    rand_search_3_iris = RandomizedSearchCV(pipe3,param3,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
-    print_conclusions("3",rand_search_3_iris)
-    rand_search_4_iris = RandomizedSearchCV(pipe4,param4,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
-    print_conclusions("4", rand_search_4_iris)
-    rand_search_5_iris = RandomizedSearchCV(pipe5,param5,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
-    print_conclusions("5", rand_search_5_iris)
-    rand_search_6_iris = RandomizedSearchCV(pipe6,param6,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
-    print_conclusions("6", rand_search_6_iris)
+# def toy_data_run():
+#
+#     # *** TOY DATA PROCESSING ***:
+#     # used that part of code to verify the pipeplines can scre well. they do. scores of randsearch cv's were around 0.95
+#
+#     iris = load_iris()
+#     X_toy=iris.data
+#     y_toy=iris.target
+#     print(X_toy)
+#     print(y_toy)
+#     X_train, X_test,y_train, y_test = train_test_split(X_toy, y_toy, test_size=0.15,random_state = args["rs"])
+#     rand_search_1a_iris = RandomizedSearchCV(pipe1a,param1a,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
+#     print_conclusions("1a",rand_search_1a_iris)
+#     rand_search_1b_iris = RandomizedSearchCV(pipe1b,param1b,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
+#     print_conclusions("1b", rand_search_1b_iris)
+#     rand_search_2_iris = RandomizedSearchCV(pipe2,param2,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
+#     print_conclusions("2",rand_search_2_iris)
+#     rand_search_3_iris = RandomizedSearchCV(pipe3,param3,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
+#     print_conclusions("3",rand_search_3_iris)
+#     rand_search_4_iris = RandomizedSearchCV(pipe4,param4,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
+#     print_conclusions("4", rand_search_4_iris)
+#     rand_search_5_iris = RandomizedSearchCV(pipe5,param5,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
+#     print_conclusions("5", rand_search_5_iris)
+#     rand_search_6_iris = RandomizedSearchCV(pipe6,param6,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
+#     print_conclusions("6", rand_search_6_iris)
 
 # to add as a transformer to the pipelines (dropping corellated features after kbest)
-class CorrelationDropper(BaseEstimator, TransformerMixin): # this one works, dont delete it
-    def __init__(self, threshold=0.9):
-        self.threshold = threshold
-        
-    def fit(self, X, y=None):
-        # Compute the correlation matrix
-        if args["drop_out_correlated"]:
-            corr_matrix = np.corrcoef(X, rowvar=False)
-            # Select upper triangle of correlation matrix
-            upper = np.triu(np.ones(corr_matrix.shape), k=1)
-            correlated_features = np.where(upper * np.abs(corr_matrix) > self.threshold)
-            
-            # Drop all but one of the correlated features
-            self.to_drop = []
-            for i, j in zip(*correlated_features):
-                if i in self.to_drop:
-                    continue
-                self.to_drop.append(j)
-            
-        return self
-    
-    def transform(self, X, y=None):
-        # Drop the correlated features
-        if args["drop_out_correlated"]:
-            return np.delete(X, self.to_drop, axis=1)
-        return X
+# class CorrelationDropper(BaseEstimator, TransformerMixin): # this one works, dont delete it
+#     def __init__(self, threshold=0.9):
+#         self.threshold = threshold
+#
+#     def fit(self, X, y=None):
+#         # Compute the correlation matrix
+#         if args["drop_out_correlated"]:
+#             corr_matrix = np.corrcoef(X, rowvar=False)
+#             # Select upper triangle of correlation matrix
+#             upper = np.triu(np.ones(corr_matrix.shape), k=1)
+#             correlated_features = np.where(upper * np.abs(corr_matrix) > self.threshold)
+#
+#             # Drop all but one of the correlated features
+#             self.to_drop = []
+#             for i, j in zip(*correlated_features):
+#                 if i in self.to_drop:
+#                     continue
+#                 self.to_drop.append(j)
+#
+#         return self
+#
+#     def transform(self, X, y=None):
+#         # Drop the correlated features
+#         if args["drop_out_correlated"]:
+#             return np.delete(X, self.to_drop, axis=1)
+#         return X
+#
+# class CorrelationDropper2(BaseEstimator, TransformerMixin):
+#     def __init__(self, threshold=0.9):
+#         self.threshold = threshold
+#         self.indices_to_keep = []
+#
+#     def _find_correlated_groups(self, correlations):
+#         correlated_groups = [None]*correlations.shape[1]
+#         visited_features = set()
+#
+#         for i in range(correlations.shape[0]):
+#             marked = False
+#             for j in range(i+1, correlations.shape[1]):
+#                 if abs(correlations[i, j]) > self.threshold:
+#                     marked = True
+#                     # Add correlated features to the same group
+#                     group = correlated_groups[i] if i in visited_features else correlated_groups[j] if j in visited_features else set()
+#                     group.add(i)
+#                     group.add(j)
+#                     visited_features.add(i)
+#                     visited_features.add(j)
+#                     correlated_groups[i] = group
+#                     correlated_groups[j] = group
+#             if not marked:
+#                 group = set()
+#                 group.add(i)
+#                 visited_features.add(i)
+#                 correlated_groups[i] = group
+#
+#         print(correlated_groups)
+#         return correlated_groups
+#
+#     def fit(self, X, y=None):
+#         if args["drop_out_correlated"]:
+#             # Calculate pairwise correlations between features
+#             correlations = np.corrcoef(X, rowvar=False)
+#             print(correlations)
+#             # Identify correlated groups
+#             correlated_groups = self._find_correlated_groups(correlations)
+#
+#             # Drop all correlated features but one from each group
+#             self.indices_to_keep = []
+#             for group in correlated_groups:
+#                 if len(group) >= 1:
+#                     self.indices_to_keep.append(list(group)[0])
+#             print(self.indices_to_keep)
+#         return self
+#
+#     def transform(self, X, y=None):
+#         if args["drop_out_correlated"]:
+#             # Select desired features from array
+#             X_transformed = np.take(X, self.indices_to_keep, axis=1)
+#             return X_transformed
+#         return X
+#
 
-class CorrelationDropper2(BaseEstimator, TransformerMixin):
-    def __init__(self, threshold=0.9):
-        self.threshold = threshold
-        self.indices_to_keep = []
-    
-    def _find_correlated_groups(self, correlations):
-        correlated_groups = [None]*correlations.shape[1]
-        visited_features = set()
-        
-        for i in range(correlations.shape[0]):
-            marked = False
-            for j in range(i+1, correlations.shape[1]):
-                if abs(correlations[i, j]) > self.threshold:
-                    marked = True
-                    # Add correlated features to the same group
-                    group = correlated_groups[i] if i in visited_features else correlated_groups[j] if j in visited_features else set()
-                    group.add(i)
-                    group.add(j)
-                    visited_features.add(i)
-                    visited_features.add(j)
-                    correlated_groups[i] = group
-                    correlated_groups[j] = group
-            if not marked:
-                group = set()
-                group.add(i)
-                visited_features.add(i)
-                correlated_groups[i] = group
-        
-        print(correlated_groups)
-        return correlated_groups
-    
-    def fit(self, X, y=None):
-        if args["drop_out_correlated"]:
-            # Calculate pairwise correlations between features
-            correlations = np.corrcoef(X, rowvar=False)
-            print(correlations)
-            # Identify correlated groups
-            correlated_groups = self._find_correlated_groups(correlations)
-            
-            # Drop all correlated features but one from each group
-            self.indices_to_keep = []
-            for group in correlated_groups:
-                if len(group) >= 1:
-                    self.indices_to_keep.append(list(group)[0])
-            print(self.indices_to_keep)
-        return self
-    
-    def transform(self, X, y=None):
-        if args["drop_out_correlated"]:
-            # Select desired features from array
-            X_transformed = np.take(X, self.indices_to_keep, axis=1)
-            return X_transformed
-        return X
- 
+def generate_random_architectures(first_layer_size_options:tuple=(3,5,10,20,30),avg_num_of_layers_in_network=4, num_of_networks_to_create=100):
+    """
+    -creates num_of_networks_to_create network architecturs (tuples of numbers,tuple[i]  represents size of ith hidden layer network)
+    -avg number of hidden layers in each architecture will be avg_num_of_layers_in_network
+    -first_layer_size_options is a tuple of optional values for the number of neurons in first layer of networks.
+    - in each network being generated, the i+1 layer size will be selected in fair chances to be one of three items: (3/4 * i layer size, 4/3 i layer size, i layer size)
+    - return a list of the architectures
+    """
+    # generate random layers
+    # first_layer_size_options = (4,5,8,10,15,20,25,28,30,32,35,37,40)
+    architectures = set()
+    num_of_architectures = num_of_networks_to_create # number of layer architertures to make
+    for i in range(num_of_architectures): # ith network to create
+        architecture = []
+        # avg_num_of_layers_in_network = 4 # set this num to the one you want
+        for j in range(2*avg_num_of_layers_in_network): # jth layer in network (in expectancy, half of layers won't be crated)
+            to_add_layer = random.random() # throw a fair coin
+            if to_add_layer < 0.5:
+                continue # don't add new layer
+            # add new layer
+            if len(architecture) == 0:
+                cur_layer_options = first_layer_size_options # first hidden layer size- pick number from all options
+            else:
+                cur_layer_options = [architecture[-1], min(architecture[-1] *4 //3, 60),max(architecture[-1]//4 *3,1)] # second layer or above layer size - pick something relatively close to prev layer
+
+            # select randomly layer size
+            index = random.randint(0, len(cur_layer_options) - 1)  # select a random index
+            architecture.append(cur_layer_options[index])  # select layer size, and add it as next layer of architecute
+        if len(architecture) > 0:
+            architectures.add(tuple(architecture))
+            print(f"network {i}\n {tuple(architecture)}")
+
+    print(f"created {num_of_architectures} networks with avg size of layers {avg_num_of_layers_in_network}")
+    return list(architectures)
+
+
 def print_conclusions(df,pipe,search,best_cv_iter_yts_list_ndarray=None,best_cv_iter_yps_list_ndarray=None):
     print("-----------------------\n New CV report \n-----------------------")
     if args['classification']:
@@ -220,7 +265,7 @@ def print_conclusions(df,pipe,search,best_cv_iter_yts_list_ndarray=None,best_cv_
     # save cross val scores and params in tuning.csv for tracking
     # csv column names and values in a row:
     d = {
-    "date":str(datetime.date.today()), # date
+    "date":str(datetime.date.today()), # date, hour
     "classifier":str(pipe.named_steps['classifier']), 
     "pipe_named_steps": str(pipe.named_steps), # all pipe steps, including the classifier as estimator
     "best_params":str(search.best_params_), 
@@ -235,7 +280,8 @@ def print_conclusions(df,pipe,search,best_cv_iter_yts_list_ndarray=None,best_cv_
     "precision": precision,
     "recall":recall,
     "f1":f1,
-    "confusion_matrix":cm_with_legend
+    "confusion_matrix":cm_with_legend,
+    "param_grid_searched_at" : str(param)
     }
     # save to cv:
     tmp = pd.DataFrame(d,index=[d.keys()])
@@ -291,15 +337,18 @@ def CV_Score(y_true, y_pred):
     elif my_scorer == 'recall':
         cvscore = recall_score(y_true, y_pred)
 
+
+
     # y_true = y_true[y_name].values  # change from df to ndarray for printing nicely
     print(f"{total_folds[0]} / {total_splits} splits counted in cross val search ")
     print("fold's true y \n", y_true)
     print("fold's predicted y\n", y_pred)
     print(f"scoring metric: {my_scorer}, score: {cvscore} ")
-    if not cvscore:
+    if not cvscore == Nan:
         print("problem - cvscore is nan.check y_true, y_pred...")
         exit()
 
+    # print(estimator.get_params())
     return cvscore
 
 def scorer():
@@ -323,9 +372,6 @@ else:
 
 X,y = main_caller_r2.get_X_y(y_name,args["X_version"]) # X and y's creationa and processing
 
-
-
-
 X.reset_index(inplace=True,drop=True)
 if args['classification']:
     y[y_name] = y[y_name].replace({"responsive": 1, "non_responsive": 0})
@@ -335,9 +381,6 @@ if args["age_under_50"]: # using only candidated under age of 50
     df = df[df['age'] < 50]
     X = df.iloc[:,:-1]
     y = df.iloc[: , -1:]
-
-
-
 
 
 # create the piplelines and greeds:
@@ -400,6 +443,7 @@ if args['classification']:
         "classifier__algorithm": ['auto', 'ball_tree', 'kd_tree', 'brute'],
         "classifier__leaf_size": range(3,80,3),
         "classifier__p":[2],
+        "classifier__p":[2],
         "kBest__k": range(4,100,3),
         "kBest__score_func" : [f_classif,mutual_info_classif], #selctKbest param 'score_func'for tuning
         "classifier" : [clf2]    
@@ -440,6 +484,22 @@ if args['classification']:
         "kBest__k":range(4,80,3),
         "classifier": [clf6]
     }
+    param6 = {  # GRADIENT BOOSTING
+        # reason I tried this classifier params:
+        "classifier__n_estimators": [5, 10, 30, 50, 100, 150, 250, 400, 500],
+        'classifier__max_depth': range(4, 80, 3),
+        "classifier__learning_rate": [0.01, 0.1, 1, 10, 100],
+        "kBest__k": range(4, 80, 3),
+        "classifier": [clf6]
+    }
+    param6b = { #GRADIENT BOOSTING
+    # reason I tried this classifier params:
+        "classifier__n_estimators":[5,10,30,50,100,150,250,400,500],
+        'classifier__max_depth':range(4,80,3),
+        "classifier__learning_rate":[0.01,0.1,1,10,100],
+        "pca__n_components": range(2, 50, 3),
+        "classifier": [clf6]
+    }
     param7 = { #CATBOOST CLASSIFIER
         'classifier__n_estimators' : [3,10,30, 50, 100, 500],
         "classifier__learning_rate":[0.01,0.1,1,10,100],
@@ -448,13 +508,47 @@ if args['classification']:
         "kBest__k": range(4,40,8),
         "classifier": [clf7]
     }
+
+    # layer_sizes = [] + [(l1) for l1 in range(2,50,4)] + [(l1,l2) for l1 in range(2,50,4)  for l2 in range(2,50,4)] + [(l1,l2,l3) for l1 in range(20,40,5) for l2 in range(20,40,5) for l3 in range(20,40,5)] +  [(l1,l2,l3,l4) for l1 in range(20,40,5) for l2 in range(20,40,5) for l3 in range(20,40,5) for l4 in range(20,40,5) ]
+    # layer_sizes = [(30, 30, 30), (25, 25, 25), (35, 35, 35), (32, 32, 32), (34, 34, 34)]
+
+    # # generate random layers
+    # first_layer_size_options = (4,5,8,10,15,20,25,28,30,32,35,37,40)
+    # architectures = set()
+    # num_of_architectures = 100 # number of layer architertures to make
+    # for i in range(num_of_architectures): # ith network to create
+    #     architecture = []
+    #     avg_num_of_layers_in_network = 4 # set this num to the one you want
+    #     for j in range(2*avg_num_of_layers_in_network): # jth layer in network (in expectancy, half of layers won't be crated)
+    #         to_add_layer = random.random() # throw a fair coin
+    #         if to_add_layer < 0.5:
+    #             continue # don't add new layer
+    #         # add new layer
+    #         if len(architecture) == 0:
+    #             cur_layer_options = first_layer_size_options # first hidden layer size- pick number from all options
+    #         else:
+    #             cur_layer_options = [architecture[-1], min(architecture[-1] *4 //3, 60),max(architecture[-1]//4 *3,1)] # second layer or above layer size - pick something relatively close to prev layer
+    #
+    #         # select randomly layer size
+    #         index = random.randint(0, len(cur_layer_options) - 1)  # select a random index
+    #         architecture.append(cur_layer_options[index])  # select layer size, and add it as next layer of architecute
+    #     if len(architecture) > 0:
+    #         architectures.add(tuple(architecture))
+    #         print(tuple(architecture))
+    # architectures = list(architectures)
+
+
     param8 = { # MLPClassifier (neural network)
-        "pca__n_components": [1,2,3,5,10],
-        'classifier__hidden_layer_sizes': [  (2),(5),(10),(5,3),(50,50,50),(30,30,30),(50,100,50), (100,), (10, 5), (20, 10, 5)],
-        'classifier__activation': ['relu', 'logistic','tanh'],
-        'classifier__solver': ['adam', 'sgd'],
-        'classifier__alpha': [0.0001, 0.001, 0.01],
-        'classifier__learning_rate': ['constant', 'adaptive'],
+        "pca__n_components": [1,2,3,5,8,13,21],
+        'classifier__hidden_layer_sizes': generate_random_architectures(first_layer_size_options = (4,5,8,10,15,20,25,28,30,32,35,37,40)),
+        'classifier__activation': ['relu','tanh'],
+        'classifier__solver': ['adam', 'sgd','lbfgs'],
+        'classifier__alpha': [0.0001],
+        'classifier__learning_rate': ['constant', 'adaptive','invscaling'],
+        # 'classifier__power_t':[0.1,0.5, 0.9],
+        'classifier__max_iter': [2000],
+        'classifier__verbose':[False], # details prints of loss
+        # 'classifier__warm_start':[True],
         "classifier": [clf8]
     }
 
@@ -466,6 +560,7 @@ if args['classification']:
     pipe4 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier",param4["classifier"][0])])
     pipe5 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier", param5["classifier"][0])])
     pipe6 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier", param6["classifier"][0])])
+    pipe6b = Pipeline(steps=[("scaler", scaler), ("pca", pca),("classifier", param6b["classifier"][0])])
     pipe7 = Pipeline(steps=[("scaler", scaler), ("kBest",kBest_selector),("classifier", param7["classifier"][0])])
     pipe8  = Pipeline(steps=[("scaler", scaler), ("pca", pca),("classifier", param8["classifier"][0])])
 
@@ -492,21 +587,46 @@ else: # regression
  
         
 #############
-# 9.1 - try with less responsive subjets:
-if args['balance_y_values']: #classification only
+# balance number of responders and non responders  by undesampling the majority class (responders):
+
+def balance_y_values(X,y,method):
+    """
+    making data set balanced in responders and non responders
+    """
+
     if not args['classification']:
         print("balancing y values supported only in calassification mode")
         print("change args['classification'] to True and try over ")
         exit()
 
-    data = X.join(y)
-    print("balancing y values...")
-    print(f"before balancing: {X.shape[0]} y values\nvalue counts:\n{y.value_counts()}")
-    data = data.drop(data[data[y_name] == 1].sample(frac=.3).index) # drop a fraction of the responders to equalize num of responders and non responders
-    X = data.iloc[:, :-1]
-    y = data.iloc[:, -1]
-    print(f"after balancing: {data.shape[0]} y values\nvalue counts:\n{y.value_counts()}")
 
+    print(f"balancing dataset (y values) using {method}...")
+    print(f"{X.shape[0]} y values\nvalue counts:\n{y.value_counts()}")
+
+    # select the method of balancing you want to use
+    if method == "undersample_majority": # drop values from the larger category
+
+        data = X.join(y)
+        # print("balancing y values...")
+        # print(f"before balancing: {X.shape[0]} y values\nvalue counts:\n{y.value_counts()}")
+
+        # undersample responders
+        data = data.drop(data[data[y_name] == 1].sample(frac=.3).index) # LEAVE frac=.3 (matching args['both'] = True and args['both]= False)  drop a fraction of the responders to equalize num of responders and non responders
+        X = data.iloc[:, :-1]
+        y = data.iloc[:, -1]
+
+        return X,y
+
+    elif method == 'SMOTE': # generate fake observations from the minority category
+
+        # Resampling the minority class. The strategy can be changed as required.
+        sm = SMOTE(sampling_strategy='minority', random_state=42)
+        # Fit the model to generate the data.
+        X,y  = sm.fit_resample(X, y)
+        # oversampled = pd.concat([pd.DataFrame(oversampled_Y), pd.DataFrame(oversampled_X)], axis=1)
+
+    print(f"after balancing: {X.shape[0]} y values\nvalue counts:\n{y.value_counts()}")
+    return X,y
 ############
 
 
@@ -566,13 +686,17 @@ for config in splitted_congifs:
 
     X_train, X_test,y_train, y_test = config[0],config[1],config[2],config[3] #8.1 - from ofir- here add stratified param on rate of responders
 
+    # fix imbalance in train set
+    if args['balance_y_values']:
+        X_train, y_train = balance_y_values(X_train,y_train,method='SMOTE')
+
     if args['classification']:
         if args['lite_mode']: # just for debugging. using one small grid
             param_pipe_list = [[param8,pipe8]]
 
-        if not args['lite_mode']: # full grid search , all models
-
+        else: # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
+
             param_pipe_list = [[param1a,pipe1a],[param1b,pipe1b],[param2,pipe2],[param3,pipe3],
             [param4,pipe4],[param5,pipe5],[param6,pipe6],[param7,pipe7]]
 
@@ -582,6 +706,7 @@ for config in splitted_congifs:
     # randomized_search = False
     for pair in param_pipe_list:
 
+
         total_folds = [0] # counter
         all_splits_yts,all_splits_yps = [],[] # all_splits_yts and all_splits_yps are lists of all all_splits_yts and all_splits_yps vectors, one vector for each split (n_iter * n_splits len).
         param = pair[0]
@@ -590,24 +715,60 @@ for config in splitted_congifs:
         total_splits = args["n_iter"] * args["cv"] # num of iterations in search * num of folds
 
         # cross validation search
-        search = RandomizedSearchCV(pipe, param,n_iter=args["n_iter"],cv =args["cv"],verbose=3 ,random_state = args['rs'],scoring = scorer(), refit=True).fit(X_train.astype(float),y_train)
+        print(param)
+        print(pipe)
 
-        n_splits = args['cv'] # num of splits in cv_iter (cv parameter n_splits)
-        best_cv_iter_idx = search.best_index_ # index of the iteration in cross val search which had best parsms (0<=best_cv_iter_idx <=niter)
-        best_cv_iter_first_split_idx = best_cv_iter_idx * n_splits
-        best_cv_iter_all_splits_indices = range(best_cv_iter_first_split_idx, best_cv_iter_first_split_idx+n_splits,1) # the exact range of the 5 test scores of the best index configuration
+        #Tried this because verbose told me too, but this causes score = nan... so now its in comment
+        # if param['classifier'][0] == clf8:
+        #     y_train = y_train.values.ravel()
 
-        # best_cv_iter_yps_list is a list in length (n_splits (n folds)) contains vectors from the best iteration in cv
-        best_cv_iter_yps_list = [all_splits_yps[i] for i in best_cv_iter_all_splits_indices]
-        
-        #print("indexes range - folds of best configuration (best_cv_iter_splits_indices): ",best_cv_iter_splits_indices)
-        best_cv_iter_yps_list_ndarray = np.concatenate(best_cv_iter_yps_list) # turn to nd_array
+        if args['halving']:
+            # https://scikit-learn.org/stable/auto_examples/model_selection/plot_successive_halving_iterations.html#sphx-glr-auto-examples-model-selection-plot-successive-halving-iterations-py
+            rsh = HalvingRandomSearchCV(
+                estimator=pipe, param_distributions=param,cv =args["cv"], scoring = scorer(),verbose=3, factor=2, random_state=args['rs']
+            )
+            rsh.fit(X, y)
 
-        # best_cv_iter_yts_list is a list in length (n_splits (n folds)) contains vectors from the best iteration in cv
-        best_cv_iter_yts_list = [all_splits_yts[index] for index in best_cv_iter_all_splits_indices]
-        best_cv_iter_yts_list_ndarray = np.concatenate(best_cv_iter_yts_list)    # print some more conclusions and details about the winning cv parmas and pipe and save them to csv
-        print_conclusions(X_train,pipe,search,best_cv_iter_yts_list_ndarray,best_cv_iter_yps_list_ndarray)
-     
+            results = pd.DataFrame(rsh.cv_results_)
+            results["params_str"] = results.params.apply(str)
+            results.drop_duplicates(subset=("params_str", "iter"), inplace=True)
+            mean_scores = results.pivot(
+                index="iter", columns="params_str", values="mean_test_score"
+            )
+            ax = mean_scores.plot(legend=False, alpha=0.6)
+
+            labels = [
+                f"iter={i}\nn_samples={rsh.n_resources_[i]}\nn_candidates={rsh.n_candidates_[i]}"
+                for i in range(rsh.n_iterations_)
+            ]
+
+            ax.set_xticks(range(rsh.n_iterations_))
+            ax.set_xticklabels(labels, rotation=45, multialignment="left")
+            ax.set_title("Scores of candidates over iterations")
+            ax.set_ylabel("mean test score", fontsize=15)
+            ax.set_xlabel("iterations", fontsize=15)
+            plt.tight_layout()
+            plt.show()
+
+        else: # regular randomic search
+            search = RandomizedSearchCV(pipe, param,n_iter=args["n_iter"],cv =args["cv"],n_jobs = args['n_jobs'],verbose=3 ,random_state = args['rs'],scoring = scorer(), refit=True).fit(X_train.astype(float),y_train)
+
+            n_splits = args['cv'] # num of splits in cv_iter (cv parameter n_splits)
+            best_cv_iter_idx = search.best_index_ # index of the iteration in cross val search which had best parsms (0<=best_cv_iter_idx <=niter)
+            best_cv_iter_first_split_idx = best_cv_iter_idx * n_splits
+            best_cv_iter_all_splits_indices = range(best_cv_iter_first_split_idx, best_cv_iter_first_split_idx+n_splits,1) # the exact range of the 5 test scores of the best index configuration
+
+            # best_cv_iter_yps_list is a list in length (n_splits (n folds)) contains vectors from the best iteration in cv
+            best_cv_iter_yps_list = [all_splits_yps[i] for i in best_cv_iter_all_splits_indices]
+
+            #print("indexes range - folds of best configuration (best_cv_iter_splits_indices): ",best_cv_iter_splits_indices)
+            best_cv_iter_yps_list_ndarray = np.concatenate(best_cv_iter_yps_list) # turn to nd_array
+
+            # best_cv_iter_yts_list is a list in length (n_splits (n folds)) contains vectors from the best iteration in cv
+            best_cv_iter_yts_list = [all_splits_yts[index] for index in best_cv_iter_all_splits_indices]
+            best_cv_iter_yts_list_ndarray = np.concatenate(best_cv_iter_yts_list)    # print some more conclusions and details about the winning cv parmas and pipe and save them to csv
+            print_conclusions(X_train,pipe,search,best_cv_iter_yts_list_ndarray,best_cv_iter_yps_list_ndarray)
+
 
 
     
