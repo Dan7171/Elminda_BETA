@@ -363,16 +363,16 @@ def CV_Score(y_true, y_pred):
             best_score_by_now[0] = choice_avg_score
             improvement_report_str = f"New best score is {best_score_by_now[0]}"
 
-        if improvement_report_str:
+        if improvement_report_str is not None:
             print("New improvement!")
             print(improvement_report_str)
-            choice = search.cv_results_['params'][param_choice_idx]  # param grid of param choice which improved
+            # choice = search.cv_results_['params'][param_choice_idx]  # param grid of param choice which improved
             f_name = "search_statistics.txt"
             if not os.path.exists(f_name):
                 open(f_name, 'w+').close() # make file
             with open(f_name, "a+") as statistics:
                 print(f"updating {f_name}...")
-                statistics.write(f"{choice_avg_score_str}\n{improvement_report_str}\n{choice}\n")
+                statistics.write(f"{choice_avg_score_str}\n{improvement_report_str}\n")
                 print("updated")
         print(f"Best parameter choice score by now is {best_score_by_now[0]}")
         print(choice_avg_score_str)
@@ -549,9 +549,7 @@ if args['classification']:
     param8 = {  # MLPClassifier (neural network)
 
         "pca__n_components": [i for i in range(18, 25)],
-        'classifier__hidden_layer_sizes': [(i, j, k) for i in range(20, 26) for j in range(25, 31) for k in
-                                           range(19, 25)] +
-                                          [(i, j, k, l, m) for i in range(17, 24) for j in range(20, 27) for k in
+        'classifier__hidden_layer_sizes': [(i, j, k, l, m) for i in range(17, 24) for j in range(20, 27) for k in
                                            range(22, 28)
                                            for l in range(25, 30) for m in range(28, 33)],
         'classifier__activation': ['relu'],
