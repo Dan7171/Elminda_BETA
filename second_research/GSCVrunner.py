@@ -343,6 +343,10 @@ def CV_Score(y_true, y_pred):
     elif my_scorer == 'recall':
         cvscore = recall_score(y_true, y_pred)
 
+    if cvscore is None:
+        print("problem - cvscore is nan.check y_true, y_pred...")
+        exit()
+
     # y_true = y_true[y_name].values  # change from df to ndarray for printing nicely
     param_choice_idx = total_folds[0] // len(choice_scores)
     idx = total_folds[0] % len(choice_scores)  # num of folds elapsed % num of folds in each param choice
@@ -351,33 +355,37 @@ def CV_Score(y_true, y_pred):
     if idx == len(choice_scores) - 1:  # calculated score for all folds in current parmeter coice
 
         choice_avg_score = np.mean(choice_scores)
-        choice_avg_score_str = f"In parameter choice num {param_choice_idx} / {args['n_iter'] - 1} avg score was: {choice_avg_score}"
+        max_param_choice_idx = args['n_iter'] - 1
+        choice_avg_score_str = f"In parameter choice num {param_choice_idx} / {max_param_choice_idx} avg score was: {choice_avg_score}"
 
         improvement_report_str = None
-        if choice_avg_score >= best_score_by_now[0]:
+        if choice_avg_score > best_score_by_now[0]:
             best_score_by_now[0] = choice_avg_score
             improvement_report_str = f"New best score is {best_score_by_now[0]}"
 
-        print(choice_avg_score_str)
+        if improvement_report_str:
+            print("New improvement!")
+            print(improvement_report_str)
+            choice = search.cv_results_['params'][param_choice_idx]  # param grid of param choice which improved
+            f_name = "search_statistics.txt"
+            if not os.path.exists(f_name):
+                open(f_name, 'w+').close() # make file
+            with open(f_name, "a+") as statistics:
+                print(f"updating {f_name}...")
+                statistics.write(f"{choice_avg_score_str}\n{improvement_report_str}\n{choice}\n")
+                print("updated")
         print(f"Best parameter choice score by now is {best_score_by_now[0]}")
         print(choice_avg_score_str)
 
-        if improvement_report_str:
-            print(improvement_report_str)
-            choice = search.cv_results_['params'][param_choice_idx]  # param grid of param choice which improved
-            with open(f"search_statistics.txt", "a+") as statistics:
-                statistics.write(f"{choice_avg_score_str}\n{improvement_report_str}\n{choice}\n")
-
-    total_folds[0] += 1  # splits counter, starts from 0
-
-    print(f"{total_folds[0]} / {total_splits} splits counted in cross val search ")
+    max_split_index = total_splits - 1
+    print(f"{total_folds[0]} / {max_split_index} splits counted in cross val search ")
     print("fold's true y \n", y_true)
     print("fold's predicted y\n", y_pred)
     print(f"scoring metric: {my_scorer}, score: {cvscore} ")
 
-    if cvscore is None:
-        print("problem - cvscore is nan.check y_true, y_pred...")
-        exit()
+    total_folds[0] += 1  # splits counter, starts from 0
+
+
     return cvscore
 
 
