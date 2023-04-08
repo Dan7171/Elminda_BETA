@@ -321,7 +321,6 @@ def CV_Score(y_true, y_pred):
 
     global my_scorer  # scorer user selected
     global all_splits_yts, all_splits_yps
-    total_folds[0] += 1  # splits counter
 
     y_true = y_true[y_name].values  # change from df to ndarray for printing nicely
 
@@ -345,10 +344,23 @@ def CV_Score(y_true, y_pred):
         cvscore = recall_score(y_true, y_pred)
 
     # y_true = y_true[y_name].values  # change from df to ndarray for printing nicely
+
+    idx = total_folds[0] % len(choice_scores) # num of folds elapsed % num of folds in each param choice
+    choice_scores[idx] = cvscore
+    if idx == len(choice_scores) - 1: # calculated score for all folds in current parmeter coice
+        choice_avg_score = np.mean(choice_scores)
+        print(f"In parameter choice num {total_folds[0] % len(choice_scores)} / {args['n_iter']} avg score was: {choice_avg_score}")
+        best_score_by_now[0] = max(best_score_by_now[0], choice_avg_score)
+        print(f"Best parameter choice score by now is {best_score_by_now[0]}")
+
+    total_folds[0] += 1  # splits counter, starts from 0
+
     print(f"{total_folds[0]} / {total_splits} splits counted in cross val search ")
     print("fold's true y \n", y_true)
     print("fold's predicted y\n", y_pred)
     print(f"scoring metric: {my_scorer}, score: {cvscore} ")
+
+
     if cvscore is None:
         print("problem - cvscore is nan.check y_true, y_pred...")
         exit()
@@ -689,7 +701,8 @@ for config in splitted_congifs:
         all_splits_yts, all_splits_yps = [], []  # all_splits_yts and all_splits_yps are lists of all all_splits_yts and all_splits_yps vectors, one vector for each split (n_iter * n_splits len).
         param = pair[0]
         pipe = pair[1]
-
+        choice_scores = [0 for i in range(args['cv'])] # list of scores in length num of folds
+        best_score_by_now = [0]
         total_splits = args["n_iter"] * args["cv"]  # num of iterations in search * num of folds
 
         # cross validation search
