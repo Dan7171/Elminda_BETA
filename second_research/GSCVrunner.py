@@ -344,14 +344,29 @@ def CV_Score(y_true, y_pred):
         cvscore = recall_score(y_true, y_pred)
 
     # y_true = y_true[y_name].values  # change from df to ndarray for printing nicely
-
-    idx = total_folds[0] % len(choice_scores) # num of folds elapsed % num of folds in each param choice
+    param_choice_idx = total_folds[0] // len(choice_scores)
+    idx = total_folds[0] % len(choice_scores)  # num of folds elapsed % num of folds in each param choice
     choice_scores[idx] = cvscore
-    if idx == len(choice_scores) - 1: # calculated score for all folds in current parmeter coice
+
+    if idx == len(choice_scores) - 1:  # calculated score for all folds in current parmeter coice
+
         choice_avg_score = np.mean(choice_scores)
-        print(f"In parameter choice num {total_folds[0] % len(choice_scores)} / {args['n_iter']} avg score was: {choice_avg_score}")
-        best_score_by_now[0] = max(best_score_by_now[0], choice_avg_score)
+        choice_avg_score_str = f"In parameter choice num {param_choice_idx} / {args['n_iter'] - 1} avg score was: {choice_avg_score}"
+
+        improvement_report_str = None
+        if choice_avg_score >= best_score_by_now[0]:
+            best_score_by_now[0] = choice_avg_score
+            improvement_report_str = f"New best score is {best_score_by_now[0]}"
+
+        print(choice_avg_score_str)
         print(f"Best parameter choice score by now is {best_score_by_now[0]}")
+        print(choice_avg_score_str)
+
+        if improvement_report_str:
+            print(improvement_report_str)
+            choice = search.cv_results_['params'][param_choice_idx]  # param grid of param choice which improved
+            with open(f"search_statistics.txt", "a+") as statistics:
+                statistics.write(f"{choice_avg_score_str}\n{improvement_report_str}\n{choice}\n")
 
     total_folds[0] += 1  # splits counter, starts from 0
 
@@ -359,7 +374,6 @@ def CV_Score(y_true, y_pred):
     print("fold's true y \n", y_true)
     print("fold's predicted y\n", y_pred)
     print(f"scoring metric: {my_scorer}, score: {cvscore} ")
-
 
     if cvscore is None:
         print("problem - cvscore is nan.check y_true, y_pred...")
@@ -527,9 +541,11 @@ if args['classification']:
     param8 = {  # MLPClassifier (neural network)
 
         "pca__n_components": [i for i in range(18, 25)],
-        'classifier__hidden_layer_sizes': [(i, j, k) for i in range(20,26) for j in range(25,31) for k in range(19,25)] +
-                                          [(i,j,k,l,m)for i in range(17,24) for j in range(20,27) for k in range(22,28)
-                                            for l in range(25,30) for m in range(28,33)],
+        'classifier__hidden_layer_sizes': [(i, j, k) for i in range(20, 26) for j in range(25, 31) for k in
+                                           range(19, 25)] +
+                                          [(i, j, k, l, m) for i in range(17, 24) for j in range(20, 27) for k in
+                                           range(22, 28)
+                                           for l in range(25, 30) for m in range(28, 33)],
         'classifier__activation': ['relu'],
         'classifier__solver': ['adam'],
         'classifier__alpha': [0.0001],
@@ -701,7 +717,7 @@ for config in splitted_congifs:
         all_splits_yts, all_splits_yps = [], []  # all_splits_yts and all_splits_yps are lists of all all_splits_yts and all_splits_yps vectors, one vector for each split (n_iter * n_splits len).
         param = pair[0]
         pipe = pair[1]
-        choice_scores = [0 for i in range(args['cv'])] # list of scores in length num of folds
+        choice_scores = [0 for i in range(args['cv'])]  # list of scores in length num of folds
         best_score_by_now = [0]
         total_splits = args["n_iter"] * args["cv"]  # num of iterations in search * num of folds
 
