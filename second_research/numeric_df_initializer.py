@@ -94,8 +94,8 @@ def generate_prediction_df(bna_path, clinical_path):
     each row is a baseline visit of a subject.""" 
     clinical = pd.read_csv(os.path.abspath(clinical_path))
     #technical step: remove all-Nan rows and all-Nan cols (for some reason they where added when openning clinical as csv):
-    clinical.dropna(axis=0, how='all', thresh=None, subset=None, inplace=True) # for some reason when opening this csv it is adding many Nan rows and cols
-    clinical.dropna(axis=1, how='all', thresh=None, subset=None, inplace=True) # so in these two rows we remove them
+    clinical.dropna(axis=0, how='all', inplace=True) # for some reason when opening this csv it is adding many Nan rows and cols
+    clinical.dropna(axis=1, how='all', inplace=True) # so in these two rows we remove them
     bna = pd.read_csv(bna_path)
     if not args['use_gamma_columns']:
         bna.dropna(axis=1, how='any',inplace=True) # removing all cordance missing values and any other missing values
