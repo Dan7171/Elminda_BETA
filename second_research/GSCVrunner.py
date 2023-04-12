@@ -362,7 +362,7 @@ def CV_Score(y_true, y_pred):
         if choice_avg_score > best_score_by_now[0]:
             best_score_by_now[0] = choice_avg_score
             improvement_report_str = f"New best score is {best_score_by_now[0]}"
-
+            parmams_str = f"chosen parameters: {pipe.get_params()}" # param configuration chose
         if improvement_report_str is not None:
             print("New improvement!")
             print(improvement_report_str)
