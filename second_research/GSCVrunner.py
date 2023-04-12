@@ -372,7 +372,7 @@ def CV_Score(y_true, y_pred):
                 open(f_name, 'w+').close() # make file
             with open(f_name, "a+") as statistics:
                 print(f"updating {f_name}...")
-                statistics.write(f"{choice_avg_score_str}\n{improvement_report_str}\n")
+                statistics.write(f"{choice_avg_score_str}\n{improvement_report_str}\n{parmams_str}\n\n")
                 print("updated")
         print(f"Best parameter choice score by now is {best_score_by_now[0]}")
         print(choice_avg_score_str)
