@@ -39,7 +39,7 @@ from sklearn.experimental import enable_halving_search_cv  # noqa
 from sklearn.model_selection import HalvingRandomSearchCV
 from imblearn.over_sampling import SMOTE
 from sklearn.datasets import make_classification
-
+import sys
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 np.seterr(divide='ignore', invalid='ignore')
 warnings.filterwarnings(action='ignore')
@@ -400,8 +400,17 @@ def scorer():
 # ******************************************* MAIN ****************************************************
 # *****************************************************************************************************
 
-print(args)
+# write output to logfile (to ease hyper - parameter tuning)
+if args['stdout_to_file']:
+    logfile_name = 'stdout.txt'
+    if os.path.exists(logfile_name):
+        os.remove(logfile_name)
+    log_file = open(logfile_name, 'a')
+    sys.stdout = sys.stderr = log_file
 
+
+
+print(args)
 if args['classification']:
     y_name = '6-weeks_HDRS21_class'  # classification problem (prediciting change rate class)
 else:
@@ -786,4 +795,5 @@ for config in splitted_congifs:
                 best_cv_iter_yts_list)  # print some more conclusions and details about the winning cv parmas and pipe and save them to csv
             print_conclusions(X_train, pipe, search, best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray)
 
+log_file.close()
 plt.show()

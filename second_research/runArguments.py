@@ -52,7 +52,9 @@ args = {
 
     "test_size": 0.15,  # train test splits test size
 
-    "halving": False
+    "halving": False,
+
+    "stdout_to_file": True # to help in hyper parameter tuning
 
 }
 if args["both"] or args["balance_y_values"]:
