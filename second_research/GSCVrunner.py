@@ -557,18 +557,18 @@ if args['classification']:
         "classifier": [clf5]
     }
 
-    param6a = {# GRADIENT BOOSTING + pca
-        "pca__n_components": [i for i in range(3, 100,5)],
-        'classifier__n_estimators': [50, 100, 150, 200, 250, 300, 350, 400, 450, 500],
-        'classifier__learning_rate': [0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45],
-        'classifier__max_depth': [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        'classifier__min_samples_split': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
-        'classifier__min_samples_leaf': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    param6a = {  # GRADIENT BOOSTING + pca
+        "pca__n_components": [i for i in range(3, 100, 8)],
+        'classifier__n_estimators': [5, 10, 20, 40, 60, 90, 120],
+        'classifier__learning_rate': [0.0001, 0.01, 0.2, 0.4],
+        'classifier__max_depth': [2, 5, 7, 9, 11],
+        'classifier__min_samples_split': [2, 4, 8, 14, 20],
+        'classifier__min_samples_leaf': [1, 4, 8, 12],
         'classifier__max_features': ['auto', 'sqrt', 'log2', None],
-        'classifier__subsample': [0.6, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1],
+        'classifier__subsample': [0.6, 0.75, 0.9, 1],
         "classifier": [clf6]
     }
-    
+
     param6b = {  # GRADIENT BOOSTING + kbest
         # reason I tried this classifier params:
         "kBest__k": range(4, 70, 3),
