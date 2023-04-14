@@ -356,7 +356,7 @@ def CV_Score(y_true, y_pred):
 
         choice_avg_score = np.mean(choice_scores)
         max_param_choice_idx = args['n_iter'] - 1
-        choice_avg_score_str = f"In parameter choice num {param_choice_idx} / {max_param_choice_idx} avg score was: {choice_avg_score}"
+        choice_avg_score_str = f"In parameter choice num {param_choice_idx} / {max_param_choice_idx} avg score was: {choice_avg_score}. This is the best score so far"
 
         improvement_report_str = None
         if choice_avg_score > best_score_by_now[0]:
@@ -371,7 +371,7 @@ def CV_Score(y_true, y_pred):
                 open(search_statistics, 'w+').close() # make file
             with open(search_statistics, "a+") as statistics:
                 print(f"updating {search_statistics}...")
-                statistics.write(f"{choice_avg_score_str}\n{improvement_report_str}\n{parmams_str}\n\n")
+                statistics.write(f"{choice_avg_score_str}\n\n")
                 print("updated")
         print(f"Best parameter choice score by now is {best_score_by_now[0]}")
         print(choice_avg_score_str)
