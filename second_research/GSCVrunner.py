@@ -461,15 +461,14 @@ if args['classification']:
     # The param 'grids'
     # note: parameters of different models pipelines can be set using '__' separated parameter names. modelname__parameter name = options to try ing gscv:
 
-    param1a = {  # LOGISTIC REGRESSION with pca, no selectkbest
+    param1a = {  # LOGISTIC REGRESSION + pca
         "pca__n_components": range(2, 50, 3),
         "classifier__C": [0.001, 0.01, 0.1, 1, 10, 100],
         "classifier__penalty": ['l2'],
         "classifier": [clf1]
     }
     # tune 3. c=0.5, k = 16, penalty= l2,mutual_info
-    param1b = {  # LOGISTIC REGRESSION with selectkbest, no pca
-
+    param1b = { # LOGISTIC REGRESSION + kbest,
         "classifier__C": [0.45, 0.47, 0.5, 0.52, 0.55, 0.6],  # classifier (logistic regression) param 'C' for tuning
         "kBest__k": range(15, 17),  # selctKbest param 'k'for tuning. must be  <= num of features
         'classifier__penalty': ['l2'],
@@ -477,55 +476,83 @@ if args['classification']:
         "classifier": [clf1]
 
     }
-
-    param1b_offir_scoring_debug = {  # LOGISTIC REGRESSION with selectkbest, no pca
-        "classifier__C": [30],  # classifier (logistic regression) param 'C' for tuning
-        "kBest__k": [5],  # selctKbest param 'k'for tuning. must be  <= num of features
-        "kBest__score_func": [f_classif],  # selctKbest param 'score_func'for tuning
-        "classifier": [clf1]
-        # the classifier clf1 (LogisticRegression) will use as the final step in pipleine- the 'estimator'
-    }
-    param2 = {  # KNN
+    param2a = { # knn + pca
+        "pca__n_components": [i for i in range(3, 100, 5)],
         "classifier__n_neighbors": range(1, 90, 3),
         "classifier__weights": ['uniform', 'distance'],
         "classifier__algorithm": ['auto', 'ball_tree', 'kd_tree', 'brute'],
         "classifier__leaf_size": range(3, 80, 3),
         "classifier__p": [2],
+        "classifier": [clf2]
+    }
+
+    param2b = {  # KNN + kbest
+        "classifier__n_neighbors": range(1, 90, 3),
+        "classifier__weights": ['uniform', 'distance'],
+        "classifier__algorithm": ['auto', 'ball_tree', 'kd_tree', 'brute'],
+        "classifier__leaf_size": range(3, 80, 3),
         "classifier__p": [2],
         "kBest__k": range(4, 100, 3),
         "kBest__score_func": [f_classif, mutual_info_classif],  # selctKbest param 'score_func'for tuning
         "classifier": [clf2]
     }
-    param3 = {  # SVC
+    param3a = {  # SVC + pca
+        "pca__n_components": [i for i in range(3, 100, 5)],
         'classifier__gamma': [60, 65, 70, 75, 80],
         'classifier__kernel': ['linear', 'rbf', 'sigmoid'],
         'classifier__C': [900, 950, 1000, 1100, 1200, 1400],
-        "kBest__k": range(40, 70, 5),  # k should be smaller than num of features in X
         "classifier": [clf3]
     }
-    param4 = {  # DECISION TREE
+    param3b = {  # SVC + kbest
+        "kBest__k": range(40, 70, 5),  # k should be smaller than num of features in X
+        'classifier__gamma': [60, 65, 70, 75, 80],
+        'classifier__kernel': ['linear', 'rbf', 'sigmoid'],
+        'classifier__C': [900, 950, 1000, 1100, 1200, 1400],
+        "classifier": [clf3]
+    }
+    param4a = {  # DECISION TREE + pca
+        "pca__n_components": [i for i in range(3, 100, 5)],
         'classifier__max_leaf_nodes': range(1, 25, 3),
         'classifier__max_depth': [2, 4, 6, 8, 10, 12],
         'classifier__criterion': ['gini', 'entropy'],
         'classifier__min_samples_split': range(2, 40, 5),
         # reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
-        "kBest__k": range(4, 40, 8),
         "classifier": [clf4]
     }
-    param5 = {  # RANDOM FOREST
+    param4b = {  # DECISION TREE + kbest
+        "kBest__k": range(4, 40, 8),
+        'classifier__max_leaf_nodes': range(1, 25, 3),
+        'classifier__max_depth': [2, 4, 6, 8, 10, 12],
+        'classifier__criterion': ['gini', 'entropy'],
+        'classifier__min_samples_split': range(2, 40, 5),
+        # reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
+        "classifier": [clf4]
+    }
+    param5a = {  # RANDOM FOREST + pca
         # reason I tried this classifier params:
         # https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74
+        "pca__n_components": [i for i in range(3, 100, 5)],
         'classifier__bootstrap': [True, False],
         "classifier__max_depth": range(2, 50, 2),
         "classifier__min_samples_split": range(2, 50, 3),
         "classifier__min_samples_leaf": range(2, 50, 3),
         "classifier__max_features": range(2, 30, 3),
+        "classifier": [clf5]
+    }
+    param5b = {  # RANDOM FOREST + kbest
+        # reason I tried this classifier params:
+        # https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74
         "kBest__k": range(4, 80, 3),
+        'classifier__bootstrap': [True, False],
+        "classifier__max_depth": range(2, 50, 2),
+        "classifier__min_samples_split": range(2, 50, 3),
+        "classifier__min_samples_leaf": range(2, 50, 3),
+        "classifier__max_features": range(2, 30, 3),
         "classifier": [clf5]
     }
 
-    param6 = {
-        "kBest__k": range(4, 70, 3),
+    param6a = {# GRADIENT BOOSTING + pca
+        "pca__n_components": [i for i in range(3, 100,5)],
         'classifier__n_estimators': [50, 100, 150, 200, 250, 300, 350, 400, 450, 500],
         'classifier__learning_rate': [0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45],
         'classifier__max_depth': [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
@@ -536,24 +563,52 @@ if args['classification']:
         "classifier": [clf6]
     }
     
-    param6b = {  # GRADIENT BOOSTING
+    param6b = {  # GRADIENT BOOSTING + kbest
         # reason I tried this classifier params:
-        "classifier__n_estimators": [5, 10, 30, 50, 100, 150, 250, 400, 500],
-        'classifier__max_depth': range(4, 80, 3),
-        "classifier__learning_rate": [0.01, 0.1, 1, 10, 100],
-        "pca__n_components": range(2, 50, 3),
+        "kBest__k": range(4, 70, 3),
+        'classifier__n_estimators': [50, 100, 150, 200, 250, 300, 350, 400, 450, 500],
+        'classifier__learning_rate': [0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45],
+        'classifier__max_depth': [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+        'classifier__min_samples_split': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
+        'classifier__min_samples_leaf': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        'classifier__max_features': ['auto', 'sqrt', 'log2', None],
+        'classifier__subsample': [0.6, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1],
         "classifier": [clf6]
     }
-    param7 = {  # CATBOOST CLASSIFIER
+
+    param7a = {  # CATBOOST CLASSIFIER + pca
+        "pca__n_components": [i for i in range(3, 100,5)],
         'classifier__n_estimators': [3, 10, 30, 50, 100, 500],
-        "classifier__learning_rate": [0.01, 0.1, 1, 10, 100],
+        "classifier__learning_rate": [0.0001,0.01, 0.1],
         'classifier__subsample': [0.1, 0.3, 0.5, 0.7, 1.0],
-        'classifier__max_depth': range(3, 10, 3),
+        'classifier__max_depth': range(3, 40, 3),
+        "classifier": [clf7]
+    }
+    param7b = {  # CATBOOST CLASSIFIER + kbest
         "kBest__k": range(4, 40, 8),
+        'classifier__n_estimators': [3, 10, 30, 50, 100, 500],
+        "classifier__learning_rate": [0.0001,0.01, 0.1],
+        'classifier__subsample': [0.1, 0.3, 0.5, 0.7, 1.0],
+        'classifier__max_depth': range(3, 40, 3),
         "classifier": [clf7]
     }
 
-    param8 = {  # MLPClassifier (neural network)
+    param8a = {  # MLPClassifier (neural network) + kbest
+
+        "kBest__k": range(4, 40, 8),
+        'classifier__hidden_layer_sizes': [(i, j, k, l, m) for i in range(17, 24) for j in range(20, 27) for k in
+                                           range(22, 28)
+                                           for l in range(25, 30) for m in range(28, 33)],
+        'classifier__activation': ['relu'],
+        'classifier__solver': ['adam'],
+        'classifier__alpha': [0.0001],
+        'classifier__learning_rate': ['adaptive'],
+        'classifier__max_iter': [2500],
+        'classifier__verbose': [False],  # details prints of loss
+        "classifier": [clf8]
+
+    }
+    param8b = {  # MLPClassifier (neural network) + pca
 
         "pca__n_components": [i for i in range(18, 25)],
         'classifier__hidden_layer_sizes': [(i, j, k, l, m) for i in range(17, 24) for j in range(20, 27) for k in
@@ -570,16 +625,26 @@ if args['classification']:
     }
 
     # define the pipelines
+
+    # pipe a - kbest
+    # pipe b - pca
+
     pipe1a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param1a["classifier"][0])])
     pipe1b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param1b["classifier"][0])])
-    pipe2 = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param2["classifier"][0])])
-    pipe3 = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param3["classifier"][0])])
-    pipe4 = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param4["classifier"][0])])
-    pipe5 = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param5["classifier"][0])])
-    pipe6 = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param6["classifier"][0])])
-    pipe6b = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param6b["classifier"][0])])
-    pipe7 = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param7["classifier"][0])])
-    pipe8 = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param8["classifier"][0])])
+    pipe2a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param2a["classifier"][0])])
+    pipe2b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param2b["classifier"][0])])
+    pipe3a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param3a["classifier"][0])])
+    pipe3b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param3b["classifier"][0])])
+    pipe4a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param4a["classifier"][0])])
+    pipe4b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param4b["classifier"][0])])
+    pipe5a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param5a["classifier"][0])])
+    pipe5b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param5b["classifier"][0])])
+    pipe6a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param6a["classifier"][0])])
+    pipe6b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param6b["classifier"][0])])
+    pipe7a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param7a["classifier"][0])])
+    pipe7b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param7b["classifier"][0])])
+    pipe8a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param8a["classifier"][0])])
+    pipe8b = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param8b["classifier"][0])])
 
 ########################## regression ####################################
 
@@ -712,13 +777,11 @@ for config in splitted_congifs:
 
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param8, pipe8]]
+            param_pipe_list = [[param8b, pipe8b]]
 
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
-
-            param_pipe_list = [[param1a, pipe1a], [param1b, pipe1b], [param2, pipe2], [param3, pipe3],
-                               [param4, pipe4], [param5, pipe5], [param6, pipe6], [param7, pipe7]]
+            param_pipe_list = [] # put all the pipe and param paris you wabnt
 
     else:  # regression
         if args['lite_mode']:  # just for debugging. using one small grid
