@@ -406,7 +406,7 @@ def scorer():
 # *****************************************************************************************************
 
 # write output to logfile (to ease hyper - parameter tuning)
-print(" >>>>>>>>>>>>>>>>>>>>> STARTING MAIN OF GSCVrunner >>>>>>>>>>>>>>>>>>>>>")
+print(" >>>>>>>>>>>>>>>>>>>>> STARTING MAIN OF GSCVrunner.py >>>>>>>>>>>>>>>>>>>>>")
 
 if args['stdout_to_file']:
     logfile_name = 'stdout.txt'
