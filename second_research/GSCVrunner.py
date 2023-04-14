@@ -650,7 +650,7 @@ if args['classification']:
     pipe7a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param7a["classifier"][0])])
     pipe7b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param7b["classifier"][0])])
     pipe8a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param8a["classifier"][0])])
-    pipe8b = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param8b["classifier"][0])])
+    pipe8b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param8b["classifier"][0])])
 
 ########################## regression ####################################
 
