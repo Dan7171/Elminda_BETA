@@ -599,9 +599,9 @@ if args['classification']:
         "classifier": [clf7]
     }
 
-    param8a = {  # MLPClassifier (neural network) + kbest
+    param8a = {  # MLPClassifier (neural network) + PCA
+        "pca__n_components": [i for i in range(18, 25)],
 
-        "kBest__k": range(4, 40, 8),
         'classifier__hidden_layer_sizes': [(i, j, k, l, m) for i in range(17, 24) for j in range(20, 27) for k in
                                            range(22, 28)
                                            for l in range(25, 30) for m in range(28, 33)],
@@ -614,9 +614,9 @@ if args['classification']:
         "classifier": [clf8]
 
     }
-    param8b = {  # MLPClassifier (neural network) + pca
+    param8b = {  # MLPClassifier (neural network) + KBEST
+        "kBest__k": range(4, 40, 8),
 
-        "pca__n_components": [i for i in range(18, 25)],
         'classifier__hidden_layer_sizes': [(i, j, k, l, m) for i in range(17, 24) for j in range(20, 27) for k in
                                            range(22, 28)
                                            for l in range(25, 30) for m in range(28, 33)],
