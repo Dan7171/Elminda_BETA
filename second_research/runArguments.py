@@ -54,7 +54,7 @@ args = {
 
     "halving": False,
 
-    "stdout_to_file": False # to help in hyper parameter tuning
+    "stdout_to_file": True # to help in hyper parameter tuning
 
 }
 if args["both"] or args["balance_y_values"]:

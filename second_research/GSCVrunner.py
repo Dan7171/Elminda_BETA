@@ -367,11 +367,10 @@ def CV_Score(y_true, y_pred):
             print("New improvement!")
             print(improvement_report_str)
             # choice = search.cv_results_['params'][param_choice_idx]  # param grid of param choice which improved
-            f_name = "search_statistics.txt"
-            if not os.path.exists(f_name):
-                open(f_name, 'w+').close() # make file
-            with open(f_name, "a+") as statistics:
-                print(f"updating {f_name}...")
+            if not os.path.exists(search_statistics):
+                open(search_statistics, 'w+').close() # make file
+            with open(search_statistics, "a+") as statistics:
+                print(f"updating {search_statistics}...")
                 statistics.write(f"{choice_avg_score_str}\n{improvement_report_str}\n{parmams_str}\n\n")
                 print("updated")
         print(f"Best parameter choice score by now is {best_score_by_now[0]}")
@@ -401,6 +400,8 @@ def scorer():
 # *****************************************************************************************************
 
 # write output to logfile (to ease hyper - parameter tuning)
+print(" >>>>>>>>>>>>>>>>>>>>> STARTED MAIN OF GCSVrunner >>>>>>>>>>>>>>>>>>>>>")
+
 if args['stdout_to_file']:
     logfile_name = 'stdout.txt'
     if os.path.exists(logfile_name):
@@ -408,8 +409,10 @@ if args['stdout_to_file']:
     log_file = open(logfile_name, 'a')
     sys.stdout = sys.stderr = log_file
 
+search_statistics = "search_statistics.txt"
 
-
+if os.path.exists(search_statistics):
+    os.remove(search_statistics)
 print(args)
 if args['classification']:
     y_name = '6-weeks_HDRS21_class'  # classification problem (prediciting change rate class)
