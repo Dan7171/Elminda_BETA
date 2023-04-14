@@ -349,30 +349,36 @@ def CV_Score(y_true, y_pred):
 
     # y_true = y_true[y_name].values  # change from df to ndarray for printing nicely
     param_choice_idx = total_folds[0] // len(choice_scores)
+
     idx = total_folds[0] % len(choice_scores)  # num of folds elapsed % num of folds in each param choice
     choice_scores[idx] = cvscore
+    max_param_choice_idx = args['n_iter'] - 1
 
+    if idx == 0:
+        param_choice_str = f"Parameter choice num {param_choice_idx} / {max_param_choice_idx} - starting..."
+        print(param_choice_str)
     if idx == len(choice_scores) - 1:  # calculated score for all folds in current parmeter coice
 
         choice_avg_score = np.mean(choice_scores)
-        max_param_choice_idx = args['n_iter'] - 1
         choice_avg_score_str = f"In parameter choice num {param_choice_idx} / {max_param_choice_idx} avg score was: {choice_avg_score}. This is the best score so far"
 
         improvement_report_str = None
         if choice_avg_score > best_score_by_now[0]:
             best_score_by_now[0] = choice_avg_score
             improvement_report_str = f"New best score is {best_score_by_now[0]}"
-            parmams_str = f"chosen parameters: {pipe.get_params()}" # param configuration chose
-        if improvement_report_str is not None:
+            # parmams_str = f"chosen parameters: {pipe.get_params()}" # param configuration chose
+
+        if improvement_report_str is not None: # improvement in score
             print("New improvement!")
             print(improvement_report_str)
             # choice = search.cv_results_['params'][param_choice_idx]  # param grid of param choice which improved
             if not os.path.exists(search_statistics):
                 open(search_statistics, 'w+').close() # make file
             with open(search_statistics, "a+") as statistics:
+                print(choice_avg_score_str)
                 print(f"updating {search_statistics}...")
                 statistics.write(f"{choice_avg_score_str}\n\n")
-                print("updated")
+                print("statistics file updated successfully with new improvement in score message!")
         print(f"Best parameter choice score by now is {best_score_by_now[0]}")
         print(choice_avg_score_str)
 
@@ -400,7 +406,7 @@ def scorer():
 # *****************************************************************************************************
 
 # write output to logfile (to ease hyper - parameter tuning)
-print(" >>>>>>>>>>>>>>>>>>>>> STARTED MAIN OF GCSVrunner >>>>>>>>>>>>>>>>>>>>>")
+print(" >>>>>>>>>>>>>>>>>>>>> STARTING MAIN OF GSCVrunner >>>>>>>>>>>>>>>>>>>>>")
 
 if args['stdout_to_file']:
     logfile_name = 'stdout.txt'
@@ -861,5 +867,7 @@ for config in splitted_congifs:
                 best_cv_iter_yts_list)  # print some more conclusions and details about the winning cv parmas and pipe and save them to csv
             print_conclusions(X_train, pipe, search, best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray)
 
+print(f"<<<<<<<<<<<<<<<<<<<<< GSCVrunner.py finished successfuly, check {logfile_name}, {search_statistics} and "
+      f"tuning.csv for search results <<<<<<<<<<<<<<<<<<<<<")
 log_file.close()
 plt.show()
