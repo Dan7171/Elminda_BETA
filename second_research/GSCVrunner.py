@@ -581,6 +581,17 @@ if args['classification']:
         'classifier__subsample': [0.6, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1],
         "classifier": [clf6]
     }
+    #GRADIENT BOOSTING ( NO PCA  NO KBEST)
+    param6c = {
+        'classifier__n_estimators': [5,20,35,50,65,80,95,110,125,150,200,250,350],
+        'classifier__learning_rate': [0.01, 0.2, 0.4],
+        'classifier__max_depth': [2, 5, 7, 9, 11],
+        'classifier__min_samples_split': [1,3,5,8,13,19,25,33,42,55,70],
+        'classifier__min_samples_leaf': [1,3,5,8,13,19,25,33,42,55,70],
+        'classifier__max_features': ['auto', 'sqrt', None],
+        'classifier__subsample': [0.6, 0.75, 0.9, 1],
+        "classifier": [clf6]
+    }
 
     param7a = {  # CATBOOST CLASSIFIER + pca
         "pca__n_components": [i for i in range(3, 100,5)],
@@ -645,13 +656,16 @@ if args['classification']:
     pipe4b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param4b["classifier"][0])])
     pipe5a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param5a["classifier"][0])])
     pipe5b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param5b["classifier"][0])])
+    # pipe5c = Pipeline(steps=[("scaler", scaler), ("classifier", param5c["classifier"][0])])
     pipe6a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param6a["classifier"][0])])
     pipe6b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param6b["classifier"][0])])
+    pipe6c = Pipeline(steps=[("scaler", scaler), ("classifier", param6c["classifier"][0])])
     pipe7a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param7a["classifier"][0])])
     pipe7b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param7b["classifier"][0])])
+    # pipe7c = Pipeline(steps=[("scaler", scaler), ("classifier", param7c["classifier"][0])])
     pipe8a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param8a["classifier"][0])])
     pipe8b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param8b["classifier"][0])])
-
+    # pipe8c = Pipeline(steps=[("scaler", scaler), ("classifier", param8c["classifier"][0])])
 ########################## regression ####################################
 
 else:  # regression
