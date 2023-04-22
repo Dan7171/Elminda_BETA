@@ -405,6 +405,7 @@ def scorer():
 # ******************************************* MAIN ****************************************************
 # *****************************************************************************************************
 
+
 # write output to logfile (to ease hyper - parameter tuning)
 print(" >>>>>>>>>>>>>>>>>>>>> STARTING MAIN OF GSCVrunner.py >>>>>>>>>>>>>>>>>>>>>")
 
@@ -558,13 +559,13 @@ if args['classification']:
     }
 
     param6a = {  # GRADIENT BOOSTING + pca
-        "pca__n_components": [i for i in range(3, 100, 8)],
-        'classifier__n_estimators': [5, 10, 20, 40, 60, 90, 120],
-        'classifier__learning_rate': [0.0001, 0.01, 0.2, 0.4],
+        "pca__n_components": [i for i in range(3, 300, 8)],
+        'classifier__n_estimators': [5, 20, 35, 50, 65, 80, 95, 110, 125, 150, 200, 250, 350],
+        'classifier__learning_rate': [0.01, 0.2, 0.4],
         'classifier__max_depth': [2, 5, 7, 9, 11],
-        'classifier__min_samples_split': [2, 4, 8, 14, 20],
-        'classifier__min_samples_leaf': [1, 4, 8, 12],
-        'classifier__max_features': ['auto', 'sqrt', 'log2', None],
+        'classifier__min_samples_split': [1, 3, 5, 8, 13, 19, 25, 33, 42, 55, 70],
+        'classifier__min_samples_leaf': [1, 3, 5, 8, 13, 19, 25, 33, 42, 55, 70],
+        'classifier__max_features': ['auto', 'sqrt', None],
         'classifier__subsample': [0.6, 0.75, 0.9, 1],
         "classifier": [clf6]
     }
