@@ -40,6 +40,7 @@ from sklearn.model_selection import HalvingRandomSearchCV
 from imblearn.over_sampling import SMOTE
 from sklearn.datasets import make_classification
 import sys
+
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 np.seterr(divide='ignore', invalid='ignore')
 warnings.filterwarnings(action='ignore')
@@ -368,12 +369,12 @@ def CV_Score(y_true, y_pred):
             improvement_report_str = f"New best score is {best_score_by_now[0]}"
             # parmams_str = f"chosen parameters: {pipe.get_params()}" # param configuration chose
 
-        if improvement_report_str is not None: # improvement in score
+        if improvement_report_str is not None:  # improvement in score
             print("New improvement!")
             print(improvement_report_str)
             # choice = search.cv_results_['params'][param_choice_idx]  # param grid of param choice which improved
             if not os.path.exists(search_statistics):
-                open(search_statistics, 'w+').close() # make file
+                open(search_statistics, 'w+').close()  # make file
             with open(search_statistics, "a+") as statistics:
                 print(choice_avg_score_str)
                 print(f"updating {search_statistics}...")
@@ -389,7 +390,6 @@ def CV_Score(y_true, y_pred):
     print(f"scoring metric: {my_scorer}, score: {cvscore} ")
 
     total_folds[0] += 1  # splits counter, starts from 0
-
 
     return cvscore
 
@@ -474,7 +474,7 @@ if args['classification']:
         "classifier": [clf1]
     }
     # tune 3. c=0.5, k = 16, penalty= l2,mutual_info
-    param1b = { # LOGISTIC REGRESSION + kbest,
+    param1b = {  # LOGISTIC REGRESSION + kbest,
         "classifier__C": [0.45, 0.47, 0.5, 0.52, 0.55, 0.6],  # classifier (logistic regression) param 'C' for tuning
         "kBest__k": range(15, 17),  # selctKbest param 'k'for tuning. must be  <= num of features
         'classifier__penalty': ['l2'],
@@ -482,7 +482,7 @@ if args['classification']:
         "classifier": [clf1]
 
     }
-    param2a = { # knn + pca
+    param2a = {  # knn + pca
         "pca__n_components": [i for i in range(3, 100, 5)],
         "classifier__n_neighbors": range(1, 90, 3),
         "classifier__weights": ['uniform', 'distance'],
@@ -581,22 +581,22 @@ if args['classification']:
         'classifier__subsample': [0.6, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1],
         "classifier": [clf6]
     }
-    #GRADIENT BOOSTING ( NO PCA  NO KBEST)
+    # GRADIENT BOOSTING ( NO PCA  NO KBEST)
     param6c = {
-        'classifier__n_estimators': [5,20,35,50,65,80,95,110,125,150,200,250,350],
+        'classifier__n_estimators': [5, 20, 35, 50, 65, 80, 95, 110, 125, 150, 200, 250, 350],
         'classifier__learning_rate': [0.01, 0.2, 0.4],
         'classifier__max_depth': [2, 5, 7, 9, 11],
-        'classifier__min_samples_split': [1,3,5,8,13,19,25,33,42,55,70],
-        'classifier__min_samples_leaf': [1,3,5,8,13,19,25,33,42,55,70],
+        'classifier__min_samples_split': [1, 3, 5, 8, 13, 19, 25, 33, 42, 55, 70],
+        'classifier__min_samples_leaf': [1, 3, 5, 8, 13, 19, 25, 33, 42, 55, 70],
         'classifier__max_features': ['auto', 'sqrt', None],
         'classifier__subsample': [0.6, 0.75, 0.9, 1],
         "classifier": [clf6]
     }
 
     param7a = {  # CATBOOST CLASSIFIER + pca
-        "pca__n_components": [i for i in range(3, 100,5)],
+        "pca__n_components": [i for i in range(3, 100, 5)],
         'classifier__n_estimators': [3, 10, 30, 50, 100, 500],
-        "classifier__learning_rate": [0.0001,0.01, 0.1],
+        "classifier__learning_rate": [0.0001, 0.01, 0.1],
         'classifier__subsample': [0.1, 0.3, 0.5, 0.7, 1.0],
         'classifier__max_depth': range(3, 40, 3),
         "classifier": [clf7]
@@ -604,7 +604,7 @@ if args['classification']:
     param7b = {  # CATBOOST CLASSIFIER + kbest
         "kBest__k": range(4, 40, 8),
         'classifier__n_estimators': [3, 10, 30, 50, 100, 500],
-        "classifier__learning_rate": [0.0001,0.01, 0.1],
+        "classifier__learning_rate": [0.0001, 0.01, 0.1],
         'classifier__subsample': [0.1, 0.3, 0.5, 0.7, 1.0],
         'classifier__max_depth': range(3, 40, 3),
         "classifier": [clf7]
@@ -797,11 +797,11 @@ for config in splitted_congifs:
 
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param8b, pipe8b]]
+            param_pipe_list = [[param6c, pipe6c]]
 
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
-            param_pipe_list = [] # put all the pipe and param paris you wabnt
+            param_pipe_list = []  # put all the pipe and param paris you wabnt
 
     else:  # regression
         if args['lite_mode']:  # just for debugging. using one small grid
