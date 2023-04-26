@@ -551,7 +551,12 @@ if args['classification']:
         #  'classifier': RandomForestClassifier(max_depth=60, max_features='auto', min_samples_leaf=3,
         #                                       min_samples_split=3, random_state=42)}
 
-
+        # third best (accuracy = 0.75) (cv=5)
+        # {'pca__n_components': 71, 'classifier__min_samples_split': 7,
+        # 'classifier__min_samples_leaf': 5, 'classifier__max_features': 2,
+        # 'classifier__max_depth': 75, 'classifier__bootstrap': True, 'classifier':
+        # RandomForestClassifier(max_depth=75, max_features=2, min_samples_leaf=5,
+        #                        min_samples_split=7, random_state=42)}
         "pca__n_components": [i for i in range(55, 85,2)],
         'classifier__bootstrap': [True],
         "classifier__max_depth": [35,75,2], #11 evenly spaceced num in range10-110
@@ -564,11 +569,11 @@ if args['classification']:
         # reason I tried this classifier params:
         # https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74
         "kBest__k": range(4, 80, 3),
-        'classifier__bootstrap': [True, False],
-        "classifier__max_depth": range(2, 50, 2),
-        "classifier__min_samples_split": range(2, 50, 3),
-        "classifier__min_samples_leaf": range(2, 50, 3),
-        "classifier__max_features": range(2, 30, 3),
+        'classifier__bootstrap': [True],
+        "classifier__max_depth": [35,75,2], #11 evenly spaceced num in range10-110
+        "classifier__min_samples_split": range(2, 15),
+        "classifier__min_samples_leaf": range(2, 12),
+        "classifier__max_features": ['auto', 'sqrt',2],
         "classifier": [clf5]
     }
 
@@ -824,7 +829,7 @@ for config in splitted_congifs:
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param8b, pipe8b]]
+            param_pipe_list = [[param5b, pipe5b]]
 # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
