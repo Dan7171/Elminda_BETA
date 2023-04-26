@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 import sklearn
 n_components = [1,2,3,4,5]

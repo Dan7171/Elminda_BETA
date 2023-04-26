@@ -612,19 +612,24 @@ if args['classification']:
     }
 
     param8a = {  # MLPClassifier (neural network) + PCA
-        "pca__n_components": [i for i in range(18, 25)],
-
-        'classifier__hidden_layer_sizes': [(i, j, k, l, m) for i in range(17, 24) for j in range(20, 27) for k in
-                                           range(22, 28)
-                                           for l in range(25, 30) for m in range(28, 33)],
+        #best by now: (accuracy 0.82)
+        # {'pca__n_components': 26, 'classifier__verbose': False, 'classifier__solver': 'adam',
+        #  'classifier__max_iter': 2500, 'classifier__learning_rate': 'adaptive',
+        #  'classifier__hidden_layer_sizes': (27, 31, 21, 31), 'classifier__alpha': 0.0001,
+        #  'classifier__activation': 'relu',
+        #  'classifier': MLPClassifier(hidden_layer_sizes=(27, 31, 21, 31), learning_rate='adaptive',
+        #                              max_iter=2500, random_state=42)}
+        "pca__n_components": [i for i in range(24, 29)],
+        'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(25, 30) for j in range(29, 34) for k in
+                                           range(19, 24)
+                                           for l in range(29, 34)],
         'classifier__activation': ['relu'],
         'classifier__solver': ['adam'],
         'classifier__alpha': [0.0001],
         'classifier__learning_rate': ['adaptive'],
-        'classifier__max_iter': [2500],
+        'classifier__max_iter': [2800],
         'classifier__verbose': [False],  # details prints of loss
         "classifier": [clf8]
-
     }
     param8b = {  # MLPClassifier (neural network) + KBEST
         "kBest__k": range(4, 40, 8),
@@ -795,11 +800,11 @@ for config in splitted_congifs:
     # fix imbalance in train set
     if args['balance_y_values']:
         X_train, y_train = balance_y_values(X_train, y_train, method='SMOTE')
-
+# *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param6a, pipe6a]]
-
+            param_pipe_list = [[param8a, pipe8a]]
+# ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
             param_pipe_list = []  # put all the pipe and param paris you wabnt
