@@ -564,14 +564,22 @@ if args['classification']:
     }
 
     param6a = {  # GRADIENT BOOSTING + pca
-        "pca__n_components": [i for i in range(3, 300, 8)],
-        'classifier__n_estimators': [5, 20, 35, 50, 65, 80, 95, 110, 125, 150, 200, 250, 350],
-        'classifier__learning_rate': [0.0001,0.01, 0.2, 0.4],
-        'classifier__max_depth': [2, 5, 7, 9, 11],
-        'classifier__min_samples_split': [1, 3, 5, 8, 13, 19, 25, 33, 42, 55, 70],
-        'classifier__min_samples_leaf': [1, 3, 5, 8, 13, 19, 25, 33, 42, 55, 70],
+        # best - accuracy 0.78
+        # {'pca__n_components': 83, 'classifier__subsample': 0.9,
+        # 'classifier__n_estimators': 40, 'classifier__min_samples_split': 2,
+        # 'classifier__min_samples_leaf': 1, 'classifier__max_features': None,
+        # 'classifier__max_depth': 5, 'classifier__learning_rate': 0.01,
+        # 'classifier': GradientBoostingClassifier(learning_rate=0.01,
+        # max_depth=5, n_estimators=40,
+        #  random_state=41, subsample=0.9)}
+        "pca__n_components": [i for i in range(70, 100, 2)],
+        'classifier__n_estimators': [i for i in range(20,60,3)],
+        'classifier__learning_rate': [0.0001,0.01],
+        'classifier__max_depth': [2,3,4, 5,6, 7,8],
+        'classifier__min_samples_split': [1,2,3],
+        'classifier__min_samples_leaf': [1,2,3],
         'classifier__max_features': ['auto', 'sqrt', None],
-        'classifier__subsample': [0.6, 0.75, 0.9, 1],
+        'classifier__subsample': [0.8, 0.9, 1],
         "classifier": [clf6]
     }
 
@@ -808,7 +816,7 @@ for config in splitted_congifs:
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param5a, pipe5a]]
+            param_pipe_list = [[param6a, pipe6a]]
 # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
