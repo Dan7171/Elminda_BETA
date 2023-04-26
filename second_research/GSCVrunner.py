@@ -536,14 +536,19 @@ if args['classification']:
         "classifier": [clf4]
     }
     param5a = {  # RANDOM FOREST + pca
-        # reason I tried this classifier params:
-        # https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74
-        "pca__n_components": [i for i in range(3, 100, 5)],
+
+        # # best by now (accuracy = 0.756)
+
+        # {'pca__n_components': 76, 'classifier__min_samples_split': 12, 'classifier__min_samples_leaf': 10,
+        #  'classifier__max_features': 2, 'classifier__max_depth': 43, 'classifier__bootstrap': True,
+        #  'classifier': RandomForestClassifier(max_depth=43, max_features=2, min_samples_leaf=10,
+        #                                       min_samples_split=12, random_state=42)}
+        "pca__n_components": [i for i in range(50, 100, 5)],
         'classifier__bootstrap': [True, False],
-        "classifier__max_depth": range(2, 50, 2),
-        "classifier__min_samples_split": range(2, 50, 3),
-        "classifier__min_samples_leaf": range(2, 50, 3),
-        "classifier__max_features": range(2, 30, 3),
+        "classifier__max_depth": [int(x) for x in np.linspace(10, 110, num = 11)], #11 evenly spaceced num in range10-110
+        "classifier__min_samples_split": range(1, 15, 2),
+        "classifier__min_samples_leaf": range(1, 15, 2),
+        "classifier__max_features": ['auto', 'sqrt'],
         "classifier": [clf5]
     }
     param5b = {  # RANDOM FOREST + kbest
@@ -803,7 +808,7 @@ for config in splitted_congifs:
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param6a, pipe6a]]
+            param_pipe_list = [[param5a, pipe5a]]
 # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
