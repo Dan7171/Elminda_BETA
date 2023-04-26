@@ -32,12 +32,12 @@ args = {
     # (for now works on classificatin only) True- train on both research 1 and research 2 data , False- train on
     # research 2 only.IMPORTANT: if set to True, use X_version = 1 only!!!
 
-    "cv": 5,  # param for cv
+    "cv": 7,  # param for cv
 
     "balance_y_values": True
     ,  # working for clasification only. balancing the number of responsive and non responsive (y categories)
 
-    "n_iter": 3000,  # param for randomized cv - num of combinations to try in randomized search
+    "n_iter": 2000,  # param for randomized cv - num of combinations to try in randomized search
 
     "n_jobs": 1,
     # num of threads each model is generating to speed up grid search. Changes can cause unexpected behaviour
