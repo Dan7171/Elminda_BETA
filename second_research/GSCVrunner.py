@@ -568,9 +568,9 @@ if args['classification']:
     param5b = {  # RANDOM FOREST + kbest
         # reason I tried this classifier params:
         # https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74
-        "kBest__k": range(4, 80, 3),
+        "kBest__k": range(4, 500, 20),
         'classifier__bootstrap': [True],
-        "classifier__max_depth": [35,75,2], #11 evenly spaceced num in range10-110
+        "classifier__max_depth": [35,75,1], #11 evenly spaceced num in range10-110
         "classifier__min_samples_split": range(2, 15),
         "classifier__min_samples_leaf": range(2, 12),
         "classifier__max_features": ['auto', 'sqrt',2],
@@ -829,7 +829,7 @@ for config in splitted_congifs:
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param6c, pipe6c]]
+            param_pipe_list = [[param5b, pipe5b]]
 # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
