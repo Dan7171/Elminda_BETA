@@ -561,7 +561,7 @@ if args['classification']:
     param6a = {  # GRADIENT BOOSTING + pca
         "pca__n_components": [i for i in range(3, 300, 8)],
         'classifier__n_estimators': [5, 20, 35, 50, 65, 80, 95, 110, 125, 150, 200, 250, 350],
-        'classifier__learning_rate': [0.01, 0.2, 0.4],
+        'classifier__learning_rate': [0.0001,0.01, 0.2, 0.4],
         'classifier__max_depth': [2, 5, 7, 9, 11],
         'classifier__min_samples_split': [1, 3, 5, 8, 13, 19, 25, 33, 42, 55, 70],
         'classifier__min_samples_leaf': [1, 3, 5, 8, 13, 19, 25, 33, 42, 55, 70],
@@ -803,7 +803,7 @@ for config in splitted_congifs:
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param8a, pipe8a]]
+            param_pipe_list = [[param6a, pipe6a]]
 # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
