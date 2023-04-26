@@ -537,18 +537,27 @@ if args['classification']:
     }
     param5a = {  # RANDOM FOREST + pca
 
-        # # best by now (accuracy = 0.756)
+        # # best by now (accuracy = 0.756) (cv=5)
 
         # {'pca__n_components': 76, 'classifier__min_samples_split': 12, 'classifier__min_samples_leaf': 10,
         #  'classifier__max_features': 2, 'classifier__max_depth': 43, 'classifier__bootstrap': True,
         #  'classifier': RandomForestClassifier(max_depth=43, max_features=2, min_samples_leaf=10,
         #                                       min_samples_split=12, random_state=42)}
-        "pca__n_components": [i for i in range(50, 100, 5)],
-        'classifier__bootstrap': [True, False],
-        "classifier__max_depth": [int(x) for x in np.linspace(10, 110, num = 11)], #11 evenly spaceced num in range10-110
-        "classifier__min_samples_split": range(1, 15, 2),
-        "classifier__min_samples_leaf": range(1, 15, 2),
-        "classifier__max_features": ['auto', 'sqrt'],
+
+        # second best: (accuracy = 0.72) (cv=4)
+
+        # {'pca__n_components': 60, 'classifier__min_samples_split': 3, 'classifier__min_samples_leaf': 3,
+        #  'classifier__max_features': 'auto', 'classifier__max_depth': 60, 'classifier__bootstrap': True,
+        #  'classifier': RandomForestClassifier(max_depth=60, max_features='auto', min_samples_leaf=3,
+        #                                       min_samples_split=3, random_state=42)}
+
+
+        "pca__n_components": [i for i in range(55, 85,2)],
+        'classifier__bootstrap': [True],
+        "classifier__max_depth": [35,75,2], #11 evenly spaceced num in range10-110
+        "classifier__min_samples_split": range(2, 15),
+        "classifier__min_samples_leaf": range(2, 12),
+        "classifier__max_features": ['auto', 'sqrt',2],
         "classifier": [clf5]
     }
     param5b = {  # RANDOM FOREST + kbest
@@ -816,7 +825,7 @@ for config in splitted_congifs:
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param6a, pipe6a]]
+            param_pipe_list = [[param5a, pipe5a]]
 # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
