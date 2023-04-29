@@ -548,23 +548,24 @@ if args['classification']:
         "classifier": [clf3]
     }
     param4a = {  # DECISION TREE + pca
-        "pca__n_components": [i for i in range(3, 100, 5)],
+        "pca__n_components": [i for i in range(3, 300, 25)],
+        'classifier__max_leaf_nodes': [2, 6,12,20,35],
+        'classifier__max_depth': [2, 6,12,20,40],
+        'classifier__criterion': ['gini', 'entropy'],
+        'classifier__min_samples_split': range(2, 30, 6),
+        'classifier__min_samples_leaf': [5, 10, 20, 50, 100],
+        # reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
+        "classifier": [clf4]
+    }
+    # DECISION TREE + kbest
+    param4b = {
         'classifier__max_leaf_nodes': range(1, 25, 3),
         'classifier__max_depth': [2, 4, 6, 8, 10, 12],
         'classifier__criterion': ['gini', 'entropy'],
         'classifier__min_samples_split': range(2, 40, 5),
         # reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
         "classifier": [clf4]
-    }
-    param4b = {  # DECISION TREE + kbest
-        "kBest__k": range(4, 40, 8),
-        'classifier__max_leaf_nodes': range(1, 25, 3),
-        'classifier__max_depth': [2, 4, 6, 8, 10, 12],
-        'classifier__criterion': ['gini', 'entropy'],
-        'classifier__min_samples_split': range(2, 40, 5),
-        # reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
-        "classifier": [clf4]
-    }
+        }
     param5a = {  # RANDOM FOREST + pca
 
         # # best by now (accuracy = 0.756) (cv=5)
