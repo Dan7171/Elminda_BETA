@@ -610,11 +610,11 @@ if args['classification']:
         #  RandomForestClassifier(max_depth=12, max_features='auto', min_samples_leaf=2,
 
 
-        "kBest__k": range(300, 400,3),
-        'classifier__bootstrap': [True],
-        "classifier__max_depth": [12,20,28,32,38,45],
-        "classifier__min_samples_split": [2,3],
-        "classifier__min_samples_leaf": [2,3],
+        "kBest__k": range(200, 600,3),
+        'classifier__bootstrap': [True,False],
+        "classifier__max_depth": range(4,300,3),
+        "classifier__min_samples_split": range(2,50),
+        "classifier__min_samples_leaf": range(2,50),
         "classifier__max_features": ['auto','sqrt'],
         "classifier": [clf5]
     }
