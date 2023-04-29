@@ -603,7 +603,7 @@ if args['classification']:
         # RandomForestClassifier(max_depth=35, min_samples_leaf=2, random_state=42)}
         "kBest__k": range(300, 440, 20),
         'classifier__bootstrap': [True],
-        "classifier__max_depth": [12,20,28,32,38,45],  
+        "classifier__max_depth": [12,20,28,32,38,45],
         "classifier__min_samples_split": [2,3],
         "classifier__min_samples_leaf": [2,3],
         "classifier__max_features": ['auto','sqrt'],

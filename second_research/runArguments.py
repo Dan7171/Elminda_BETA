@@ -21,7 +21,7 @@ args = {
 
     "debug": False,  # NEVER USE
 
-    "exhaustive_grid_search": True,  # or randomized
+    "exhaustive_grid_search": False,  # or randomized
 
     "classification_type": "normal",
     # "normal" = 2 classes: < 50% change, => 50% change / "extreme" = 3 classes:  <30% , 30-70% , >70% change
