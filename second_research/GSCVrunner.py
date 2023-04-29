@@ -1,4 +1,5 @@
 import math
+from functools import reduce
 
 from matplotlib import pyplot as plt
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
@@ -354,12 +355,48 @@ def CV_Score(y_true, y_pred):
     idx = total_folds[0] % len(choice_scores)  # num of folds elapsed % num of folds in each param choice
     choice_scores[idx] = cvscore
     max_param_choice_idx = args['n_iter'] - 1
+    max_split_index = total_splits - 1
+
+    # if idx == 0:
+    #     param_choice_str = f"Parameter choice num {param_choice_idx} / {max_param_choice_idx} - starting..."
+    #     print(param_choice_str)
+    # if idx == len(choice_scores) - 1:  # calculated score for all folds in current parmeter coice
+    #
+    #     choice_avg_score = np.mean(choice_scores)
+    #     choice_avg_score_str = f"In parameter choice num {param_choice_idx} / {max_param_choice_idx} avg score was: {choice_avg_score}. This is the best score so far"
+    #
+    #     improvement_report_str = None
+    #     if choice_avg_score > best_score_by_now[0]:
+    #         best_score_by_now[0] = choice_avg_score
+    #         improvement_report_str = f"New best score is {best_score_by_now[0]}"
+    #         # parmams_str = f"chosen parameters: {pipe.get_params()}" # param configuration chose
+    #
+    #     if improvement_report_str is not None:  # improvement in score
+    #         print("New improvement!")
+    #         print(improvement_report_str)
+    #         # choice = search.cv_results_['params'][param_choice_idx]  # param grid of param choice which improved
+    #         if not os.path.exists(search_statistics):
+    #             open(search_statistics, 'w+').close()  # make file
+    #         with open(search_statistics, "a+") as statistics:
+    #             print(choice_avg_score_str)
+    #             print(f"updating {search_statistics}...")
+    #             statistics.write(f"{choice_avg_score_str}\n\n")
+    #             print("statistics file updated successfully with new improvement in score message!")
+    #     print(f"Best parameter choice score by now is {best_score_by_now[0]}")
+    #     print(choice_avg_score_str)
 
     if idx == 0:
         param_choice_str = f"Parameter choice num {param_choice_idx} / {max_param_choice_idx} - starting..."
         print(param_choice_str)
-    if idx == len(choice_scores) - 1:  # calculated score for all folds in current parmeter coice
 
+    # max_split_index = total_splits - 1
+    print(f"{total_folds[0]} / {max_split_index} splits counted in cross val search ")
+    print("fold's true y \n", y_true)
+    print("fold's predicted y\n", y_pred)
+    print(f"scoring metric: {my_scorer}, score: {cvscore} ")
+
+
+    if idx == len(choice_scores) - 1:  # calculated score for all folds in current parmeter coice
         choice_avg_score = np.mean(choice_scores)
         choice_avg_score_str = f"In parameter choice num {param_choice_idx} / {max_param_choice_idx} avg score was: {choice_avg_score}. This is the best score so far"
 
@@ -382,13 +419,6 @@ def CV_Score(y_true, y_pred):
                 print("statistics file updated successfully with new improvement in score message!")
         print(f"Best parameter choice score by now is {best_score_by_now[0]}")
         print(choice_avg_score_str)
-
-    max_split_index = total_splits - 1
-    print(f"{total_folds[0]} / {max_split_index} splits counted in cross val search ")
-    print("fold's true y \n", y_true)
-    print("fold's predicted y\n", y_pred)
-    print(f"scoring metric: {my_scorer}, score: {cvscore} ")
-
     total_folds[0] += 1  # splits counter, starts from 0
 
     return cvscore
@@ -567,13 +597,16 @@ if args['classification']:
     }
     param5b = {  # RANDOM FOREST + kbest
         # reason I tried this classifier params:
-        # https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74
-        "kBest__k": range(4, 500, 20),
+        # {'kBest__k': 364, 'classifier__min_samples_split': 2,
+        # 'classifier__min_samples_leaf': 2, 'classifier__max_features': 'sqrt',
+        # 'classifier__max_depth': 35, 'classifier__bootstrap': True, 'classifier':
+        # RandomForestClassifier(max_depth=35, min_samples_leaf=2, random_state=42)}
+        "kBest__k": range(300, 440, 20),
         'classifier__bootstrap': [True],
-        "classifier__max_depth": [35,75,1], #11 evenly spaceced num in range10-110
-        "classifier__min_samples_split": range(2, 15),
-        "classifier__min_samples_leaf": range(2, 12),
-        "classifier__max_features": ['auto', 'sqrt',2],
+        "classifier__max_depth": [12,20,28,32,38,45], #11 evenly spaceced num in range10-110
+        "classifier__min_samples_split": [2,3],
+        "classifier__min_samples_leaf": [2,3],
+        "classifier__max_features": ['auto','sqrt'],
         "classifier": [clf5]
     }
 
@@ -847,71 +880,46 @@ for config in splitted_congifs:
         pipe = pair[1]
         choice_scores = [0 for i in range(args['cv'])]  # list of scores in length num of folds
         best_score_by_now = [0]
-        total_splits = args["n_iter"] * args["cv"]  # num of iterations in search * num of folds
 
         # cross validation search
         print(param)
         print(pipe)
 
-        # Tried this because verbose told me too, but this causes score = nan... so now its in comment
-        # if param['classifier'][0] == clf8:
-        #     y_train = y_train.values.ravel()
 
-        if args['halving']:
-            # # https://scikit-learn.org/stable/auto_examples/model_selection/plot_successive_halving_iterations.html#sphx-glr-auto-examples-model-selection-plot-successive-halving-iterations-py
-            # rsh = HalvingRandomSearchCV(
-            #     estimator=pipe, param_distributions=param,cv =args["cv"], scoring = scorer(),verbose=3, factor=2, random_state=args['rs']
-            # )
-            # rsh.fit(X, y)
-            #
-            # results = pd.DataFrame(rsh.cv_results_)
-            # results["params_str"] = results.params.apply(str)
-            # results.drop_duplicates(subset=("params_str", "iter"), inplace=True)
-            # mean_scores = results.pivot(
-            #     index="iter", columns="params_str", values="mean_test_score"
-            # )
-            # ax = mean_scores.plot(legend=False, alpha=0.6)
-            #
-            # labels = [
-            #     f"iter={i}\nn_samples={rsh.n_resources_[i]}\nn_candidates={rsh.n_candidates_[i]}"
-            #     for i in range(rsh.n_iterations_)
-            # ]
-            #
-            # ax.set_xticks(range(rsh.n_iterations_))
-            # ax.set_xticklabels(labels, rotation=45, multialignment="left")
-            # ax.set_title("Scores of candidates over iterations")
-            # ax.set_ylabel("mean test score", fontsize=15)
-            # ax.set_xlabel("iterations", fontsize=15)
-            # plt.tight_layout()
-            # plt.show()
-            #
-            pass
-        else:  # regular random search
-            search = RandomizedSearchCV(pipe, param, n_iter=args["n_iter"], cv=args["cv"], n_jobs=args['n_jobs'],
-                                        verbose=3, random_state=args['rs'], scoring=scorer(), refit=True).fit(
-                X_train.astype(float), y_train)
+        if args['exhaustive_grid_search']: # exhausitve search
+            print("~~~~~~~~~~ EXHAUSTIVE SEARCH CV ~~~~~~~~~~~")
+            search = GridSearchCV(param_grid=param,estimator=pipe,cv=args["cv"],verbose=3,scoring=scorer(),refit=True)
+            choice_options = [len(val) for val in param.values()]
+            args['n_iter'] = reduce(lambda x,y:x*y, choice_options) #multiply all choice options
+            search.fit(X_train.astype(float), y_train)
+        else: # randomized search
+            print("~~~~~~~~~~ RANDOMIZED SEARCH CV ~~~~~~~~~~")
+            search = RandomizedSearchCV(estimator=pipe, param_distributions=param, n_iter=args["n_iter"], cv=args["cv"], n_jobs=args['n_jobs'],verbose=3, random_state=args['rs'], scoring=scorer(), refit=True)
 
-            n_splits = args['cv']  # num of splits in cv_iter (cv parameter n_splits)
-            best_cv_iter_idx = search.best_index_  # index of the iteration in cross val search which had best parsms (0<=best_cv_iter_idx <=niter)
-            best_cv_iter_first_split_idx = best_cv_iter_idx * n_splits
-            best_cv_iter_all_splits_indices = range(best_cv_iter_first_split_idx,
-                                                    best_cv_iter_first_split_idx + n_splits,
-                                                    1)  # the exact range of the 5 test scores of the best index configuration
+        n_splits = args['cv']  # num of splits in cv_iter (cv parameter n_splits)
+        total_splits = args["n_iter"] * n_splits  # num of iterations in search * num of folds
+        search.fit(X_train.astype(float), y_train)
 
-            # best_cv_iter_yps_list is a list in length (n_splits (n folds)) contains vectors from the best iteration
-            # in cv
-            best_cv_iter_yps_list = [all_splits_yps[i] for i in best_cv_iter_all_splits_indices]
+        best_cv_iter_idx = search.best_index_  # index of the iteration in cross val search which had best parsms (0<=best_cv_iter_idx <=niter)
+        best_cv_iter_first_split_idx = best_cv_iter_idx * n_splits
+        best_cv_iter_all_splits_indices = range(best_cv_iter_first_split_idx,
+                                                best_cv_iter_first_split_idx + n_splits,
+                                                1)  # the exact range of the 5 test scores of the best index configuration
 
-            # print("indexes range - folds of best configuration (best_cv_iter_splits_indices): ",
-            # best_cv_iter_splits_indices)
-            best_cv_iter_yps_list_ndarray = np.concatenate(best_cv_iter_yps_list)  # turn to nd_array
+        # best_cv_iter_yps_list is a list in length (n_splits (n folds)) contains vectors from the best iteration
+        # in cv
+        best_cv_iter_yps_list = [all_splits_yps[i] for i in best_cv_iter_all_splits_indices]
 
-            # best_cv_iter_yts_list is a list in length (n_splits (n folds)) contains vectors from the best iteration
-            # in cv
-            best_cv_iter_yts_list = [all_splits_yts[index] for index in best_cv_iter_all_splits_indices]
-            best_cv_iter_yts_list_ndarray = np.concatenate(
-                best_cv_iter_yts_list)  # print some more conclusions and details about the winning cv parmas and pipe and save them to csv
-            print_conclusions(X_train, pipe, search, best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray)
+        # print("indexes range - folds of best configuration (best_cv_iter_splits_indices): ",
+        # best_cv_iter_splits_indices)
+        best_cv_iter_yps_list_ndarray = np.concatenate(best_cv_iter_yps_list)  # turn to nd_array
+
+        # best_cv_iter_yts_list is a list in length (n_splits (n folds)) contains vectors from the best iteration
+        # in cv
+        best_cv_iter_yts_list = [all_splits_yts[index] for index in best_cv_iter_all_splits_indices]
+        best_cv_iter_yts_list_ndarray = np.concatenate(
+            best_cv_iter_yts_list)  # print some more conclusions and details about the winning cv parmas and pipe and save them to csv
+        print_conclusions(X_train, pipe, search, best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray)
 
 print(f"<<<<<<<<<<<<<<<<<<<<< GSCVrunner.py finished successfuly, check {logfile_name}, {search_statistics} and "
       f"tuning.csv for search results <<<<<<<<<<<<<<<<<<<<<")

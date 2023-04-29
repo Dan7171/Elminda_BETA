@@ -21,7 +21,7 @@ args = {
 
     "debug": False,  # NEVER USE
 
-    "exhaustive_grid_search": False,  # or randomized
+    "exhaustive_grid_search": True,  # or randomized
 
     "classification_type": "normal",
     # "normal" = 2 classes: < 50% change, => 50% change / "extreme" = 3 classes:  <30% , 30-70% , >70% change
@@ -37,7 +37,7 @@ args = {
     "balance_y_values": True
     ,  # working for clasification only. balancing the number of responsive and non responsive (y categories)
 
-    "n_iter": 3500,  # param for randomized cv - num of combinations to try in randomized search
+    "n_iter": 1500,  # param for randomized cv - num of combinations to try in randomized search
 
     "n_jobs": 1,
     # num of threads each model is generating to speed up grid search. Changes can cause unexpected behaviour
@@ -52,7 +52,7 @@ args = {
 
     "test_size": 0.15,  # train test splits test size
 
-    "halving": False,
+    "halving": False, # out of order
 
     "stdout_to_file": True # to help in hyper parameter tuning
 
@@ -63,3 +63,6 @@ if args["both"] or args["balance_y_values"]:
 if not args['classification']:
     args["balance_y_values"] = False
     args["both"] = False
+
+if args['exhaustive_grid_search']:
+    args['n_iter'] = None
