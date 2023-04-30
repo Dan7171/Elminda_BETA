@@ -627,9 +627,17 @@ if args['classification']:
         #                                       min_samples_leaf=2, min_samples_split=6,
         #                                       random_state=42)}
         #
-        "kBest__k": range(470, 510,3),
+        #
+
+        # {'kBest__k': 485, 'classifier__min_samples_split': 5, 'classifier__min_samples_leaf': 2,
+        #  'classifier__max_features': 'auto', 'classifier__max_depth': 156, 'classifier__bootstrap': False,
+        #  'classifier': RandomForestClassifier(bootstrap=False, max_depth=156, max_features='auto',
+        #                                       min_samples_leaf=2, min_samples_split=5,
+        #                                       random_state=42)}
+        #
+        "kBest__k": range(480, 490),
         'classifier__bootstrap': [True,False],
-        "classifier__max_depth": range(120, 180,4),
+        "classifier__max_depth": range(150,160),
         "classifier__min_samples_split": range(2,10),
         "classifier__min_samples_leaf": range(2,10),
         "classifier__max_features": ['auto','sqrt'],
