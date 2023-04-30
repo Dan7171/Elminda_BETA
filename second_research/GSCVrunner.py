@@ -712,7 +712,7 @@ if args['classification']:
         "classifier": [clf8]
     }
     param8b = {  # MLPClassifier (neural network) + KBEST
-        "kBest__k": range(4, 40, 8),
+        "kBest__k": range(25,45,2),
         'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(25, 30) for j in range(29, 34) for k in
                                            range(19, 24)
                                            for l in range(29, 34)],
@@ -882,7 +882,7 @@ for config in splitted_congifs:
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param6b, pipe6b]]
+            param_pipe_list = [[param8b, pipe8b]]
 # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with

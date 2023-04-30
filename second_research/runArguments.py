@@ -37,7 +37,7 @@ args = {
     "balance_y_values": True
     ,  # working for clasification only. balancing the number of responsive and non responsive (y categories)
 
-    "n_iter": 22000,  # param for randomized cv - num of combinations to try in randomized search
+    "n_iter": 3000,  # param for randomized cv - num of combinations to try in randomized search
 
     "n_jobs": 1,
     # num of threads each model is generating to speed up grid search. Changes can cause unexpected behaviour
