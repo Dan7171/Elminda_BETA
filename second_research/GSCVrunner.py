@@ -653,13 +653,13 @@ if args['classification']:
     param6b = {  # GRADIENT BOOSTING + kbest
         # reason I tried this classifier params:
         "kBest__k": range(2, 600, 20),
-        'classifier__subsample': [0.55, 0.9],
-        'classifier__n_estimators': [20,40,60,80,100,120,140,160,200,300],
-        'classifier__min_samples_split': [2,5,10,20,30],
-        'classifier__min_samples_leaf': [2,5,10,20,30],
-        'classifier__max_features': ['auto'],
-        'classifier__max_depth': [2,5,10,20,30,45,70,100,150,250],
-        'classifier__learning_rate': [0.001],
+        'classifier__subsample': [0.6, 0.9],
+        'classifier__n_estimators': [30,35,40,45,50,60,65,70],
+        'classifier__min_samples_split': [1,2,3,4,5],
+        'classifier__min_samples_leaf': [1,2,3,4,5],
+        'classifier__max_features': ['auto',None,'sqrt'],
+        'classifier__max_depth': [2,4,7,12],
+        'classifier__learning_rate': [0.01],
         "classifier": [clf6]
     }
     # GRADIENT BOOSTING ( NO PCA  NO KBEST)
@@ -882,7 +882,7 @@ for config in splitted_congifs:
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param8b, pipe8b]]
+            param_pipe_list = [[param6b, pipe6b]]
 # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
