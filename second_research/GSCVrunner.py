@@ -621,11 +621,12 @@ if args['classification']:
         #  RandomForestClassifier(max_depth=12, max_features='auto', min_samples_leaf=2,
 
 
-        "kBest__k": range(200, 600,3),
+        #
+        "kBest__k": range(300, 500,5),
         'classifier__bootstrap': [True,False],
-        "classifier__max_depth": range(4,300,3),
-        "classifier__min_samples_split": range(2,50),
-        "classifier__min_samples_leaf": range(2,50),
+        "classifier__max_depth": range(4,300,10),
+        "classifier__min_samples_split": range(2,50,4),
+        "classifier__min_samples_leaf": range(2,50,4),
         "classifier__max_features": ['auto','sqrt'],
         "classifier": [clf5]
     }
@@ -882,7 +883,7 @@ for config in splitted_congifs:
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param6b, pipe6b]]
+            param_pipe_list = [[param5b, pipe5b]]
 # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
