@@ -553,13 +553,19 @@ if args['classification']:
         # classifier__min_samples_leaf=5, classifier__min_samples_split=14, pca__n_components=53;,
         # score=0.704 total time=   0.1s
 
-        "pca__n_components": [i for i in range(30, 100)],
-        'classifier__max_leaf_nodes': range(20,100,3),
-        'classifier__max_depth': range(30,300,5),
-        'classifier__criterion': ['gini', 'entropy'],
-        'classifier__min_samples_split': range(2, 30),
-        'classifier__min_samples_leaf': range(2, 30),
-        # reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
+        # best accuracy - 0.714021164021164
+        # {'pca__n_components': 52, 'classifier__min_samples_split': 8,
+        # 'classifier__min_samples_leaf': 3, 'classifier__max_leaf_nodes': 95,
+        # 'classifier__max_depth': 240, 'classifier__criterion': 'entropy',
+        # 'classifier': DecisionTreeClassifier(criterion='entropy', max_depth=240, max_leaf_nodes=95,
+        #                        min_samples_leaf=3, min_samples_split=8,
+        #                        random_state=42)}
+        "pca__n_components": [i for i in range(45, 60)],
+        'classifier__max_leaf_nodes': range(40,130,5),
+        'classifier__max_depth': range(20,450,5),
+        'classifier__criterion': ['entropy'],
+        'classifier__min_samples_split': range(1, 25,2),
+        'classifier__min_samples_leaf': range(1, 25,2),
         "classifier": [clf4]
     }
     # DECISION TREE + kbest
@@ -876,7 +882,7 @@ for config in splitted_congifs:
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param6c, pipe6c]]
+            param_pipe_list = [[param4a, pipe4a]]
 # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
