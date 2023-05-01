@@ -593,10 +593,15 @@ if args['classification']:
     #  'classifier__max_leaf_nodes': 80, 'classifier__max_depth': 260, 'classifier__criterion': 'gini',
     #  'classifier': DecisionTreeClassifier(max_depth=260, max_leaf_nodes=80, min_samples_leaf=2,
     #                                       min_samples_split=3, random_state=42)}
+
+    #{'kBest__k': 500, 'classifier__min_samples_split': 3, 'classifier__min_samples_leaf': 2,
+    # 'classifier__max_leaf_nodes': 86, 'classifier__max_depth': 274, 'classifier__criterion': 'gini',
+    # 'classifier': DecisionTreeClassifier(max_depth=274, max_leaf_nodes=86, min_samples_leaf=2,
+    #                   min_samples_split=3, random_state=42)}
     param4b = {
-        "kBest__k": range(460, 501,5),
-        'classifier__max_leaf_nodes': range(76,95,2),
-        'classifier__max_depth': range(250,280,4),
+        "kBest__k": range(470, 490,2),
+        'classifier__max_leaf_nodes': range(78,90),
+        'classifier__max_depth': range(260,280),
         'classifier__criterion': ['gini'],
         'classifier__min_samples_split': [2,3],
         'classifier__min_samples_leaf': [1,2],
@@ -604,7 +609,6 @@ if args['classification']:
 
         }
 
-    DecisionTreeClassifier()
 
     param5a = {  # RANDOM FOREST + pca
 
