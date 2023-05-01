@@ -578,12 +578,12 @@ if args['classification']:
         #               min_samples_leaf=2, min_samples_split=3,
         #               random_state=42)}"
 
-        "pca__n_components": range(48,55),
-        'classifier__max_leaf_nodes': range(93,102),
-        'classifier__max_depth': range(236,249),
+        "pca__n_components": range(48,600,10),
+        'classifier__max_leaf_nodes': range(92,110,2),
+        'classifier__max_depth': range(239,243),
         'classifier__criterion': ['entropy'],
-        'classifier__min_samples_split': range(2,4),
-        'classifier__min_samples_leaf': range(2,4),
+        'classifier__min_samples_split': range(2,3,5,10),
+        'classifier__min_samples_leaf': range(2,3,5,10),
         "classifier": [clf4]
     }
 
