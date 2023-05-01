@@ -562,8 +562,7 @@ if args['classification']:
         #                        random_state=42)}
 
 
-
-        "pca__n_components": [i for i in range(45, 100,10)],
+        "pca__n_components": [i for i in range(45, 500,20)],
         'classifier__max_leaf_nodes': range(40,130,10),
         'classifier__max_depth': range(20,450,20),
         'classifier__criterion': ['entropy'],
@@ -899,7 +898,7 @@ for config in splitted_congifs:
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param6b, pipe6b]]
+            param_pipe_list = [[param4a, pipe4a]]
 # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
