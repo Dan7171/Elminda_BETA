@@ -571,12 +571,19 @@ if args['classification']:
         # 'classifier__max_depth': 239, 'classifier__criterion': 'entropy',
         # 'classifier': DecisionTreeClassifier(criterion='entropy', max_depth=239, max_leaf_nodes=97,
         #                        min_samples_leaf=2, random_state=42)}"
-        "pca__n_components": range(49,56),
-        'classifier__max_leaf_nodes': range(89,105,2),
-        'classifier__max_depth': range(232,255,2),
+
+        #"{'pca__n_components': 52, 'classifier__min_samples_split': 3, 'classifier__min_samples_leaf': 2,
+        # 'classifier__max_leaf_nodes': 95, 'classifier__max_depth': 240, 'classifier__criterion': 'entropy',
+        # 'classifier': DecisionTreeClassifier(criterion='entropy', max_depth=240, max_leaf_nodes=95,
+        #               min_samples_leaf=2, min_samples_split=3,
+        #               random_state=42)}"
+
+        "pca__n_components": range(48,55),
+        'classifier__max_leaf_nodes': range(93,102),
+        'classifier__max_depth': range(236,249),
         'classifier__criterion': ['entropy'],
-        'classifier__min_samples_split': range(2,5),
-        'classifier__min_samples_leaf': range(2,5),
+        'classifier__min_samples_split': range(2,4),
+        'classifier__min_samples_leaf': range(2,4),
         "classifier": [clf4]
     }
 
