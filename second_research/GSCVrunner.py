@@ -599,9 +599,9 @@ if args['classification']:
     # 'classifier': DecisionTreeClassifier(max_depth=274, max_leaf_nodes=86, min_samples_leaf=2,
     #                   min_samples_split=3, random_state=42)}
     param4b = {
-        "kBest__k": range(470, 490,2),
-        'classifier__max_leaf_nodes': range(78,90),
-        'classifier__max_depth': range(260,280),
+        "kBest__k": range(470, 800,10),
+        'classifier__max_leaf_nodes': range(78,90,2),
+        'classifier__max_depth': range(260,280,3),
         'classifier__criterion': ['gini'],
         'classifier__min_samples_split': [2,3],
         'classifier__min_samples_leaf': [1,2],
