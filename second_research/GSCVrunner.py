@@ -588,11 +588,16 @@ if args['classification']:
     }
 
     # DECISION TREE + kbest
+    #
+    # {'kBest__k': 475, 'classifier__min_samples_split': 3, 'classifier__min_samples_leaf': 2,
+    #  'classifier__max_leaf_nodes': 80, 'classifier__max_depth': 260, 'classifier__criterion': 'gini',
+    #  'classifier': DecisionTreeClassifier(max_depth=260, max_leaf_nodes=80, min_samples_leaf=2,
+    #                                       min_samples_split=3, random_state=42)}
     param4b = {
-        "kBest__k": range(50, 500,25),
-        'classifier__max_leaf_nodes': range(70,130,5),
-        'classifier__max_depth': range(200,500,20),
-        'classifier__criterion': ['entropy','gini'],
+        "kBest__k": range(460, 501,5),
+        'classifier__max_leaf_nodes': range(76,95,2),
+        'classifier__max_depth': range(250,280,4),
+        'classifier__criterion': ['gini'],
         'classifier__min_samples_split': [2,3],
         'classifier__min_samples_leaf': [1,2],
         "classifier": [clf4]
@@ -920,7 +925,7 @@ for config in splitted_congifs:
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param4a, pipe4a]]
+            param_pipe_list = [[param4b, pipe4b]]
 # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
