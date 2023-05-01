@@ -561,15 +561,15 @@ if args['classification']:
         #                        min_samples_leaf=3, min_samples_split=8,
         #                        random_state=42)}
 
-
-        "pca__n_components": [i for i in range(40, 80,10)],
-        'classifier__max_leaf_nodes': range(40,130,10),
-        'classifier__max_depth': range(20,450,20),
+        "pca__n_components": range(50,70,3),
+        'classifier__max_leaf_nodes': range(65,85,3),
+        'classifier__max_depth': range(200,300,5),
         'classifier__criterion': ['entropy'],
-        'classifier__min_samples_split': range(1, 25,4),
-        'classifier__min_samples_leaf': range(1, 25,4),
+        'classifier__min_samples_split': range(2,8,2),
+        'classifier__min_samples_leaf': range(2,8,2),
         "classifier": [clf4]
     }
+
     # DECISION TREE + kbest
     param4b = {
         'classifier__max_leaf_nodes': range(1, 25, 3),
@@ -579,6 +579,8 @@ if args['classification']:
         # reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
         "classifier": [clf4]
         }
+
+
     param5a = {  # RANDOM FOREST + pca
 
         # # best by now (accuracy = 0.756) (cv=5)
