@@ -578,27 +578,28 @@ if args['classification']:
         #               min_samples_leaf=2, min_samples_split=3,
         #               random_state=42)}"
 
-        "pca__n_components": range(300,800,20),
+        "pca__n_components": range(50,500,20),
         'classifier__max_leaf_nodes': range(92,110,2),
         'classifier__max_depth': range(239,243),
         'classifier__criterion': ['entropy','gini'],
-        'classifier__min_samples_split': range(2,5),
-        'classifier__min_samples_leaf': range(2,5),
+        'classifier__min_samples_split': [2,3],
+        'classifier__min_samples_leaf': [1,2],
         "classifier": [clf4]
     }
 
     # DECISION TREE + kbest
     param4b = {
-        "kBest__k": range(350, 700,25),
+        "kBest__k": range(50, 500,25),
         'classifier__max_leaf_nodes': range(70,130,5),
-        'classifier__max_depth': range(200,300,10),
+        'classifier__max_depth': range(200,500,20),
         'classifier__criterion': ['entropy','gini'],
-        'classifier__min_samples_split': range(2,4),
-        'classifier__min_samples_leaf': range(2,4),
+        'classifier__min_samples_split': [2,3],
+        'classifier__min_samples_leaf': [1,2],
         "classifier": [clf4]
 
         }
 
+    DecisionTreeClassifier()
 
     param5a = {  # RANDOM FOREST + pca
 
