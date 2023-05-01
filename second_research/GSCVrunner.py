@@ -581,7 +581,7 @@ if args['classification']:
         "pca__n_components": range(48,600,10),
         'classifier__max_leaf_nodes': range(92,110,2),
         'classifier__max_depth': range(239,243),
-        'classifier__criterion': ['entropy'],
+        'classifier__criterion': ['entropy','gini'],
         'classifier__min_samples_split': range(2,3,5,10),
         'classifier__min_samples_leaf': range(2,3,5,10),
         "classifier": [clf4]
@@ -589,12 +589,14 @@ if args['classification']:
 
     # DECISION TREE + kbest
     param4b = {
-        'classifier__max_leaf_nodes': range(1, 25, 3),
-        'classifier__max_depth': [2, 4, 6, 8, 10, 12],
-        'classifier__criterion': ['gini', 'entropy'],
-        'classifier__min_samples_split': range(2, 40, 5),
-        # reason I tried this classifier params https://medium.com/analytics-vidhya/decisiontree-classifier-working-on-moons-dataset-using-gridsearchcv-to-find-best-hyperparameters-ede24a06b489
+        "kBest__k": range(350, 700,25),
+        'classifier__max_leaf_nodes': range(70,130,5),
+        'classifier__max_depth': range(200,300,10),
+        'classifier__criterion': ['entropy','gini'],
+        'classifier__min_samples_split': range(2,4),
+        'classifier__min_samples_leaf': range(2,4),
         "classifier": [clf4]
+
         }
 
 
@@ -917,7 +919,7 @@ for config in splitted_congifs:
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param4a, pipe4a]]
+            param_pipe_list = [[param4b, pipe4b]]
 # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
