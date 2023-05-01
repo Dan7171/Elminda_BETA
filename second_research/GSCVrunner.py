@@ -562,7 +562,7 @@ if args['classification']:
         #                        random_state=42)}
 
 
-        "pca__n_components": [i for i in range(45, 500,20)],
+        "pca__n_components": [i for i in range(40, 80,10)],
         'classifier__max_leaf_nodes': range(40,130,10),
         'classifier__max_depth': range(20,450,20),
         'classifier__criterion': ['entropy'],
