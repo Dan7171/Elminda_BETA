@@ -246,7 +246,7 @@ def CV_Score(y_true, y_pred):
     param_choice_idx = total_folds[0] // len(choice_scores)
 
     idx = total_folds[0] % len(choice_scores)  # num of folds elapsed % num of folds in each param choice
-    choice_scores[idx] = cvscore
+    choice_scores[idx]  = cvscore
     max_param_choice_idx = args['n_iter'] - 1
     max_split_index = total_splits - 1
 
@@ -403,7 +403,7 @@ if args['classification']:
     #     "classifier": [clf1]
     # }
     param1a = {  # LOGISTIC REGRESSION + pca
-        "pca__n_components": range(2, 50, 3),
+        "pca__n_components": range(2, 500, 10),
         "classifier__C": [0.001, 0.01, 0.1, 1, 10, 100],
         "classifier__penalty": ['l2'],
         "classifier": [clf1]
@@ -438,27 +438,27 @@ if args['classification']:
         "classifier": [clf2]
     }
     param3a = {  # SVC + pca
-        "pca__n_components": [i for i in range(3, 100, 5)],
-        'classifier__gamma': [60, 65, 70, 75, 80],
+        "pca__n_components": range(2, 55, 10),
+        'classifier__gamma': range(20,400,10),
         'classifier__kernel': ['linear', 'rbf', 'sigmoid'],
-        'classifier__C': [900, 950, 1000, 1100, 1200, 1400],
+        'classifier__C': range(20,1000,30),
         "classifier": [clf3]
     }
     param3b = {  # SVC + kbest
-        "kBest__k": range(40, 70, 5),  # k should be smaller than num of features in X
-        'classifier__gamma': [60, 65, 70, 75, 80],
+        "kBest__k": range(2, 55, 10),  # k should be smaller than num of features in X
+        'classifier__gamma': range(5,1000,30),
         'classifier__kernel': ['linear', 'rbf', 'sigmoid'],
-        'classifier__C': [900, 950, 1000, 1100, 1200, 1400],
+        'classifier__C': range(5,1500,20),
         "classifier": [clf3]
     }
     param4a = {  # DECISION TREE + pca
 
-        "pca__n_components": range(50,500,20),
-        'classifier__max_leaf_nodes': range(92,110,2),
-        'classifier__max_depth': range(239,243),
+        "pca__n_components": range(2, 55, 10),
+        'classifier__max_leaf_nodes': range(5,1000,30),
+        'classifier__max_depth':range(5,1000,30),
         'classifier__criterion': ['entropy','gini'],
-        'classifier__min_samples_split': [2,3],
-        'classifier__min_samples_leaf': [1,2],
+        'classifier__min_samples_split': range(2,100,5),
+        'classifier__min_samples_leaf': range(20,100,5),
         "classifier": [clf4]
     }
 
@@ -487,37 +487,17 @@ if args['classification']:
 
     param5a = {  # RANDOM FOREST + pca
 
-        # # best by now (accuracy = 0.756) (cv=5)
-
-        # {'pca__n_components': 76, 'classifier__min_samples_split': 12, 'classifier__min_samples_leaf': 10,
-        #  'classifier__max_features': 2, 'classifier__max_depth': 43, 'classifier__bootstrap': True,
-        #  'classifier': RandomForestClassifier(max_depth=43, max_features=2, min_samples_leaf=10,
-        #                                       min_samples_split=12, random_state=42)}
-
-        # second best: (accuracy = 0.72) (cv=4)
-
-        # {'pca__n_components': 60, 'classifier__min_samples_split': 3, 'classifier__min_samples_leaf': 3,
-        #  'classifier__max_features': 'auto', 'classifier__max_depth': 60, 'classifier__bootstrap': True,
-        #  'classifier': RandomForestClassifier(max_depth=60, max_features='auto', min_samples_leaf=3,
-        #                                       min_samples_split=3, random_state=42)}
-
-        # third best (accuracy = 0.75) (cv=5)
-        # {'pca__n_components': 71, 'classifier__min_samples_split': 7,
-        # 'classifier__min_samples_leaf': 5, 'classifier__max_features': 2,
-        # 'classifier__max_depth': 75, 'classifier__bootstrap': True, 'classifier':
-        # RandomForestClassifier(max_depth=75, max_features=2, min_samples_leaf=5,
-        #                        min_samples_split=7, random_state=42)}
-        "pca__n_components": [i for i in range(55, 85,2)],
-        'classifier__bootstrap': [True],
-        "classifier__max_depth": [35,75,2], #11 evenly spaceced num in range10-110
-        "classifier__min_samples_split": range(2, 15),
-        "classifier__min_samples_leaf": range(2, 12),
+        "pca__n_components":  range(2, 40, 10),
+        'classifier__bootstrap': [True,False],
+        "classifier__max_depth": range(5,1000,30), #11 evenly spaceced num in range10-110
+        "classifier__min_samples_split": range(2,100,5),
+        "classifier__min_samples_leaf": range(2,100,5),
         "classifier__max_features": ['auto', 'sqrt',2],
         "classifier": [clf5]
     }
     param5b = {  # RANDOM FOREST + kbest
 
-        "kBest__k": range(480, 490),
+        "kBest__k":  range(2, 40, 10),
         'classifier__bootstrap': [True,False],
         "classifier__max_depth": range(150,160),
         "classifier__min_samples_split": range(2,10),
@@ -528,34 +508,34 @@ if args['classification']:
 
     param6a = {  # GRADIENT BOOSTING + pca
 
-        "pca__n_components": [i for i in range(70, 100, 2)],
-        'classifier__n_estimators': [i for i in range(20,60,3)],
+        "pca__n_components":  range(2, 60, 10),
+        'classifier__n_estimators': [i for i in range(20,600,20)],
         'classifier__learning_rate': [0.0001,0.01],
-        'classifier__max_depth': [2,3,4,5,6, 7,8],
-        'classifier__min_samples_split': [1,2,3],
-        'classifier__min_samples_leaf': [1,2,3],
+        'classifier__max_depth': range(20,600,20),
+        'classifier__min_samples_split': range(2,100,5),
+        'classifier__min_samples_leaf': range(2,100,5),
         'classifier__max_features': ['auto', 'sqrt', None],
-        'classifier__subsample': [0.8, 0.9, 1],
+        'classifier__subsample': [0.8,  1],
         "classifier": [clf6]
     }
 
     param6b = {  # GRADIENT BOOSTING + kbest
         # reason I tried this classifier params:
-        "kBest__k": range(2, 600, 20),
+        "kBest__k": range(2, 60, 10),
         'classifier__subsample': [0.6, 0.9],
-        'classifier__n_estimators': [30,35,40,45,50,60,65,70],
-        'classifier__min_samples_split': [1,2,3,4,5],
-        'classifier__min_samples_leaf': [1,2,3,4,5],
+        'classifier__n_estimators': range(5,1000,30),
+        'classifier__min_samples_split': range(2,100,5),
+        'classifier__min_samples_leaf': range(2,100,5),
         'classifier__max_features': ['auto',None,'sqrt'],
-        'classifier__max_depth': [2,4,7,12],
+        'classifier__max_depth': range(5,1000,30),
         'classifier__learning_rate': [0.01],
         "classifier": [clf6]
     }
     # GRADIENT BOOSTING ( NO PCA  NO KBEST)
     param6c = {
         # 'classifier__n_estimators': [5, 20, 35, 50, 65, 80, 95, 110, 125, 150, 200, 250, 350],
-        'classifier__learning_rate': [0.0001],
-        'classifier__max_depth': [2, 15, 40,60,80,100,200,500],
+        'classifier__learning_rate': [0.001],
+        'classifier__max_depth': range(5,1000,30),
         'classifier__min_samples_split': [1,2,9,16,24,38],
         'classifier__min_samples_leaf': [1,2,9,16,24,38],
         'classifier__max_features': ['auto', 'sqrt'],
@@ -564,41 +544,41 @@ if args['classification']:
     }
 
     param7a = {  # CATBOOST CLASSIFIER + pca
-        "pca__n_components": [i for i in range(3, 100, 5)],
-        'classifier__n_estimators': [3, 10, 30, 50, 100, 500],
+        "pca__n_components": range(2, 60, 10),
+        'classifier__n_estimators':range(2,1000,30),
         "classifier__learning_rate": [0.0001, 0.01, 0.1],
-        'classifier__subsample': [0.1, 0.3, 0.5, 0.7, 1.0],
-        'classifier__max_depth': range(3, 40, 3),
+        'classifier__subsample': [0.1, 0.5, 0.7, 1.0],
+        'classifier__max_depth': range(3, 500, 20),
         "classifier": [clf7]
     }
     param7b = {  # CATBOOST CLASSIFIER + kbest
-        "kBest__k": range(4, 40, 8),
-        'classifier__n_estimators': [3, 10, 30, 50, 100, 500],
+        "kBest__k": range(4, 60, 8),
+        'classifier__n_estimators': range(2,1000,30),
         "classifier__learning_rate": [0.0001, 0.01, 0.1],
-        'classifier__subsample': [0.1, 0.3, 0.5, 0.7, 1.0],
-        'classifier__max_depth': range(3, 40, 3),
+        'classifier__subsample': [0.1, 0.5, 0.7, 1.0],
+        'classifier__max_depth': range(3, 500, 20),
         "classifier": [clf7]
     }
 
     param8a = {  # MLPClassifier (neural network) + PCA
 
-        "pca__n_components": [i for i in range(24, 29)],
-        'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(25, 30) for j in range(29, 34) for k in
-                                           range(19, 24)
-                                           for l in range(29, 34)],
-        'classifier__activation': ['relu'],
-        'classifier__solver': ['adam'],
-        'classifier__alpha': [0.0001],
-        'classifier__learning_rate': ['adaptive'],
+        "pca__n_components": range(4, 80, 8),
+        'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(5, 50,5) for j in range(5, 50,5) for k in
+                                           range(5, 50,5)
+                                           for l in range(5, 50,5)],
+        'classifier__activation':  ['identity', 'logistic', 'tanh', 'relu'],
+        'classifier__solver': ['adam','lbfgs','sgd'],
+        'classifier__alpha': [0.0001, 0.001],
+        'classifier__learning_rate': [ 'adaptive','constant','invscaling'],
         'classifier__max_iter': [2800],
         'classifier__verbose': [False],  # details prints of loss
         "classifier": [clf8]
     }
     param8b = {  # MLPClassifier (neural network) + KBEST
-        "kBest__k": range(26,30),
-        'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(25, 30) for j in range(29, 34) for k in
-                                           range(19, 24)
-                                           for l in range(29, 34)],
+        "kBest__k":  range(4, 80, 8),
+        'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(5, 50,5) for j in range(5, 50,5) for k in
+                                           range(5, 50,5)
+                                           for l in range(5, 50,5)],
         'classifier__activation': ['identity', 'logistic', 'tanh', 'relu'],
         'classifier__solver': ['adam','lbfgs','sgd'],
         'classifier__alpha': [0.0001, 0.01],
@@ -766,13 +746,14 @@ for config in splitted_congifs:
     for i in range(4):
         if isinstance(config[i], pd.Series):  # convert to data frame to make scorer work
             config[i] = config[i].to_frame()
-
+        
     X_train, X_test, y_train, y_test = config[0], config[1], config[2], config[
         3]  # 8.1 - from ofir- here add stratified param on rate of responders
 
-    print(f"**************************************************"
-          f"Distribtion of categorial variables in data:\n\n\n"
-          f"**************************************************"
+
+    print(f"**************************************************\n"
+          f"Distribtion of categorial variables in data:"
+          f"**************************************************\n"
           "Gender:\n"
           f"X['gender'].value_counts(): {X['gender'].value_counts()}\n"
           f"X_train['gender'].value_counts():\n{X_train['gender'].value_counts()}\n"
