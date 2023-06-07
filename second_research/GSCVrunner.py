@@ -752,7 +752,7 @@ for config in splitted_congifs:
 
 
     print(f"**************************************************\n"
-          f"Distribtion of categorial variables in data:"
+          f"Distribution of categorial variables in data:"
           f"**************************************************\n"
           "Gender:\n"
           f"X['gender'].value_counts(): {X['gender'].value_counts()}\n"

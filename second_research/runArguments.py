@@ -43,7 +43,7 @@ args = {
     "n_jobs": 1,
     # num of threads each model is generating to speed up grid search. Changes can cause unexpected behaviour
 
-    "use_gamma_columns": True,
+    "use_gamma_columns": True, # read comment!!
     # True: using Gamma columns. False: not using them. IMPORTANT: for True, use with X_version = 1 only
 
     "classification": True,  # true - classification cv train, false- regression cv train
@@ -53,9 +53,9 @@ args = {
 
     "test_size": 0.15,  # train test splits test size
 
-    "halving": False, # out of order
+    # "halving": False, # out of order
 
-    "stdout_to_file": False # to help in hyper parameter tuning
+    "stdout_to_file": True
 
 }
 if args["both"] or args["balance_y_values"]:
