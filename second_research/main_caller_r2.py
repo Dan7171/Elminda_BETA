@@ -1,5 +1,4 @@
-
-
+import os.path
 
 import numeric_df_initializer
 import numpy as np
@@ -70,10 +69,10 @@ def get_X_y (y_name,X_version): # for use in GSCVrunner
 
     # Part a: generate X without filtering and y (y is same for X with or without filtering)
     if args['use_gamma_columns']:
-        bna_path = 'EYEC_Cordance_Gamma_no_missing_vals.csv'
+        bna_path = 'EYEC_Cordance_Gamma_no_missing_vals.csv' # eeg new york with gamma
     else:
-        bna_path = 'EYEC_Cordance_Gamma.csv'
-    clinical_path = 'BW_clinical_data.csv'
+        bna_path = 'EYEC_Cordance_Gamma.csv' # eeg new york without gamma
+    clinical_path = 'BW_clinical_data.csv' # clinical new york
     # prepare X for model training
     X = numeric_df_initializer.generate_prediction_df(bna_path,clinical_path) #initial numeric-predicting data frame
     X_specific = specify_X_to_y(X.copy(),y_name) # remove the second y  columns
@@ -85,13 +84,16 @@ def get_X_y (y_name,X_version): # for use in GSCVrunner
     if not args['both']:
         # if X_version == 1: # no filtering, remain with the basic version
         #    do nothing
+        #    leave in comment
         if(X_version == 2): # basic filtering
-            X_specific = pd.read_csv("X_(basic_filter).csv")
+            X_specific = pd.read_csv("X_new_york_only(basic_filter)_no_gamma.csv")
         if(X_version == 3): # hard filtering- predictors only
-            X_specific = pd.read_csv("X_(predictors_only).csv")
+            X_specific = pd.read_csv("X_new_york_only(predictors_only)_no_gamma.csv")
     else: # use both research 1 and research 2,for now works in classification only
         all_data = pd.read_csv('all_data.csv')
         X_specific = all_data.iloc[:,:-1]
         y = all_data.iloc[: , -1:]
+
+
     return X_specific,y
     

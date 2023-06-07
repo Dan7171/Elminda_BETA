@@ -1,0 +1,12 @@
+RREADME: 
+
+1. "gender": male = 1, female = 0
+2. "Treatment_group": which TMS coil was in use in treatment. coil from H1 model = 0, coil from H7 model = 1.
+3. "AgeV1": age in visit 1.
+
+rows 0:102 (included) (103 valid subjects in total) from New york 
+rows 103:131 (included) (28 valid subjects in total) from beer yaacov
+
+
+Note: No Gamma (cordance)  values in thisdata set because beer yaacov have no gamma.
+To get gamma, take it from the relevant table in research 2.

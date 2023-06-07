@@ -74,13 +74,18 @@ def get_df_without_illegal_subjects(df):
     df = df.drop(['remove'],axis = 1) # not the 'remove' column is redundant. remove it
     
     return df
+
+#
+
 def change_categorial_non_numeric_to_numeric(subjects):
     """ Given a df, changing values of categorial-variables to numeric random coding (ints)"""
+
     subjects.gender = pd.Categorical(subjects.gender)
     subjects['gender'] = subjects.gender.cat.codes
-    subjects.Treatment_group =  pd.Categorical(subjects.Treatment_group)
+    subjects.Treatment_group = pd.Categorical(subjects.Treatment_group)
     subjects['Treatment_group'] = subjects.Treatment_group.cat.codes
-    subjects.recordingSystem =  pd.Categorical(subjects.recordingSystem)
+
+    subjects.recordingSystem = pd.Categorical(subjects.recordingSystem)
     subjects['recordingSystem'] = subjects.recordingSystem.cat.codes
     subjects.site =  pd.Categorical(subjects.site)
     subjects['site'] = subjects.site.cat.codes
@@ -98,8 +103,9 @@ def generate_prediction_df(bna_path, clinical_path):
     clinical.dropna(axis=1, how='all', inplace=True) # so in these two rows we remove them
     bna = pd.read_csv(bna_path)
     if not args['use_gamma_columns']:
-        bna.dropna(axis=1, how='any',inplace=True) # removing all cordance missing values and any other missing values
-    print(bna)
+        bna.dropna(axis=1, how='any',inplace=True) # removing all cordance missing values and any other missing values (there will be missing values because beer ayaavcov doesent have)
+
+    # print(bna)
     #Step 1 -  merge dfs by the column 'subject':
     visits = clinical.merge(bna, how = 'inner',on = ['subject']) #leaving in the df all pairs with the same subject
     #Step 2 - drop out illegal subjects- subjcets with two visits of the same kind (1,1 or 2,2):

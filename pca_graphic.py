@@ -1,7 +1,7 @@
 import pandas as pd
 import sklearn
 n_components = [1,2,3,4,5]
-df = pd.read_csv('all_data.csv')
+df = pd.read_csv('all_data(eeg_clinical_beer_yaacov_and_new_york_no_gamma_valid_subjects).csv')
 scaler = sklearn.preprocessing.StandardScaler()
 df = scaler.fit_transform(df)
 for n in n_components:

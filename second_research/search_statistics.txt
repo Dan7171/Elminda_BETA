@@ -1,2 +1,4 @@
-In parameter choice num 0 / 3 avg score was: 0.5814814814814815. This is the best score so far
+In parameter choice num 0 / 2 avg score was: 0.4541501976284585. This is the best score so far
+
+In parameter choice num 2 / 2 avg score was: 0.4545454545454545. This is the best score so far
 

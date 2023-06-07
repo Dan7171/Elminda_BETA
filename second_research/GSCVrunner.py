@@ -16,6 +16,7 @@ from sklearn import metrics
 from sklearn.model_selection import cross_val_score
 from sklearn.feature_selection import SelectKBest, f_classif, f_regression, mutual_info_classif
 from sklearn.pipeline import Pipeline
+
 from sklearn.decomposition import PCA
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
@@ -35,11 +36,11 @@ from sklearn.base import BaseEstimator, TransformerMixin
 import os
 from scipy.stats import randint
 from runArguments import args
-from imblearn.over_sampling import SMOTE
 from sklearn.experimental import enable_halving_search_cv  # noqa
 from sklearn.model_selection import HalvingRandomSearchCV
 from imblearn.over_sampling import SMOTE
 from sklearn.datasets import make_classification
+from imblearn.pipeline import Pipeline as imb_Pipeline
 import sys
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -60,114 +61,6 @@ all_splits_yts, all_splits_yps = [], []
 my_scorer = args['scoring_method']
 
 
-# def toy_data_run():
-#
-#     # *** TOY DATA PROCESSING ***:
-#     # used that part of code to verify the pipeplines can scre well. they do. scores of randsearch cv's were around 0.95
-#
-#     iris = load_iris()
-#     X_toy=iris.data
-#     y_toy=iris.target
-#     print(X_toy)
-#     print(y_toy)
-#     X_train, X_test,y_train, y_test = train_test_split(X_toy, y_toy, test_size=0.15,random_state = args["rs"])
-#     rand_search_1a_iris = RandomizedSearchCV(pipe1a,param1a,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
-#     print_conclusions("1a",rand_search_1a_iris)
-#     rand_search_1b_iris = RandomizedSearchCV(pipe1b,param1b,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
-#     print_conclusions("1b", rand_search_1b_iris)
-#     rand_search_2_iris = RandomizedSearchCV(pipe2,param2,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
-#     print_conclusions("2",rand_search_2_iris)
-#     rand_search_3_iris = RandomizedSearchCV(pipe3,param3,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
-#     print_conclusions("3",rand_search_3_iris)
-#     rand_search_4_iris = RandomizedSearchCV(pipe4,param4,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
-#     print_conclusions("4", rand_search_4_iris)
-#     rand_search_5_iris = RandomizedSearchCV(pipe5,param5,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
-#     print_conclusions("5", rand_search_5_iris)
-#     rand_search_6_iris = RandomizedSearchCV(pipe6,param6,n_iter=args["n_iter"],refit=True,cv =args["cv"],verbose=1,random_state=args["rs"]).fit(X_train,y_train.ravel())
-#     print_conclusions("6", rand_search_6_iris)
-
-# to add as a transformer to the pipelines (dropping corellated features after kbest)
-# class CorrelationDropper(BaseEstimator, TransformerMixin): # this one works, dont delete it
-#     def __init__(self, threshold=0.9):
-#         self.threshold = threshold
-#
-#     def fit(self, X, y=None):
-#         # Compute the correlation matrix
-#         if args["drop_out_correlated"]:
-#             corr_matrix = np.corrcoef(X, rowvar=False)
-#             # Select upper triangle of correlation matrix
-#             upper = np.triu(np.ones(corr_matrix.shape), k=1)
-#             correlated_features = np.where(upper * np.abs(corr_matrix) > self.threshold)
-#
-#             # Drop all but one of the correlated features
-#             self.to_drop = []
-#             for i, j in zip(*correlated_features):
-#                 if i in self.to_drop:
-#                     continue
-#                 self.to_drop.append(j)
-#
-#         return self
-#
-#     def transform(self, X, y=None):
-#         # Drop the correlated features
-#         if args["drop_out_correlated"]:
-#             return np.delete(X, self.to_drop, axis=1)
-#         return X
-#
-# class CorrelationDropper2(BaseEstimator, TransformerMixin):
-#     def __init__(self, threshold=0.9):
-#         self.threshold = threshold
-#         self.indices_to_keep = []
-#
-#     def _find_correlated_groups(self, correlations):
-#         correlated_groups = [None]*correlations.shape[1]
-#         visited_features = set()
-#
-#         for i in range(correlations.shape[0]):
-#             marked = False
-#             for j in range(i+1, correlations.shape[1]):
-#                 if abs(correlations[i, j]) > self.threshold:
-#                     marked = True
-#                     # Add correlated features to the same group
-#                     group = correlated_groups[i] if i in visited_features else correlated_groups[j] if j in visited_features else set()
-#                     group.add(i)
-#                     group.add(j)
-#                     visited_features.add(i)
-#                     visited_features.add(j)
-#                     correlated_groups[i] = group
-#                     correlated_groups[j] = group
-#             if not marked:
-#                 group = set()
-#                 group.add(i)
-#                 visited_features.add(i)
-#                 correlated_groups[i] = group
-#
-#         print(correlated_groups)
-#         return correlated_groups
-#
-#     def fit(self, X, y=None):
-#         if args["drop_out_correlated"]:
-#             # Calculate pairwise correlations between features
-#             correlations = np.corrcoef(X, rowvar=False)
-#             print(correlations)
-#             # Identify correlated groups
-#             correlated_groups = self._find_correlated_groups(correlations)
-#
-#             # Drop all correlated features but one from each group
-#             self.indices_to_keep = []
-#             for group in correlated_groups:
-#                 if len(group) >= 1:
-#                     self.indices_to_keep.append(list(group)[0])
-#             print(self.indices_to_keep)
-#         return self
-#
-#     def transform(self, X, y=None):
-#         if args["drop_out_correlated"]:
-#             # Select desired features from array
-#             X_transformed = np.take(X, self.indices_to_keep, axis=1)
-#             return X_transformed
-#         return X
-#
 
 def generate_random_architectures(first_layer_size_options: tuple = (3, 5, 10, 20, 30), avg_num_of_layers_in_network=4,
                                   num_of_networks_to_create=100, adjacent_layers_ratio=1.33):
@@ -440,7 +333,9 @@ def scorer():
 print(" >>>>>>>>>>>>>>>>>>>>> STARTING MAIN OF GSCVrunner.py >>>>>>>>>>>>>>>>>>>>>")
 
 if args['stdout_to_file']:
+
     logfile_name = 'stdout.txt'
+    print(f"see stdout in {logfile_name}")
     if os.path.exists(logfile_name):
         os.remove(logfile_name)
     log_file = open(logfile_name, 'a')
@@ -457,8 +352,8 @@ else:
     y_name = "6-weeks_HDRS21_change_rate"  # regression problem
 
 X, y = main_caller_r2.get_X_y(y_name, args["X_version"])  # X and y's creationa and processing
-
 X.reset_index(inplace=True, drop=True)
+
 if args['classification']:
     y[y_name] = y[y_name].replace({"responsive": 1, "non_responsive": 0})
 
@@ -498,6 +393,15 @@ if args['classification']:
     # The param 'grids'
     # note: parameters of different models pipelines can be set using '__' separated parameter names. modelname__parameter name = options to try ing gscv:
 
+
+    # param_1a_smote = {
+    #     # "smote__sampling_strategy": ['minority'],
+    #     # "smote__random_state": [args["rs"]],
+    #     "pca__n_components": range(2, 50, 3),
+    #     "classifier__C": [0.001, 0.01, 0.1, 1, 10, 100],
+    #     "classifier__penalty": ['l2'],
+    #     "classifier": [clf1]
+    # }
     param1a = {  # LOGISTIC REGRESSION + pca
         "pca__n_components": range(2, 50, 3),
         "classifier__C": [0.001, 0.01, 0.1, 1, 10, 100],
@@ -548,35 +452,6 @@ if args['classification']:
         "classifier": [clf3]
     }
     param4a = {  # DECISION TREE + pca
-        #DecisionTreeClassifier(random_state=42),
-        # classifier__criterion=entropy, classifier__max_depth=40, classifier__max_leaf_nodes=35,
-        # classifier__min_samples_leaf=5, classifier__min_samples_split=14, pca__n_components=53;,
-        # score=0.704 total time=   0.1s
-
-        # best accuracy - 0.714021164021164
-        # {'pca__n_components': 52, 'classifier__min_samples_split': 8,
-        # 'classifier__min_samples_leaf': 3, 'classifier__max_leaf_nodes': 95,
-        # 'classifier__max_depth': 240, 'classifier__criterion': 'entropy',
-        # 'classifier': DecisionTreeClassifier(criterion='entropy', max_depth=240, max_leaf_nodes=95,
-        #                        min_samples_leaf=3, min_samples_split=8,
-        #                        random_state=42)}
-
-        # "{'pca__n_components': 50, 'classifier__min_samples_split': 2,
-        # 'classifier__min_samples_leaf': 2, 'classifier__max_leaf_nodes': 80, 'classifier__max_depth': 200,
-        # 'classifier__criterion': 'entropy', 'classifier': DecisionTreeClassifier(criterion='entropy', max_depth=200, max_leaf_nodes=80,
-        #                        min_samples_leaf=2, random_state=42)}"
-
-        # "{'pca__n_components': 52, 'classifier__min_samples_split': 2,
-        # 'classifier__min_samples_leaf': 2, 'classifier__max_leaf_nodes': 97,
-        # 'classifier__max_depth': 239, 'classifier__criterion': 'entropy',
-        # 'classifier': DecisionTreeClassifier(criterion='entropy', max_depth=239, max_leaf_nodes=97,
-        #                        min_samples_leaf=2, random_state=42)}"
-
-        #"{'pca__n_components': 52, 'classifier__min_samples_split': 3, 'classifier__min_samples_leaf': 2,
-        # 'classifier__max_leaf_nodes': 95, 'classifier__max_depth': 240, 'classifier__criterion': 'entropy',
-        # 'classifier': DecisionTreeClassifier(criterion='entropy', max_depth=240, max_leaf_nodes=95,
-        #               min_samples_leaf=2, min_samples_split=3,
-        #               random_state=42)}"
 
         "pca__n_components": range(50,500,20),
         'classifier__max_leaf_nodes': range(92,110,2),
@@ -641,33 +516,7 @@ if args['classification']:
         "classifier": [clf5]
     }
     param5b = {  # RANDOM FOREST + kbest
-        # reason I tried this classifier params:
-        # {'kBest__k': 364, 'classifier__min_samples_split': 2,
-        # 'classifier__min_samples_leaf': 2, 'classifier__max_features': 'sqrt',
-        # 'classifier__max_depth': 35, 'classifier__bootstrap': True, 'classifier':
-        # RandomForestClassifier(max_depth=35, min_samples_leaf=2, random_state=42)}
 
-        # * CV Accuracy:  0.6985294117647058:
-        # * Best Hyperparametes picked in cross validation: (cv's best score):
-        #  {'kBest__k': 340, 'classifier__min_samples_split': 2, 'classifier__min_samples_leaf': 2,
-        #  'classifier__max_features': 'auto', 'classifier__max_depth': 12, 'classifier__bootstrap': True, 'classifier':
-        #  RandomForestClassifier(max_depth=12, max_features='auto', min_samples_leaf=2,
-
-        # #
-        # {'kBest__k': 485, 'classifier__min_samples_split': 6, 'classifier__min_samples_leaf': 2,
-        #  'classifier__max_features': 'auto', 'classifier__max_depth': 154, 'classifier__bootstrap': False,
-        #  'classifier': RandomForestClassifier(bootstrap=False, max_depth=154, max_features='auto',
-        #                                       min_samples_leaf=2, min_samples_split=6,
-        #                                       random_state=42)}
-        #
-        #
-
-        # {'kBest__k': 485, 'classifier__min_samples_split': 5, 'classifier__min_samples_leaf': 2,
-        #  'classifier__max_features': 'auto', 'classifier__max_depth': 156, 'classifier__bootstrap': False,
-        #  'classifier': RandomForestClassifier(bootstrap=False, max_depth=156, max_features='auto',
-        #                                       min_samples_leaf=2, min_samples_split=5,
-        #                                       random_state=42)}
-        #
         "kBest__k": range(480, 490),
         'classifier__bootstrap': [True,False],
         "classifier__max_depth": range(150,160),
@@ -678,14 +527,7 @@ if args['classification']:
     }
 
     param6a = {  # GRADIENT BOOSTING + pca
-        # best - accuracy 0.78
-        # {'pca__n_components': 83, 'classifier__subsample': 0.9,
-        # 'classifier__n_estimators': 40, 'classifier__min_samples_split': 2,
-        # 'classifier__min_samples_leaf': 1, 'classifier__max_features': None,
-        # 'classifier__max_depth': 5, 'classifier__learning_rate': 0.01,
-        # 'classifier': GradientBoostingClassifier(learning_rate=0.01,
-        # max_depth=5, n_estimators=40,
-        #  random_state=41, subsample=0.9)}
+
         "pca__n_components": [i for i in range(70, 100, 2)],
         'classifier__n_estimators': [i for i in range(20,60,3)],
         'classifier__learning_rate': [0.0001,0.01],
@@ -739,13 +581,7 @@ if args['classification']:
     }
 
     param8a = {  # MLPClassifier (neural network) + PCA
-        #best by now: (accuracy 0.82)
-        # {'pca__n_components': 26, 'classifier__verbose': False, 'classifier__solver': 'adam',
-        #  'classifier__max_iter': 2500, 'classifier__learning_rate': 'adaptive',
-        #  'classifier__hidden_layer_sizes': (27, 31, 21, 31), 'classifier__alpha': 0.0001,
-        #  'classifier__activation': 'relu',
-        #  'classifier': MLPClassifier(hidden_layer_sizes=(27, 31, 21, 31), learning_rate='adaptive',
-        #                              max_iter=2500, random_state=42)}
+
         "pca__n_components": [i for i in range(24, 29)],
         'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(25, 30) for j in range(29, 34) for k in
                                            range(19, 24)
@@ -772,11 +608,21 @@ if args['classification']:
         "classifier": [clf8]
 
     }
-
+    sm = SMOTE(sampling_strategy='minority', random_state=42)
     # define the pipelines
 
     # pipe a - kbest
     # pipe b - pca
+    pipe_smote_1a = imb_Pipeline(steps=[("smote",sm), ("scaler", scaler), ("pca", pca), ("classifier", param1a["classifier"][0])])
+    pipe_smote_3a = imb_Pipeline(steps=[("smote",sm), ("scaler", scaler), ("pca", pca), ("classifier", param3a["classifier"][0])])
+    pipe_smote_6a = imb_Pipeline(steps=[("smote",sm), ("scaler", scaler), ("pca", pca), ("classifier", param6a["classifier"][0])])
+    pipe_smote_7a = imb_Pipeline(steps=[("smote",sm), ("scaler", scaler), ("pca", pca), ("classifier", param7a["classifier"][0])])
+    pipe_smote_8a = imb_Pipeline(steps=[("smote", sm), ("scaler", scaler), ("pca", pca), ("classifier", param8a["classifier"][0])])
+    pipe_smote_1b = imb_Pipeline(steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param1b["classifier"][0])])
+    pipe_smote_3b = imb_Pipeline(steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param3b["classifier"][0])])
+    pipe_smote_6b = imb_Pipeline(steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param6b["classifier"][0])])
+    pipe_smote_7b = imb_Pipeline(steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param7b["classifier"][0])])
+    pipe_smote_8b = imb_Pipeline(steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param8b["classifier"][0])])
 
     pipe1a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param1a["classifier"][0])])
     pipe1b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param1b["classifier"][0])])
@@ -873,6 +719,7 @@ if (args["split_rows"] == 'normal'):  # regular test train split  =  don't drop 
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=args['test_size'], random_state=args["rs"])
     splitted_congifs.append([X_train, X_test, y_train, y_test])
 
+
 elif args["split_rows"] in ['h1', 'h7', 'h1h7']:  # split by 'Treatment_group' (device - h1/h7)
     print("splitting by h1 h7 : ")
 
@@ -884,7 +731,7 @@ elif args["split_rows"] in ['h1', 'h7', 'h1h7']:  # split by 'Treatment_group' (
         print("new data- only the rows where column 'Treatment_group is 0:")
         X_tmp = df1.iloc[:, :-1]
         y_tmp = df1.iloc[:, -1]
-        # X_train, X_test,y_train, y_test = train_test_split(X_tmp, y_tmp, test_size=args['test_size'],random_state = args["rs"],shuffle=True,stratify=y_tmp) 
+        # X_train, X_test,y_train, y_test = train_test_split(X_tmp, y_tmp, test_size=args['test_size'],random_state = args["rs"],shuffle=True,stratify=y_tmp)
         if args['classification']:
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=args['test_size'],
                                                                 random_state=args["rs"], shuffle=True, stratify=y_tmp)
@@ -894,7 +741,7 @@ elif args["split_rows"] in ['h1', 'h7', 'h1h7']:  # split by 'Treatment_group' (
         splitted_congifs.append([X_train, X_test, y_train, y_test])
 
     if args['split_rows'] in ['h7', 'h1h7']:  # use h7
-        # for treatment group 2 - h7 ('Treatment_group' is 1) 
+        # for treatment group 2 - h7 ('Treatment_group' is 1)
         # h7 subjects only
         # df2 = X[X['Treatment_group'] == 1].join(y, how = "inner") #H7
         df2 = X.join(y)
@@ -923,13 +770,40 @@ for config in splitted_congifs:
     X_train, X_test, y_train, y_test = config[0], config[1], config[2], config[
         3]  # 8.1 - from ofir- here add stratified param on rate of responders
 
-    # fix imbalance in train set
-    if args['balance_y_values']:
-        X_train, y_train = balance_y_values(X_train, y_train, method='SMOTE')
+    print(f"**************************************************"
+          f"Distribtion of categorial variables in data:\n\n\n"
+          f"**************************************************"
+          "Gender:\n"
+          f"X['gender'].value_counts(): {X['gender'].value_counts()}\n"
+          f"X_train['gender'].value_counts():\n{X_train['gender'].value_counts()}\n"
+          f"X_test['gender'].value_counts():\n{X_test['gender'].value_counts()}\n"
+          f"\n**************************************************\n"
+          "Treatment_group (coil):\n"
+          f"X['Treatment_group'].value_counts(): {X['Treatment_group'].value_counts()}\n"
+          f"X_train['Treatment_group'].value_counts():\n{X_train['Treatment_group'].value_counts()}\n"
+          f"X_test['Treatment_group'].value_counts():\n{X_test['Treatment_group'].value_counts()}\n"
+          "Response to treatment:\n"
+          f"\n**************************************************\n"
+          f"['6-weeks_HDRS21_class'].value_counts():\n{y['6-weeks_HDRS21_class'].value_counts()}\n"
+          f"y_train['6-weeks_HDRS21_class'].value_counts():\n{y_train['6-weeks_HDRS21_class'].value_counts()}\n"
+          f"y_test['6-weeks_HDRS21_class'].value_counts():\n{y_test['6-weeks_HDRS21_class'].value_counts()}\n")
+
+    # # fix imbalance in train set
+    # if args['balance_y_values']:
+    #     X_train, y_train = balance_y_values(X_train, y_train, method='SMOTE')
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param4b, pipe4b]]
+            # param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
+            # param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
+            # param_pipe_list = [[param7a, pipe_smote_7a]] #CHECKED
+            # param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
+
+            # param_pipe_list = [[param3b, pipe_smote_3b]] # CHECKED
+            # param_pipe_list = [[param6b, pipe_smote_6b]] # CHECKED
+            # param_pipe_list = [[param7b, pipe_smote_7b]] #CHECKED
+            param_pipe_list = [[param8b, pipe_smote_8b]] # CHECKED
+
 # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
@@ -948,9 +822,8 @@ for config in splitted_congifs:
         choice_scores = [0 for i in range(args['cv'])]  # list of scores in length num of folds
         best_score_by_now = [0]
 
-        # cross validation search
-        print(param)
-        print(pipe)
+        # # cross validation search
+
 
 
         if args['exhaustive_grid_search']: # exhausitve search
@@ -988,7 +861,7 @@ for config in splitted_congifs:
             best_cv_iter_yts_list)  # print some more conclusions and details about the winning cv parmas and pipe and save them to csv
         print_conclusions(X_train, pipe, search, best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray)
 
-print(f"<<<<<<<<<<<<<<<<<<<<< GSCVrunner.py finished successfuly, check {logfile_name}, {search_statistics} and "
-      f"tuning.csv for search results <<<<<<<<<<<<<<<<<<<<<")
-log_file.close()
+print(f"<<<<<<<<<<<<<<<<<<<<< GSCVrunner.py finished successfuly<<<<<<<<<<<<<<<<<<<<<")
+if args['stdout_to_file']:
+    log_file.close()
 plt.show()
