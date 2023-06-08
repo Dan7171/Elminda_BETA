@@ -55,7 +55,7 @@ args = {
 
     # "halving": False, # out of order
 
-    "stdout_to_file": True
+    "stdout_to_file": False
 
 }
 if args["both"] or args["balance_y_values"]:

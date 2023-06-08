@@ -352,6 +352,15 @@ else:
     y_name = "6-weeks_HDRS21_change_rate"  # regression problem
 
 X, y = main_caller_r2.get_X_y(y_name, args["X_version"])  # X and y's creationa and processing
+now =  datetime.datetime.now()
+folder = now.strftime("%Y-%m-%d %H_%M_%S")
+if not os.path.isdir(folder):
+    os.mkdir(folder)
+if not os.path.exists(os.path.join(folder,'X.csv')):
+    X.to_csv(os.path.join(folder,'X.csv'))
+if not os.path.exists(os.path.join(folder,'y.csv')):
+    y.to_csv(os.path.join(folder,'y.csv'))
+
 X.reset_index(inplace=True, drop=True)
 
 if args['classification']:

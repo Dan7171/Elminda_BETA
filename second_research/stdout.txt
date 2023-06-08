@@ -1,0 +1,5 @@
+{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'accuracy', 'both': True, 'cv': 5, 'n_iter': 1000, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True, 'lite_mode': True, 'test_size': 0.15, 'stdout_to_file': True}
+Traceback (most recent call last):
+  File "C:\Users\dan77\Documents\GitHub\Elminda_BETA\second_research\GSCVrunner.py", line 357, in <module>
+    os.mkdir(folder)
+OSError: [WinError 123] The filename, directory name, or volume label syntax is incorrect: '2023-06-08 23:21:25.888332'
