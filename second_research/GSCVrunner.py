@@ -239,7 +239,7 @@ def CV_Score(y_true, y_pred):
     elif my_scorer == 'recall':
         cvscore = recall_score(y_true, y_pred)
     elif my_scorer =='f_beta':
-        cvscore = fbeta_score(y_true,y_pred,beta=0.5) # beta = weight given to recall (weight given to precision is always 1)
+        cvscore = fbeta_score(y_true,y_pred,beta=0.3) # beta = weight given to recall (weight given to precision is always 1)
 
     if cvscore is None:
         print("problem - cvscore is nan.check y_true, y_pred...")
@@ -574,15 +574,15 @@ if args['classification']:
 
     param8a = {  # MLPClassifier (neural network) + PCA
 
-        "pca__n_components": range(4, 80, 8),
+        "pca__n_components": range(4, 80, 10),
         'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(5, 50,5) for j in range(5, 50,5) for k in
                                            range(5, 50,5)
                                            for l in range(5, 50,5)],
-        'classifier__activation':  ['identity', 'logistic', 'tanh', 'relu'],
-        'classifier__solver': ['adam','lbfgs','sgd'],
-        'classifier__alpha': [0.001],
+        'classifier__activation':  ['logistic', 'tanh', 'relu'],
+        'classifier__solver': ['sgd'],
+        'classifier__alpha': [0.01,0.001],
         'classifier__learning_rate': [ 'adaptive','constant','invscaling'],
-        'classifier__max_iter': [2800],
+        'classifier__max_iter': [1000],
         'classifier__verbose': [False],  # details prints of loss
         "classifier": [clf8]
     }
@@ -787,10 +787,10 @@ for config in splitted_congifs:
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
+            # param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
             # param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
             # param_pipe_list = [[param7a, pipe_smote_7a]] # CATBOOST - BUGS
-            # param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
+            param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
 
             # param_pipe_list = [[param3b, pipe_smote_3b]] # CHECKED
             # param_pipe_list = [[param6b, pipe_smote_6b]] # CHECKED
