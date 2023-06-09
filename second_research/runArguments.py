@@ -26,7 +26,7 @@ args = {
     "classification_type": "normal",
     # "normal" = 2 classes: < 50% change, => 50% change / "extreme" = 3 classes:  <30% , 30-70% , >70% change
 
-    "scoring_method": 'accuracy',  # "accuracy" /'f1'/ 'roc_auc' /'precision' /'recall' (sklearn metrics score funcs)
+    "scoring_method": 'f1',  # "accuracy" /'f1'/ 'roc_auc' /'precision' /'recall' (sklearn metrics score funcs)
 
     "both": True,
     # (for now works on classificatin only) True- train on both research 1 and research 2 data , False- train on
@@ -38,7 +38,7 @@ args = {
     # "balance_y_values": False
     # ,  # working for clasification only. balancing the number of responsive and non responsive (y categories)
 
-    "n_iter":1000,  # param for randomized cv - num of combinations to try in randomized search
+    "n_iter":100,  # param for randomized cv - num of combinations to try in randomized search
 
     "n_jobs": 1,
     # num of threads each model is generating to speed up grid search. Changes can cause unexpected behaviour

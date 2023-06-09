@@ -175,8 +175,8 @@ def print_conclusions(df, pipe, search, best_cv_iter_yts_list_ndarray=None, best
         "user_inputs": str(args),  # runArguments.args
         "responders_rate": str(((cm[1][0] + cm[1][1]) / total)),  # responders / total
         "X_train_size(num of rows in cv input df)": str(total),
-        "scorer_used": args['scoring_method'],  # scoring method used for cv as scorer param
-        "scorer_score_mean": str(score_mean),  # should be one of (accuracy,precission,recall,f1 (if scorer_used = f1))
+        "scorer_used": args['scoring_method'],  # scoring method used for cv as scorer param should be one of (accuracy,precision,recall,f1
+        "scorer_score_mean": str(score_mean),
         "scorer_score_std": str(score_std),
         "accuracy": accuracy,
         "precision": precision,
@@ -577,7 +577,7 @@ if args['classification']:
                                            for l in range(5, 50,5)],
         'classifier__activation':  ['identity', 'logistic', 'tanh', 'relu'],
         'classifier__solver': ['adam','lbfgs','sgd'],
-        'classifier__alpha': [0.0001, 0.001],
+        'classifier__alpha': [0.001],
         'classifier__learning_rate': [ 'adaptive','constant','invscaling'],
         'classifier__max_iter': [2800],
         'classifier__verbose': [False],  # details prints of loss
@@ -785,14 +785,15 @@ for config in splitted_congifs:
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
             # param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
-            # param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
+            param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
             # param_pipe_list = [[param7a, pipe_smote_7a]] #CHECKED
             # param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
 
             # param_pipe_list = [[param3b, pipe_smote_3b]] # CHECKED
             # param_pipe_list = [[param6b, pipe_smote_6b]] # CHECKED
             # param_pipe_list = [[param7b, pipe_smote_7b]] #CHECKED
-            param_pipe_list = [[param8b, pipe_smote_8b]] # CHECKED
+
+            # param_pipe_list = [[param8b, pipe_smote_8b]] # CHECKED
 
 # ********************************
         else:  # more than one model
