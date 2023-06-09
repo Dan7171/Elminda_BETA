@@ -16,7 +16,7 @@ from sklearn import metrics
 from sklearn.model_selection import cross_val_score
 from sklearn.feature_selection import SelectKBest, f_classif, f_regression, mutual_info_classif
 from sklearn.pipeline import Pipeline
-
+from sklearn.metrics import fbeta_score
 from sklearn.decomposition import PCA
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
@@ -179,6 +179,7 @@ def print_conclusions(df, pipe, search, best_cv_iter_yts_list_ndarray=None, best
         "scorer_score_mean": str(score_mean),
         "scorer_score_std": str(score_std),
         "accuracy": accuracy,
+
         "precision": precision,
         "recall": recall,
         "f1": f1,
@@ -223,7 +224,7 @@ def CV_Score(y_true, y_pred):
     all_splits_yps.append(y_pred)
 
     # input check
-    if my_scorer not in ['accuracy', 'f1', 'roc_auc', 'precision', 'recall']:
+    if my_scorer not in ['accuracy', 'f1', 'roc_auc', 'precision', 'recall','f_beta']:
         print('invalid score func from user')
         exit()
     cvscore = 0
@@ -237,6 +238,8 @@ def CV_Score(y_true, y_pred):
         cvscore = precision_score(y_true, y_pred)
     elif my_scorer == 'recall':
         cvscore = recall_score(y_true, y_pred)
+    elif my_scorer =='f_beta':
+        cvscore = fbeta_score(y_true,y_pred,beta=0.5) # beta = weight given to recall (weight given to precision is always 1)
 
     if cvscore is None:
         print("problem - cvscore is nan.check y_true, y_pred...")
@@ -784,21 +787,21 @@ for config in splitted_congifs:
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            # param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
+            param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
             # param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
-            # param_pipe_list = [[param7a, pipe_smote_7a]] #CHECKED
-            param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
+            # param_pipe_list = [[param7a, pipe_smote_7a]] # CATBOOST - BUGS
+            # param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
 
             # param_pipe_list = [[param3b, pipe_smote_3b]] # CHECKED
             # param_pipe_list = [[param6b, pipe_smote_6b]] # CHECKED
-            # param_pipe_list = [[param7b, pipe_smote_7b]] #CHECKED
+            # param_pipe_list = [[param7b, pipe_smote_7b]] # CATBOOST - BUGS
 
             # param_pipe_list = [[param8b, pipe_smote_8b]] # CHECKED
 
 # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
-            param_pipe_list = []  # put all the pipe and param paris you wabnt
+            param_pipe_list = []  # put all the pipe and param paris you want
 
     else:  # regression
         if args['lite_mode']:  # just for debugging. using one small grid
