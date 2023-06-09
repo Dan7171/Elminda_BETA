@@ -787,8 +787,8 @@ for config in splitted_congifs:
 # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
-            # param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
-            param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
+            param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
+            # param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
             # param_pipe_list = [[param7a, pipe_smote_7a]] # CATBOOST - BUGS
             # param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
 
