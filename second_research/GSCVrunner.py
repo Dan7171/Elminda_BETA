@@ -571,14 +571,15 @@ if args['classification']:
         'classifier__max_depth': range(3, 500, 20),
         "classifier": [clf7]
     }
-
+    l1 = [(i, j, k, l) for i in range(20, 60, 5) for j in range(20, 60, 5) for k in range(20, 60, 5) for l in
+          range(20, 60, 5)]
+    l2 = [(i, j, k, l, m) for i in range(20, 60, 5) for j in range(20, 60, 5) for k in range(20, 60, 5) for l in
+          range(20, 60, 5) for m in range(20, 60, 5)]
     param8a = {  # MLPClassifier (neural network) + PCA
 
-        "pca__n_components": range(4, 80, 10),
-        'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(5, 50,5) for j in range(5, 50,5) for k in
-                                           range(5, 50,5)
-                                           for l in range(5, 50,5)],
-        'classifier__activation':  ['logistic', 'tanh', 'relu'],
+        "pca__n_components": range(30, 70, 8),
+        'classifier__hidden_layer_sizes': l1.copy() + l2.copy(),
+        'classifier__activation':  ['tanh', 'relu'],
         'classifier__solver': ['sgd'],
         'classifier__alpha': [0.01,0.001],
         'classifier__learning_rate': [ 'adaptive','constant','invscaling'],
