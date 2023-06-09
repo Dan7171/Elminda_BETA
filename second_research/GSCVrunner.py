@@ -785,9 +785,9 @@ for config in splitted_congifs:
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
             # param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
-            param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
+            # param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
             # param_pipe_list = [[param7a, pipe_smote_7a]] #CHECKED
-            # param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
+            param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
 
             # param_pipe_list = [[param3b, pipe_smote_3b]] # CHECKED
             # param_pipe_list = [[param6b, pipe_smote_6b]] # CHECKED
