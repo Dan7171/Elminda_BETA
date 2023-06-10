@@ -47,6 +47,6 @@ Name: 6-weeks_HDRS21_class, dtype: int64
 
 ~~~~~~~~~~ RANDOMIZED SEARCH CV ~~~~~~~~~~
 Traceback (most recent call last):
-  File "C:\Users\dan77\Documents\GitHub\Elminda_BETA\second_research\GSCVrunner.py", line 845, in <module>
+  File "C:\Users\dan77\Documents\GitHub\Elminda_BETA\second_research\GSCVrunner.py", line 851, in <module>
     best_classifier = search.best_estimator_.steps[-1][1]
 AttributeError: 'RandomizedSearchCV' object has no attribute 'best_estimator_'

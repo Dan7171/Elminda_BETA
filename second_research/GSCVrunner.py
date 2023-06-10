@@ -592,8 +592,7 @@ if args['classification']:
         #                                                                random_state=42,
 
         "pca__n_components": range(47,57,3),
-        'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(25, 38,2) for j in range(44,58,2) for k in range(25, 36, 2) for l in
-          range(35, 45, 2)],
+        'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(25, 38,2) for j in range(44,58,2) for k in range(25, 36, 2) for l in range(35, 45, 2)],
         'classifier__activation':  [ 'relu'],
         'classifier__solver': ['sgd'],
         'classifier__alpha': [0.001],
