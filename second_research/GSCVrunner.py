@@ -517,15 +517,20 @@ if args['classification']:
     }
 
     param6a = {  # GRADIENT BOOSTING + pca
-
-        "pca__n_components": range(2, 60, 10),
-        'classifier__n_estimators': [i for i in range(20, 600, 20)],
-        'classifier__learning_rate': [0.0001, 0.01],
-        'classifier__max_depth': range(20, 600, 20),
-        'classifier__min_samples_split': range(2, 100, 5),
-        'classifier__min_samples_leaf': range(2, 100, 5),
-        'classifier__max_features': ['auto', 'sqrt', None],
-        'classifier__subsample': [0.8, 1],
+        #{'pca__n_components': 52, 'classifier__subsample': 0.8, 'classifier__n_estimators': 20,
+         # 'classifier__min_samples_split': 82, 'classifier__min_samples_leaf': 27, 'classifier__max_features': None,
+         #'classifier__max_depth': 100, 'classifier__learning_rate': 0.0001,
+         #'classifier': GradientBoostingClassifier(learning_rate=0.0001, max_depth=100,
+         #                                         min_samples_leaf=27, min_samples_split=82,
+         #                                         n_estimators=20, random_state=42, subsample=0.8)}
+        "pca__n_components": range(48,56,2),
+        'classifier__n_estimators': range(2,50,4),
+        'classifier__learning_rate': [0.0001],
+        'classifier__max_depth': range(60, 140, 10),
+        'classifier__min_samples_split': range(58, 102, 4),
+        'classifier__min_samples_leaf': range(20, 40, 2),
+        'classifier__max_features': ['auto', None],
+        'classifier__subsample': [0.7,0.8,0.9],
         "classifier": [clf6]
     }
 
