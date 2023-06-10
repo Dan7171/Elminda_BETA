@@ -173,7 +173,7 @@ def print_conclusions(df, pipe, search, best_cv_iter_yts_list_ndarray=None, best
         "best_params": str(search.best_params_),
         "selected_features": str(selected_features),
         "user_inputs": str(args),  # runArguments.args
-        "responders_rate": str(((cm[1][0] + cm[1][1]) / total)),  # responders / total
+        "responders_rate": str(((cm[1][0] + cm[1][1]) / total)),  # responders in train set / total subjects in train set
         "X_train_size(num of rows in cv input df)": str(total),
         "scorer_used": args['scoring_method'],  # scoring method used for cv as scorer param should be one of (accuracy,precision,recall,f1
         "scorer_score_mean": str(score_mean),
@@ -239,7 +239,7 @@ def CV_Score(y_true, y_pred):
     elif my_scorer == 'recall':
         cvscore = recall_score(y_true, y_pred)
     elif my_scorer =='f_beta':
-        cvscore = fbeta_score(y_true,y_pred,beta=0.3) # beta = weight given to recall (weight given to precision is always 1)
+        cvscore = fbeta_score(y_true,y_pred,beta=args['beta']) # beta = weight given to recall (weight given to precision is always 1)
 
     if cvscore is None:
         print("problem - cvscore is nan.check y_true, y_pred...")
@@ -571,24 +571,27 @@ if args['classification']:
         'classifier__max_depth': range(3, 500, 20),
         "classifier": [clf7]
     }
-    l1 = [(i, j, k, l) for i in range(20, 60, 5) for j in range(20, 60, 5) for k in range(20, 60, 5) for l in
-          range(20, 60, 5)]
-    l2 = [(i, j, k, l, m) for i in range(20, 60, 5) for j in range(20, 60, 5) for k in range(20, 60, 5) for l in
-          range(20, 60, 5) for m in range(20, 60, 5)]
+    _4_layers = [(i, j, k, l) for i in range(3, 70, 3) for j in range(3, 70, 3) for k in range(3, 70, 3) for l in
+          range(3, 70, 3)]
+    _5_layers= [(i, j, k, l, m) for i in range(10, 60, 5) for j in range(10, 60, 5) for k in range(10, 60, 5) for l in
+          range(10, 60, 5) for m in range(10, 60, 5)]
+    _3_layers = [(i, j, k) for i in range(10, 70, 3) for j in range(10, 70, 3) for k in range(10, 70, 3)]
+    _2_layers = [(i, j) for i in range(5, 100, 3) for j in range(5,100,3)]
     param8a = {  # MLPClassifier (neural network) + PCA
 
-        "pca__n_components": range(30, 70, 8),
-        'classifier__hidden_layer_sizes': l1.copy() + l2.copy(),
+        "pca__n_components": range(30, 60,2),
+        'classifier__hidden_layer_sizes': _2_layers + _3_layers + _4_layers + _5_layers,
         'classifier__activation':  ['tanh', 'relu'],
         'classifier__solver': ['sgd'],
-        'classifier__alpha': [0.01,0.001],
-        'classifier__learning_rate': [ 'adaptive','constant','invscaling'],
-        'classifier__max_iter': [1000],
+        'classifier__alpha': [0.001],
+        # 'classifier__learning_rate': [ 'adaptive','constant','invscaling'],
+        'classifier__learning_rate': ['invscaling'],
+        'classifier__max_iter': [1500],
         'classifier__verbose': [False],  # details prints of loss
         "classifier": [clf8]
     }
     param8b = {  # MLPClassifier (neural network) + KBEST
-        "kBest__k":  range(4, 80, 8),
+        "kBest__k":  range(30, 60,2),
         'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(5, 50,5) for j in range(5, 50,5) for k in
                                            range(5, 50,5)
                                            for l in range(5, 50,5)],
