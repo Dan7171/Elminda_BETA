@@ -27,7 +27,7 @@ import warnings
 import main_caller_r2
 from sklearn.exceptions import DataConversionWarning
 from sklearn.model_selection import RandomizedSearchCV
-from sklearn.metrics import confusion_matrix, f1_score, accuracy_score, roc_auc_score, precision_score, recall_score
+from sklearn.metrics import confusion_matrix, f1_score, accuracy_score, roc_auc_score, precision_score, recall_score, roc_curve
 from sklearn.metrics import make_scorer
 from sklearn.datasets import load_iris
 from sklearn.utils import shuffle
@@ -186,6 +186,12 @@ def print_conclusions(df, pipe, search, best_cv_iter_yts_list_ndarray=None, best
         "confusion_matrix": cm_with_legend,
         "param_grid_searched_at": str(param)
     }
+
+
+
+
+
+
     # save to cv:
     tmp = pd.DataFrame(d, index=[d.keys()])
     file_path = 'tuning.csv'
@@ -578,10 +584,17 @@ if args['classification']:
     _3_layers = [(i, j, k) for i in range(10, 70, 3) for j in range(10, 70, 3) for k in range(10, 70, 3)]
     _2_layers = [(i, j) for i in range(5, 100, 3) for j in range(5,100,3)]
     param8a = {  # MLPClassifier (neural network) + PCA
+        # {'pca__n_components': 52, 'classifier__verbose': False, 'classifier__solver': 'sgd',
+        #  'classifier__max_iter': 1500, 'classifier__learning_rate': 'invscaling',
+        #  'classifier__hidden_layer_sizes': (33, 51, 30, 39), 'classifier__alpha': 0.001,
+        #  'classifier__activation': 'relu', 'classifier': MLPClassifier(alpha=0.001, hidden_layer_sizes=(33, 51, 30, 39),
+        #                                                                learning_rate='invscaling', max_iter=1500,
+        #                                                                random_state=42,
 
-        "pca__n_components": range(30, 60,2),
-        'classifier__hidden_layer_sizes': _2_layers + _3_layers + _4_layers + _5_layers,
-        'classifier__activation':  ['tanh', 'relu'],
+        "pca__n_components": range(47,57,3),
+        'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(25, 38,2) for j in range(44,58,2) for k in range(25, 36, 2) for l in
+          range(35, 45, 2)],
+        'classifier__activation':  [ 'relu'],
         'classifier__solver': ['sgd'],
         'classifier__alpha': [0.001],
         # 'classifier__learning_rate': [ 'adaptive','constant','invscaling'],
@@ -830,10 +843,64 @@ for config in splitted_congifs:
             choice_options = [len(val) for val in param.values()]
             args['n_iter'] = reduce(lambda x,y:x*y, choice_options) #multiply all choice options
             search.fit(X_train.astype(float), y_train)
+
         else: # randomized search
             print("~~~~~~~~~~ RANDOMIZED SEARCH CV ~~~~~~~~~~")
             search = RandomizedSearchCV(estimator=pipe, param_distributions=param, n_iter=args["n_iter"], cv=args["cv"], n_jobs=args['n_jobs'],verbose=3, random_state=args['rs'], scoring=scorer(), refit=True)
+            if args['scoring_method'] == 'roc_auc':
+                # Get the best classifier from the grid search
+                best_classifier = search.best_estimator_.steps[-1][1]
 
+                # Get the predicted probabilities for the positive class
+                proba_positive = best_classifier.predict_proba(X_test)[:, 1]
+
+                # Compute the false positive rate, true positive rate, and threshold values
+                fpr, tpr, thresholds = roc_curve(y_test, proba_positive)
+
+                # Compute the ROC AUC score
+                auc_score = roc_auc_score(y_test, proba_positive)
+
+                # Plot the ROC curve
+                plt.figure(figsize=(8, 6))
+                plt.plot(fpr, tpr, label='ROC curve (AUC = {:.2f})'.format(auc_score))
+                plt.plot([0, 1], [0, 1], 'k--')  # Plot the diagonal line
+                plt.xlabel('False Positive Rate')
+                plt.ylabel('True Positive Rate')
+                plt.title('Receiver Operating Characteristic (ROC) Curve')
+                plt.legend(loc='lower right')
+
+                # Assuming you have computed the false positive rate (fpr), true positive rate (tpr), and threshold values
+
+                # Calculate the Youden's J statistic (J = sensitivity + specificity - 1) for each threshold
+                youden_j = tpr - fpr
+
+                # Find the index of the threshold that maximizes Youden's J statistic
+                optimal_threshold_index = np.argmax(youden_j)
+
+                # Get the optimal threshold value
+                optimal_threshold = thresholds[optimal_threshold_index]
+
+                print("Optimal Threshold:", optimal_threshold)
+
+                # Assuming you have computed the predicted probabilities (proba_positive) and the optimal threshold (optimal_threshold)
+
+                # Apply the optimal threshold to make predictions
+                adjusted_predictions = np.where(proba_positive >= optimal_threshold, 1, 0)
+
+                # Evaluate the performance using the adjusted predictions and desired metrics
+                accuracy = accuracy_score(y_test, adjusted_predictions)
+                precision = precision_score(y_test, adjusted_predictions)
+                recall = recall_score(y_test, adjusted_predictions)
+                f1 = f1_score(y_test, adjusted_predictions)
+
+                print("Adjusted Predictions:") # this should be y_pred?
+                print(adjusted_predictions)
+                print("Accuracy:", accuracy)
+                print("Precision:", precision)
+                print("Recall:", recall)
+                print("F1-score:", f1)
+
+                plt.show()
         n_splits = args['cv']  # num of splits in cv_iter (cv parameter n_splits)
         total_splits = args["n_iter"] * n_splits  # num of iterations in search * num of folds
         search.fit(X_train.astype(float), y_train)
