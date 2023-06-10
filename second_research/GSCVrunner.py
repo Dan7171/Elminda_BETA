@@ -27,7 +27,7 @@ import warnings
 import main_caller_r2
 from sklearn.exceptions import DataConversionWarning
 from sklearn.model_selection import RandomizedSearchCV
-from sklearn.metrics import confusion_matrix, f1_score, accuracy_score, roc_auc_score, precision_score, recall_score, roc_curve
+from sklearn.metrics import confusion_matrix, f1_score, accuracy_score, roc_auc_score, precision_score, recall_score
 from sklearn.metrics import make_scorer
 from sklearn.datasets import load_iris
 from sklearn.utils import shuffle
@@ -59,7 +59,6 @@ with warnings.catch_warnings():
 
 all_splits_yts, all_splits_yps = [], []
 my_scorer = args['scoring_method']
-
 
 
 def generate_random_architectures(first_layer_size_options: tuple = (3, 5, 10, 20, 30), avg_num_of_layers_in_network=4,
@@ -121,7 +120,7 @@ def print_conclusions(df, pipe, search, best_cv_iter_yts_list_ndarray=None, best
         selected_features = df.columns[selector.get_support()].tolist()
     print("* Best features by (selectKbest): \n", selected_features)
 
-    # score 
+    # score
     print("* Scorer_used:", args['scoring_method'])  # scoring method used for cv as scorer param
     score_mean = search.cv_results_['mean_test_score'][search.best_index_]
     score_std = search.cv_results_['std_test_score'][search.best_index_]
@@ -132,12 +131,12 @@ def print_conclusions(df, pipe, search, best_cv_iter_yts_list_ndarray=None, best
     cm_with_legend = str(cm) + "\n" + "[[TN FP\n[FN TP]]"
     print("* Confusion matrix: \n", cm_with_legend)
 
-    # confusion matrix plot making: 
+    # confusion matrix plot making:
     fig = metrics.ConfusionMatrixDisplay.from_predictions(best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray)
 
     fig.ax_.set_title(name)
 
-    # calculate Response rate: 
+    # calculate Response rate:
     y_train_responders_cnt = 0
 
     if args['classification']:
@@ -173,9 +172,10 @@ def print_conclusions(df, pipe, search, best_cv_iter_yts_list_ndarray=None, best
         "best_params": str(search.best_params_),
         "selected_features": str(selected_features),
         "user_inputs": str(args),  # runArguments.args
-        "responders_rate": str(((cm[1][0] + cm[1][1]) / total)),  # responders in train set / total subjects in train set
+        "responders_rate": str(((cm[1][0] + cm[1][1]) / total)),  # responders / total
         "X_train_size(num of rows in cv input df)": str(total),
-        "scorer_used": args['scoring_method'],  # scoring method used for cv as scorer param should be one of (accuracy,precision,recall,f1
+        "scorer_used": args['scoring_method'],
+        # scoring method used for cv as scorer param should be one of (accuracy,precision,recall,f1
         "scorer_score_mean": str(score_mean),
         "scorer_score_std": str(score_std),
         "accuracy": accuracy,
@@ -186,12 +186,6 @@ def print_conclusions(df, pipe, search, best_cv_iter_yts_list_ndarray=None, best
         "confusion_matrix": cm_with_legend,
         "param_grid_searched_at": str(param)
     }
-
-
-
-
-
-
     # save to cv:
     tmp = pd.DataFrame(d, index=[d.keys()])
     file_path = 'tuning.csv'
@@ -230,7 +224,7 @@ def CV_Score(y_true, y_pred):
     all_splits_yps.append(y_pred)
 
     # input check
-    if my_scorer not in ['accuracy', 'f1', 'roc_auc', 'precision', 'recall','f_beta']:
+    if my_scorer not in ['accuracy', 'f1', 'roc_auc', 'precision', 'recall', 'f_beta']:
         print('invalid score func from user')
         exit()
     cvscore = 0
@@ -244,8 +238,9 @@ def CV_Score(y_true, y_pred):
         cvscore = precision_score(y_true, y_pred)
     elif my_scorer == 'recall':
         cvscore = recall_score(y_true, y_pred)
-    elif my_scorer =='f_beta':
-        cvscore = fbeta_score(y_true,y_pred,beta=args['beta']) # beta = weight given to recall (weight given to precision is always 1)
+    elif my_scorer == 'f_beta':
+        cvscore = fbeta_score(y_true, y_pred,
+                              beta=0.5)  # beta = weight given to recall (weight given to precision is always 1)
 
     if cvscore is None:
         print("problem - cvscore is nan.check y_true, y_pred...")
@@ -255,7 +250,7 @@ def CV_Score(y_true, y_pred):
     param_choice_idx = total_folds[0] // len(choice_scores)
 
     idx = total_folds[0] % len(choice_scores)  # num of folds elapsed % num of folds in each param choice
-    choice_scores[idx]  = cvscore
+    choice_scores[idx] = cvscore
     max_param_choice_idx = args['n_iter'] - 1
     max_split_index = total_splits - 1
 
@@ -296,7 +291,6 @@ def CV_Score(y_true, y_pred):
     print("fold's true y \n", y_true)
     print("fold's predicted y\n", y_pred)
     print(f"scoring metric: {my_scorer}, score: {cvscore} ")
-
 
     if idx == len(choice_scores) - 1:  # calculated score for all folds in current parmeter coice
         choice_avg_score = np.mean(choice_scores)
@@ -361,14 +355,14 @@ else:
     y_name = "6-weeks_HDRS21_change_rate"  # regression problem
 
 X, y = main_caller_r2.get_X_y(y_name, args["X_version"])  # X and y's creationa and processing
-now =  datetime.datetime.now()
+now = datetime.datetime.now()
 folder = now.strftime("%Y-%m-%d %H_%M_%S")
 if not os.path.isdir(folder):
     os.mkdir(folder)
-if not os.path.exists(os.path.join(folder,'X.csv')):
-    X.to_csv(os.path.join(folder,'X.csv'))
-if not os.path.exists(os.path.join(folder,'y.csv')):
-    y.to_csv(os.path.join(folder,'y.csv'))
+if not os.path.exists(os.path.join(folder, 'X.csv')):
+    X.to_csv(os.path.join(folder, 'X.csv'))
+if not os.path.exists(os.path.join(folder, 'y.csv')):
+    y.to_csv(os.path.join(folder, 'y.csv'))
 
 X.reset_index(inplace=True, drop=True)
 
@@ -410,7 +404,6 @@ if args['classification']:
     clf8 = MLPClassifier(random_state=args["rs"])
     # The param 'grids'
     # note: parameters of different models pipelines can be set using '__' separated parameter names. modelname__parameter name = options to try ing gscv:
-
 
     # param_1a_smote = {
     #     # "smote__sampling_strategy": ['minority'],
@@ -457,26 +450,26 @@ if args['classification']:
     }
     param3a = {  # SVC + pca
         "pca__n_components": range(2, 55, 10),
-        'classifier__gamma': range(20,400,10),
+        'classifier__gamma': range(20, 400, 10),
         'classifier__kernel': ['linear', 'rbf', 'sigmoid'],
-        'classifier__C': range(20,1000,30),
+        'classifier__C': range(20, 1000, 30),
         "classifier": [clf3]
     }
     param3b = {  # SVC + kbest
         "kBest__k": range(2, 55, 10),  # k should be smaller than num of features in X
-        'classifier__gamma': range(5,1000,30),
+        'classifier__gamma': range(5, 1000, 30),
         'classifier__kernel': ['linear', 'rbf', 'sigmoid'],
-        'classifier__C': range(5,1500,20),
+        'classifier__C': range(5, 1500, 20),
         "classifier": [clf3]
     }
     param4a = {  # DECISION TREE + pca
 
         "pca__n_components": range(2, 55, 10),
-        'classifier__max_leaf_nodes': range(5,1000,30),
-        'classifier__max_depth':range(5,1000,30),
-        'classifier__criterion': ['entropy','gini'],
-        'classifier__min_samples_split': range(2,100,5),
-        'classifier__min_samples_leaf': range(20,100,5),
+        'classifier__max_leaf_nodes': range(5, 1000, 30),
+        'classifier__max_depth': range(5, 1000, 30),
+        'classifier__criterion': ['entropy', 'gini'],
+        'classifier__min_samples_split': range(2, 100, 5),
+        'classifier__min_samples_leaf': range(20, 100, 5),
         "classifier": [clf4]
     }
 
@@ -487,53 +480,52 @@ if args['classification']:
     #  'classifier': DecisionTreeClassifier(max_depth=260, max_leaf_nodes=80, min_samples_leaf=2,
     #                                       min_samples_split=3, random_state=42)}
 
-    #{'kBest__k': 500, 'classifier__min_samples_split': 3, 'classifier__min_samples_leaf': 2,
+    # {'kBest__k': 500, 'classifier__min_samples_split': 3, 'classifier__min_samples_leaf': 2,
     # 'classifier__max_leaf_nodes': 86, 'classifier__max_depth': 274, 'classifier__criterion': 'gini',
     # 'classifier': DecisionTreeClassifier(max_depth=274, max_leaf_nodes=86, min_samples_leaf=2,
     #                   min_samples_split=3, random_state=42)}
     param4b = {
-        "kBest__k": range(470, 800,10),
-        'classifier__max_leaf_nodes': range(78,90,2),
-        'classifier__max_depth': range(260,280,3),
+        "kBest__k": range(470, 800, 10),
+        'classifier__max_leaf_nodes': range(78, 90, 2),
+        'classifier__max_depth': range(260, 280, 3),
         'classifier__criterion': ['gini'],
-        'classifier__min_samples_split': [2,3],
-        'classifier__min_samples_leaf': [1,2],
+        'classifier__min_samples_split': [2, 3],
+        'classifier__min_samples_leaf': [1, 2],
         "classifier": [clf4]
 
-        }
-
+    }
 
     param5a = {  # RANDOM FOREST + pca
 
-        "pca__n_components":  range(2, 40, 10),
-        'classifier__bootstrap': [True,False],
-        "classifier__max_depth": range(5,1000,30), #11 evenly spaceced num in range10-110
-        "classifier__min_samples_split": range(2,100,5),
-        "classifier__min_samples_leaf": range(2,100,5),
-        "classifier__max_features": ['auto', 'sqrt',2],
+        "pca__n_components": range(2, 40, 10),
+        'classifier__bootstrap': [True, False],
+        "classifier__max_depth": range(5, 1000, 30),  # 11 evenly spaceced num in range10-110
+        "classifier__min_samples_split": range(2, 100, 5),
+        "classifier__min_samples_leaf": range(2, 100, 5),
+        "classifier__max_features": ['auto', 'sqrt', 2],
         "classifier": [clf5]
     }
     param5b = {  # RANDOM FOREST + kbest
 
-        "kBest__k":  range(2, 40, 10),
-        'classifier__bootstrap': [True,False],
-        "classifier__max_depth": range(150,160),
-        "classifier__min_samples_split": range(2,10),
-        "classifier__min_samples_leaf": range(2,10),
-        "classifier__max_features": ['auto','sqrt'],
+        "kBest__k": range(2, 40, 10),
+        'classifier__bootstrap': [True, False],
+        "classifier__max_depth": range(150, 160),
+        "classifier__min_samples_split": range(2, 10),
+        "classifier__min_samples_leaf": range(2, 10),
+        "classifier__max_features": ['auto', 'sqrt'],
         "classifier": [clf5]
     }
 
     param6a = {  # GRADIENT BOOSTING + pca
 
-        "pca__n_components":  range(2, 60, 10),
-        'classifier__n_estimators': [i for i in range(20,600,20)],
-        'classifier__learning_rate': [0.0001,0.01],
-        'classifier__max_depth': range(20,600,20),
-        'classifier__min_samples_split': range(2,100,5),
-        'classifier__min_samples_leaf': range(2,100,5),
+        "pca__n_components": range(2, 60, 10),
+        'classifier__n_estimators': [i for i in range(20, 600, 20)],
+        'classifier__learning_rate': [0.0001, 0.01],
+        'classifier__max_depth': range(20, 600, 20),
+        'classifier__min_samples_split': range(2, 100, 5),
+        'classifier__min_samples_leaf': range(2, 100, 5),
         'classifier__max_features': ['auto', 'sqrt', None],
-        'classifier__subsample': [0.8,  1],
+        'classifier__subsample': [0.8, 1],
         "classifier": [clf6]
     }
 
@@ -541,11 +533,11 @@ if args['classification']:
         # reason I tried this classifier params:
         "kBest__k": range(2, 60, 10),
         'classifier__subsample': [0.6, 0.9],
-        'classifier__n_estimators': range(5,1000,30),
-        'classifier__min_samples_split': range(2,100,5),
-        'classifier__min_samples_leaf': range(2,100,5),
-        'classifier__max_features': ['auto',None,'sqrt'],
-        'classifier__max_depth': range(5,1000,30),
+        'classifier__n_estimators': range(5, 1000, 30),
+        'classifier__min_samples_split': range(2, 100, 5),
+        'classifier__min_samples_leaf': range(2, 100, 5),
+        'classifier__max_features': ['auto', None, 'sqrt'],
+        'classifier__max_depth': range(5, 1000, 30),
         'classifier__learning_rate': [0.01],
         "classifier": [clf6]
     }
@@ -553,9 +545,9 @@ if args['classification']:
     param6c = {
         # 'classifier__n_estimators': [5, 20, 35, 50, 65, 80, 95, 110, 125, 150, 200, 250, 350],
         'classifier__learning_rate': [0.001],
-        'classifier__max_depth': range(5,1000,30),
-        'classifier__min_samples_split': [1,2,9,16,24,38],
-        'classifier__min_samples_leaf': [1,2,9,16,24,38],
+        'classifier__max_depth': range(5, 1000, 30),
+        'classifier__min_samples_split': [1, 2, 9, 16, 24, 38],
+        'classifier__min_samples_leaf': [1, 2, 9, 16, 24, 38],
         'classifier__max_features': ['auto', 'sqrt'],
         'classifier__subsample': [0.6, 0.95],
         "classifier": [clf6]
@@ -563,7 +555,7 @@ if args['classification']:
 
     param7a = {  # CATBOOST CLASSIFIER + pca
         "pca__n_components": range(2, 60, 10),
-        'classifier__n_estimators':range(2,1000,30),
+        'classifier__n_estimators': range(2, 1000, 30),
         "classifier__learning_rate": [0.0001, 0.01, 0.1],
         'classifier__subsample': [0.1, 0.5, 0.7, 1.0],
         'classifier__max_depth': range(3, 500, 20),
@@ -571,25 +563,14 @@ if args['classification']:
     }
     param7b = {  # CATBOOST CLASSIFIER + kbest
         "kBest__k": range(4, 60, 8),
-        'classifier__n_estimators': range(2,1000,30),
+        'classifier__n_estimators': range(2, 1000, 30),
         "classifier__learning_rate": [0.0001, 0.01, 0.1],
         'classifier__subsample': [0.1, 0.5, 0.7, 1.0],
         'classifier__max_depth': range(3, 500, 20),
         "classifier": [clf7]
     }
-    _4_layers = [(i, j, k, l) for i in range(3, 70, 3) for j in range(3, 70, 3) for k in range(3, 70, 3) for l in
-          range(3, 70, 3)]
-    _5_layers= [(i, j, k, l, m) for i in range(10, 60, 5) for j in range(10, 60, 5) for k in range(10, 60, 5) for l in
-          range(10, 60, 5) for m in range(10, 60, 5)]
-    _3_layers = [(i, j, k) for i in range(10, 70, 3) for j in range(10, 70, 3) for k in range(10, 70, 3)]
-    _2_layers = [(i, j) for i in range(5, 100, 3) for j in range(5,100,3)]
+
     param8a = {  # MLPClassifier (neural network) + PCA
-        # {'pca__n_components': 52, 'classifier__verbose': False, 'classifier__solver': 'sgd',
-        #  'classifier__max_iter': 1500, 'classifier__learning_rate': 'invscaling',
-        #  'classifier__hidden_layer_sizes': (33, 51, 30, 39), 'classifier__alpha': 0.001,
-        #  'classifier__activation': 'relu', 'classifier': MLPClassifier(alpha=0.001, hidden_layer_sizes=(33, 51, 30, 39),
-        #                                                                learning_rate='invscaling', max_iter=1500,
-        #                                                                random_state=42,
 
         "pca__n_components": range(47,57,3),
         'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(25, 38,2) for j in range(44,58,2) for k in range(25, 36, 2) for l in range(35, 45, 2)],
@@ -603,14 +584,14 @@ if args['classification']:
         "classifier": [clf8]
     }
     param8b = {  # MLPClassifier (neural network) + KBEST
-        "kBest__k":  range(30, 60,2),
-        'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(5, 50,5) for j in range(5, 50,5) for k in
-                                           range(5, 50,5)
-                                           for l in range(5, 50,5)],
+        "kBest__k": range(4, 80, 8),
+        'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(5, 50, 5) for j in range(5, 50, 5) for k in
+                                           range(5, 50, 5)
+                                           for l in range(5, 50, 5)],
         'classifier__activation': ['identity', 'logistic', 'tanh', 'relu'],
-        'classifier__solver': ['adam','lbfgs','sgd'],
+        'classifier__solver': ['adam', 'lbfgs', 'sgd'],
         'classifier__alpha': [0.0001, 0.01],
-        'classifier__learning_rate': ['adaptive','constant','invscaling'],
+        'classifier__learning_rate': ['adaptive', 'constant', 'invscaling'],
         'classifier__max_iter': [3500],
         'classifier__verbose': [False],  # details prints of loss
         "classifier": [clf8]
@@ -621,16 +602,26 @@ if args['classification']:
 
     # pipe a - kbest
     # pipe b - pca
-    pipe_smote_1a = imb_Pipeline(steps=[("smote",sm), ("scaler", scaler), ("pca", pca), ("classifier", param1a["classifier"][0])])
-    pipe_smote_3a = imb_Pipeline(steps=[("smote",sm), ("scaler", scaler), ("pca", pca), ("classifier", param3a["classifier"][0])])
-    pipe_smote_6a = imb_Pipeline(steps=[("smote",sm), ("scaler", scaler), ("pca", pca), ("classifier", param6a["classifier"][0])])
-    pipe_smote_7a = imb_Pipeline(steps=[("smote",sm), ("scaler", scaler), ("pca", pca), ("classifier", param7a["classifier"][0])])
-    pipe_smote_8a = imb_Pipeline(steps=[("smote", sm), ("scaler", scaler), ("pca", pca), ("classifier", param8a["classifier"][0])])
-    pipe_smote_1b = imb_Pipeline(steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param1b["classifier"][0])])
-    pipe_smote_3b = imb_Pipeline(steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param3b["classifier"][0])])
-    pipe_smote_6b = imb_Pipeline(steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param6b["classifier"][0])])
-    pipe_smote_7b = imb_Pipeline(steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param7b["classifier"][0])])
-    pipe_smote_8b = imb_Pipeline(steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param8b["classifier"][0])])
+    pipe_smote_1a = imb_Pipeline(
+        steps=[("smote", sm), ("scaler", scaler), ("pca", pca), ("classifier", param1a["classifier"][0])])
+    pipe_smote_3a = imb_Pipeline(
+        steps=[("smote", sm), ("scaler", scaler), ("pca", pca), ("classifier", param3a["classifier"][0])])
+    pipe_smote_6a = imb_Pipeline(
+        steps=[("smote", sm), ("scaler", scaler), ("pca", pca), ("classifier", param6a["classifier"][0])])
+    pipe_smote_7a = imb_Pipeline(
+        steps=[("smote", sm), ("scaler", scaler), ("pca", pca), ("classifier", param7a["classifier"][0])])
+    pipe_smote_8a = imb_Pipeline(
+        steps=[("smote", sm), ("scaler", scaler), ("pca", pca), ("classifier", param8a["classifier"][0])])
+    pipe_smote_1b = imb_Pipeline(
+        steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param1b["classifier"][0])])
+    pipe_smote_3b = imb_Pipeline(
+        steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param3b["classifier"][0])])
+    pipe_smote_6b = imb_Pipeline(
+        steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param6b["classifier"][0])])
+    pipe_smote_7b = imb_Pipeline(
+        steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param7b["classifier"][0])])
+    pipe_smote_8b = imb_Pipeline(
+        steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param8b["classifier"][0])])
 
     pipe1a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param1a["classifier"][0])])
     pipe1b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param1b["classifier"][0])])
@@ -774,10 +765,9 @@ for config in splitted_congifs:
     for i in range(4):
         if isinstance(config[i], pd.Series):  # convert to data frame to make scorer work
             config[i] = config[i].to_frame()
-        
+
     X_train, X_test, y_train, y_test = config[0], config[1], config[2], config[
         3]  # 8.1 - from ofir- here add stratified param on rate of responders
-
 
     print(f"**************************************************\n"
           f"Distribution of categorial variables in data:"
@@ -800,7 +790,7 @@ for config in splitted_congifs:
     # # fix imbalance in train set
     # if args['balance_y_values']:
     #     X_train, y_train = balance_y_values(X_train, y_train, method='SMOTE')
-# *******************************
+    # *******************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
             # param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
@@ -814,7 +804,7 @@ for config in splitted_congifs:
 
             # param_pipe_list = [[param8b, pipe_smote_8b]] # CHECKED
 
-# ********************************
+        # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
             param_pipe_list = []  # put all the pipe and param paris you want
@@ -834,72 +824,19 @@ for config in splitted_congifs:
 
         # # cross validation search
 
-
-
-        if args['exhaustive_grid_search']: # exhausitve search
+        if args['exhaustive_grid_search']:  # exhausitve search
             print("~~~~~~~~~~ EXHAUSTIVE SEARCH CV ~~~~~~~~~~~")
-            search = GridSearchCV(param_grid=param,estimator=pipe,cv=args["cv"],verbose=3,scoring=scorer(),refit=True)
+            search = GridSearchCV(param_grid=param, estimator=pipe, cv=args["cv"], verbose=3, scoring=scorer(),
+                                  refit=True)
             choice_options = [len(val) for val in param.values()]
-            args['n_iter'] = reduce(lambda x,y:x*y, choice_options) #multiply all choice options
+            args['n_iter'] = reduce(lambda x, y: x * y, choice_options)  # multiply all choice options
             search.fit(X_train.astype(float), y_train)
-
-        else: # randomized search
+        else:  # randomized search
             print("~~~~~~~~~~ RANDOMIZED SEARCH CV ~~~~~~~~~~")
-            search = RandomizedSearchCV(estimator=pipe, param_distributions=param, n_iter=args["n_iter"], cv=args["cv"], n_jobs=args['n_jobs'],verbose=3, random_state=args['rs'], scoring=scorer(), refit=True)
-            if args['scoring_method'] == 'roc_auc':
-                # Get the best classifier from the grid search
-                best_classifier = search.best_estimator_.steps[-1][1]
+            search = RandomizedSearchCV(estimator=pipe, param_distributions=param, n_iter=args["n_iter"], cv=args["cv"],
+                                        n_jobs=args['n_jobs'], verbose=3, random_state=args['rs'], scoring=scorer(),
+                                        refit=True)
 
-                # Get the predicted probabilities for the positive class
-                proba_positive = best_classifier.predict_proba(X_test)[:, 1]
-
-                # Compute the false positive rate, true positive rate, and threshold values
-                fpr, tpr, thresholds = roc_curve(y_test, proba_positive)
-
-                # Compute the ROC AUC score
-                auc_score = roc_auc_score(y_test, proba_positive)
-
-                # Plot the ROC curve
-                plt.figure(figsize=(8, 6))
-                plt.plot(fpr, tpr, label='ROC curve (AUC = {:.2f})'.format(auc_score))
-                plt.plot([0, 1], [0, 1], 'k--')  # Plot the diagonal line
-                plt.xlabel('False Positive Rate')
-                plt.ylabel('True Positive Rate')
-                plt.title('Receiver Operating Characteristic (ROC) Curve')
-                plt.legend(loc='lower right')
-
-                # Assuming you have computed the false positive rate (fpr), true positive rate (tpr), and threshold values
-
-                # Calculate the Youden's J statistic (J = sensitivity + specificity - 1) for each threshold
-                youden_j = tpr - fpr
-
-                # Find the index of the threshold that maximizes Youden's J statistic
-                optimal_threshold_index = np.argmax(youden_j)
-
-                # Get the optimal threshold value
-                optimal_threshold = thresholds[optimal_threshold_index]
-
-                print("Optimal Threshold:", optimal_threshold)
-
-                # Assuming you have computed the predicted probabilities (proba_positive) and the optimal threshold (optimal_threshold)
-
-                # Apply the optimal threshold to make predictions
-                adjusted_predictions = np.where(proba_positive >= optimal_threshold, 1, 0)
-
-                # Evaluate the performance using the adjusted predictions and desired metrics
-                accuracy = accuracy_score(y_test, adjusted_predictions)
-                precision = precision_score(y_test, adjusted_predictions)
-                recall = recall_score(y_test, adjusted_predictions)
-                f1 = f1_score(y_test, adjusted_predictions)
-
-                print("Adjusted Predictions:") # this should be y_pred?
-                print(adjusted_predictions)
-                print("Accuracy:", accuracy)
-                print("Precision:", precision)
-                print("Recall:", recall)
-                print("F1-score:", f1)
-
-                plt.show()
         n_splits = args['cv']  # num of splits in cv_iter (cv parameter n_splits)
         total_splits = args["n_iter"] * n_splits  # num of iterations in search * num of folds
         search.fit(X_train.astype(float), y_train)

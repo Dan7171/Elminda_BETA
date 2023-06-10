@@ -1,4 +1,4 @@
-{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': True, 'cv': 5, 'n_iter': 20, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True, 'lite_mode': True, 'test_size': 0.15, 'stdout_to_file': True}
+{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc_auc', 'both': True, 'cv': 5, 'n_iter': 5, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True, 'lite_mode': True, 'test_size': 0.15, 'stdout_to_file': True}
 configs types debug
 [<class 'pandas.core.frame.DataFrame'>, <class 'pandas.core.frame.DataFrame'>, <class 'pandas.core.frame.DataFrame'>, <class 'pandas.core.frame.DataFrame'>]
 **************************************************
@@ -47,6 +47,12 @@ Name: 6-weeks_HDRS21_class, dtype: int64
 
 ~~~~~~~~~~ RANDOMIZED SEARCH CV ~~~~~~~~~~
 Traceback (most recent call last):
-  File "C:\Users\dan77\Documents\GitHub\Elminda_BETA\second_research\GSCVrunner.py", line 851, in <module>
-    best_classifier = search.best_estimator_.steps[-1][1]
-AttributeError: 'RandomizedSearchCV' object has no attribute 'best_estimator_'
+  File "C:\Users\dan77\Documents\GitHub\Elminda_BETA\second_research\GSCVrunner.py", line 854, in <module>
+    proba_positive = search.predict_proba(X_train)[:, 1]
+  File "C:\Users\dan77\anaconda3\lib\site-packages\sklearn\utils\metaestimators.py", line 113, in <lambda>
+    out = lambda *args, **kwargs: self.fn(obj, *args, **kwargs)  # noqa
+  File "C:\Users\dan77\anaconda3\lib\site-packages\sklearn\model_selection\_search.py", line 543, in predict_proba
+    check_is_fitted(self)
+  File "C:\Users\dan77\anaconda3\lib\site-packages\sklearn\utils\validation.py", line 1222, in check_is_fitted
+    raise NotFittedError(msg % {"name": type(estimator).__name__})
+sklearn.exceptions.NotFittedError: This RandomizedSearchCV instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
