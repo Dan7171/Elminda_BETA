@@ -569,17 +569,25 @@ if args['classification']:
         'classifier__max_depth': range(3, 500, 20),
         "classifier": [clf7]
     }
-
+    _4_layers = [(i, j, k, l) for i in range(3, 70, 3) for j in range(3, 70, 3) for k in range(3, 70, 3) for l in
+                 range(3, 70, 3)]
+    _5_layers = [(i, j, k, l, m) for i in range(30, 80, 5) for j in range(30, 80, 5) for k in range(30, 80, 5) for l in
+                 range(30, 80, 5) for m in range(30, 80, 5)]
+    _3_layers = [(i, j, k) for i in range(10, 70, 3) for j in range(10, 70, 3) for k in range(10, 70, 3)]
+    _2_layers = [(i, j) for i in range(5, 100, 3) for j in range(5, 100, 3)]
     param8a = {  # MLPClassifier (neural network) + PCA
-
-        "pca__n_components": range(47,57,3),
-        'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(25, 38,2) for j in range(44,58,2) for k in range(25, 36, 2) for l in range(35, 45, 2)],
-        'classifier__activation':  [ 'relu'],
-        'classifier__solver': ['sgd'],
+        #{'pca__n_components': 53, 'classifier__verbose': False, 'classifier__solver': 'sgd', 'classifier__max_iter': 1500, 'classifier__learning_rate': 'invscaling',
+        # 'classifier__hidden_layer_sizes': (33, 44, 35, 39), 'classifier__alpha': 0.001, 'classifier__activation': 'relu', 'classifier': MLPClassifier(alpha=0.001, hidden_layer_sizes=(33, 44, 35, 39),
+              # learning_rate='invscaling', max_iter=1500, random_state=42,
+              # solver='sgd')}
+        "pca__n_components": range(51,55),
+        'classifier__hidden_layer_sizes': [(i, j, k, l) for i in range(29,35) for j in range(40,61,2) for k in range(25, 46, 2) for l in range(34, 45, 2)] + _5_layers,
+        'classifier__activation':  ['relu'],
+        'classifier__solver': ['sgd','adam'],
         'classifier__alpha': [0.001],
         # 'classifier__learning_rate': [ 'adaptive','constant','invscaling'],
-        'classifier__learning_rate': ['invscaling'],
-        'classifier__max_iter': [1500],
+        'classifier__learning_rate': ['invscaling','adaptive'],
+        'classifier__max_iter': [500],
         'classifier__verbose': [False],  # details prints of loss
         "classifier": [clf8]
     }
