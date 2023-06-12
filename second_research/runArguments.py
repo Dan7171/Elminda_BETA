@@ -35,10 +35,10 @@ args = {
     "cv": 5,  # param for cv
 
     # old and wrong way to do smote
-    # "balance_y_values": False
+    # "balance_y_values": False,
     # ,  # working for clasification only. balancing the number of responsive and non responsive (y categories)
 
-    "n_iter":1000,  # param for randomized cv - num of combinations to try in randomized search
+    "n_iter": 1000,  # param for randomized cv - num of combinations to try in randomized search
 
     "n_jobs": 1,
     # num of threads each model is generating to speed up grid search. Changes can cause unexpected behaviour
@@ -55,15 +55,15 @@ args = {
 
     # "halving": False, # out of order
 
-    "stdout_to_file": False
+    "stdout_to_file": True
 
 }
-if args["both"] or args["balance_y_values"]:
-    args['classification'] = True
+# if args["both"] or args["balance_y_values"]:
+#     args['classification'] = True
 
-if not args['classification']:
-    args["balance_y_values"] = False
-    args["both"] = False
+# if not args['classification']:
+#     # args["balance_y_values"] = False
+#     # args["both"] = False
 
 if args['exhaustive_grid_search']:
     args['n_iter'] = None

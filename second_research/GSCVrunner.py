@@ -7,6 +7,7 @@ from sklearn.svm import SVC
 import numpy as np
 import pandas as pd
 import sklearn
+from sklearn.metrics import classification_report
 import datetime
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
@@ -101,7 +102,7 @@ def generate_random_architectures(first_layer_size_options: tuple = (3, 5, 10, 2
     return list(architectures)
 
 
-def print_conclusions(df, pipe, search, best_cv_iter_yts_list_ndarray=None, best_cv_iter_yps_list_ndarray=None):
+def print_conclusions(df, pipe, search, best_cv_iter_yts_list_ndarray=None, best_cv_iter_yps_list_ndarray=None,folder="out_folder"):
     print("-----------------------\n New CV report \n-----------------------")
     if args['classification']:
         name = pipe.named_steps['classifier']
@@ -188,7 +189,8 @@ def print_conclusions(df, pipe, search, best_cv_iter_yts_list_ndarray=None, best
     }
     # save to cv:
     tmp = pd.DataFrame(d, index=[d.keys()])
-    file_path = 'tuning.csv'
+    # file_path = 'tuning.csv'
+    file_path  = os.path.join(folder,'tuning.csv')
     if not os.path.exists(file_path):
         # If the file does not exist, create a new empty CSV file
         open(file_path, 'a').close()
@@ -198,6 +200,8 @@ def print_conclusions(df, pipe, search, best_cv_iter_yts_list_ndarray=None, best
     df = pd.concat([df, tmp])
     df.to_csv(file_path, index=False)
 
+    print("Try this as a ways to print report :")
+    print(classification_report(y_true=best_cv_iter_yts_list,y_pred=best_cv_iter_yps_list ))
     print("CV report saved to  ", file_path)
     print("-----------------------\n End of CV report \n-----------------------", '\n' * 3)
 
@@ -334,31 +338,33 @@ def scorer():
 
 # write output to logfile (to ease hyper - parameter tuning)
 print(" >>>>>>>>>>>>>>>>>>>>> STARTING MAIN OF GSCVrunner.py >>>>>>>>>>>>>>>>>>>>>")
-
+now = datetime.datetime.now()
+folder = now.strftime("%Y-%m-%d %H_%M_%S")
+if not os.path.isdir(folder):
+    os.mkdir(folder)
 if args['stdout_to_file']:
 
-    logfile_name = 'stdout.txt'
+    # logfile_name = 'stdout.txt'
+    logfile_name = os.path.join(folder,'stdout.txt')
     print(f"see stdout in {logfile_name}")
     if os.path.exists(logfile_name):
         os.remove(logfile_name)
     log_file = open(logfile_name, 'a')
     sys.stdout = sys.stderr = log_file
 
-search_statistics = "search_statistics.txt"
-
+# search_statistics = "search_statistics.txt"
+search_statistics = os.path.join(folder,"search_statistics.txt")
 if os.path.exists(search_statistics):
     os.remove(search_statistics)
-print(args)
+# print(args)
 if args['classification']:
     y_name = '6-weeks_HDRS21_class'  # classification problem (prediciting change rate class)
 else:
     y_name = "6-weeks_HDRS21_change_rate"  # regression problem
 
 X, y = main_caller_r2.get_X_y(y_name, args["X_version"])  # X and y's creationa and processing
-now = datetime.datetime.now()
-folder = now.strftime("%Y-%m-%d %H_%M_%S")
-if not os.path.isdir(folder):
-    os.mkdir(folder)
+
+
 if not os.path.exists(os.path.join(folder, 'X.csv')):
     X.to_csv(os.path.join(folder, 'X.csv'))
 if not os.path.exists(os.path.join(folder, 'y.csv')):
@@ -405,14 +411,8 @@ if args['classification']:
     # The param 'grids'
     # note: parameters of different models pipelines can be set using '__' separated parameter names. modelname__parameter name = options to try ing gscv:
 
-    # param_1a_smote = {
-    #     # "smote__sampling_strategy": ['minority'],
-    #     # "smote__random_state": [args["rs"]],
-    #     "pca__n_components": range(2, 50, 3),
-    #     "classifier__C": [0.001, 0.01, 0.1, 1, 10, 100],
-    #     "classifier__penalty": ['l2'],
-    #     "classifier": [clf1]
-    # }
+
+
     param1a = {  # LOGISTIC REGRESSION + pca
         "pca__n_components": range(2, 500, 10),
         "classifier__C": [0.001, 0.01, 0.1, 1, 10, 100],
@@ -580,6 +580,7 @@ if args['classification']:
                  range(30, 80, 5) for m in range(30, 80, 5)]
     _3_layers = [(i, j, k) for i in range(10, 70, 3) for j in range(10, 70, 3) for k in range(10, 70, 3)]
     _2_layers = [(i, j) for i in range(5, 100, 3) for j in range(5, 100, 3)]
+
     param8a = {  # MLPClassifier (neural network) + PCA
         #{'pca__n_components': 53, 'classifier__verbose': False, 'classifier__solver': 'sgd', 'classifier__max_iter': 1500, 'classifier__learning_rate': 'invscaling',
         # 'classifier__hidden_layer_sizes': (33, 44, 35, 39), 'classifier__alpha': 0.001, 'classifier__activation': 'relu', 'classifier': MLPClassifier(alpha=0.001, hidden_layer_sizes=(33, 44, 35, 39),
@@ -609,6 +610,34 @@ if args['classification']:
         'classifier__verbose': [False],  # details prints of loss
         "classifier": [clf8]
 
+    }
+
+    param_3_classifier_only = {
+        'classifier__gamma': range(20, 400, 10),
+        'classifier__kernel': ['linear', 'rbf', 'sigmoid'],
+        'classifier__C': range(20, 1000, 30),
+        "classifier": [clf3]
+    }
+    param_6_classifier_only = {
+
+        'classifier__n_estimators': range(2, 50, 4),
+        'classifier__learning_rate': [0.0001],
+        'classifier__max_depth': range(60, 140, 10),
+        'classifier__min_samples_split': range(58, 102, 4),
+        'classifier__min_samples_leaf': range(20, 40, 2),
+        'classifier__max_features': ['auto', None],
+        'classifier__subsample': [0.7, 0.8, 0.9],
+        "classifier": [clf6]
+    }
+    param_8_classifier_only = {
+        'classifier__hidden_layer_sizes': _2_layers + _3_layers + _4_layers + _5_layers,
+        'classifier__activation': ['relu'],
+        'classifier__solver': ['sgd', 'adam'],
+        'classifier__alpha': [0.001],
+        'classifier__learning_rate': ['adaptive','constant','invscaling'],
+        'classifier__max_iter': [500],
+        'classifier__verbose': [False],  # details prints of loss
+        "classifier": [clf8]
     }
     sm = SMOTE(sampling_strategy='minority', random_state=42)
     # define the pipelines
@@ -642,6 +671,7 @@ if args['classification']:
     pipe2b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param2b["classifier"][0])])
     pipe3a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param3a["classifier"][0])])
     pipe3b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param3b["classifier"][0])])
+    pipe3_classifier_only = Pipeline(steps=[("scaler", scaler), ("classifier", param_3_classifier_only["classifier"][0])])
     pipe4a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param4a["classifier"][0])])
     pipe4b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param4b["classifier"][0])])
     pipe5a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param5a["classifier"][0])])
@@ -649,13 +679,15 @@ if args['classification']:
     # pipe5c = Pipeline(steps=[("scaler", scaler), ("classifier", param5c["classifier"][0])])
     pipe6a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param6a["classifier"][0])])
     pipe6b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param6b["classifier"][0])])
-    pipe6c = Pipeline(steps=[("scaler", scaler), ("classifier", param6c["classifier"][0])])
+    pipe6_classifier_only = Pipeline(steps=[("scaler", scaler), ("classifier", param_6_classifier_only["classifier"][0])])
     pipe7a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param7a["classifier"][0])])
     pipe7b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param7b["classifier"][0])])
     # pipe7c = Pipeline(steps=[("scaler", scaler), ("classifier", param7c["classifier"][0])])
     pipe8a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param8a["classifier"][0])])
     pipe8b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param8b["classifier"][0])])
-    # pipe8c = Pipeline(steps=[("scaler", scaler), ("classifier", param8c["classifier"][0])])
+    pipe8_classifier_only = Pipeline(steps=[("scaler", scaler), ("classifier", param_8_classifier_only["classifier"][0])])
+
+
 ########################## regression ####################################
 
 else:  # regression
@@ -677,44 +709,44 @@ else:  # regression
 #############
 # balance number of responders and non responders  by undersampling the majority class (responders):
 
-def balance_y_values(X, y, method):
-    """
-    making data set balanced in responders and non responders
-    """
-
-    if not args['classification']:
-        print("balancing y values supported only in calassification mode")
-        print("change args['classification'] to True and try over ")
-        exit()
-
-    print(f"balancing dataset (y values) using {method}...")
-    print(f"{X.shape[0]} y values\nvalue counts:\n{y.value_counts()}")
-
-    # select the method of balancing you want to use
-    if method == "undersample_majority":  # drop values from the larger category
-
-        data = X.join(y)
-        # print("balancing y values...")
-        # print(f"before balancing: {X.shape[0]} y values\nvalue counts:\n{y.value_counts()}")
-
-        # undersample responders
-        data = data.drop(data[data[y_name] == 1].sample(
-            frac=.3).index)  # LEAVE frac=.3 (matching args['both'] = True and args['both]= False)  drop a fraction of the responders to equalize num of responders and non responders
-        X = data.iloc[:, :-1]
-        y = data.iloc[:, -1]
-
-        return X, y
-
-    elif method == 'SMOTE':  # generate fake observations from the minority category
-
-        # Resampling the minority class. The strategy can be changed as required.
-        sm = SMOTE(sampling_strategy='minority', random_state=42)
-        # Fit the model to generate the data.
-        X, y = sm.fit_resample(X, y)
-        # oversampled = pd.concat([pd.DataFrame(oversampled_Y), pd.DataFrame(oversampled_X)], axis=1)
-
-    print(f"after balancing: {X.shape[0]} y values\nvalue counts:\n{y.value_counts()}")
-    return X, y
+# def balance_y_values(X, y, method):
+#     """
+#     making data set balanced in responders and non responders
+#     """
+#
+#     if not args['classification']:
+#         print("balancing y values supported only in calassification mode")
+#         print("change args['classification'] to True and try over ")
+#         exit()
+#
+#     print(f"balancing dataset (y values) using {method}...")
+#     print(f"{X.shape[0]} y values\nvalue counts:\n{y.value_counts()}")
+#
+#     # select the method of balancing you want to use
+#     if method == "undersample_majority":  # drop values from the larger category
+#
+#         data = X.join(y)
+#         # print("balancing y values...")
+#         # print(f"before balancing: {X.shape[0]} y values\nvalue counts:\n{y.value_counts()}")
+#
+#         # undersample responders
+#         data = data.drop(data[data[y_name] == 1].sample(
+#             frac=.3).index)  # LEAVE frac=.3 (matching args['both'] = True and args['both]= False)  drop a fraction of the responders to equalize num of responders and non responders
+#         X = data.iloc[:, :-1]
+#         y = data.iloc[:, -1]
+#
+#         return X, y
+#
+#     elif method == 'SMOTE':  # generate fake observations from the minority category
+#
+#         # Resampling the minority class. The strategy can be changed as required.
+#         sm = SMOTE(sampling_strategy='minority', random_state=42)
+#         # Fit the model to generate the data.
+#         X, y = sm.fit_resample(X, y)
+#         # oversampled = pd.concat([pd.DataFrame(oversampled_Y), pd.DataFrame(oversampled_X)], axis=1)
+#
+#     print(f"after balancing: {X.shape[0]} y values\nvalue counts:\n{y.value_counts()}")
+#     return X, y
 
 
 ############
@@ -807,7 +839,7 @@ for config in splitted_congifs:
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
             # param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
-            param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
+            # param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
             # param_pipe_list = [[param7a, pipe_smote_7a]] # CATBOOST - BUGS
             # param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
 
@@ -817,6 +849,9 @@ for config in splitted_congifs:
 
             # param_pipe_list = [[param8b, pipe_smote_8b]] # CHECKED
 
+            # param_pipe_list = [[param_3_classifier_only, pipe3_classifier_only]]
+            # param_pipe_list = [[param_6_classifier_only, pipe6_classifier_only]]
+            param_pipe_list = [[param_8_classifier_only, pipe8_classifier_only]]
         # ********************************
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
@@ -873,7 +908,7 @@ for config in splitted_congifs:
         best_cv_iter_yts_list = [all_splits_yts[index] for index in best_cv_iter_all_splits_indices]
         best_cv_iter_yts_list_ndarray = np.concatenate(
             best_cv_iter_yts_list)  # print some more conclusions and details about the winning cv parmas and pipe and save them to csv
-        print_conclusions(X_train, pipe, search, best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray)
+        print_conclusions(X_train, pipe, search, best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray,folder)
 
 print(f"<<<<<<<<<<<<<<<<<<<<< GSCVrunner.py finished successfuly<<<<<<<<<<<<<<<<<<<<<")
 if args['stdout_to_file']:
