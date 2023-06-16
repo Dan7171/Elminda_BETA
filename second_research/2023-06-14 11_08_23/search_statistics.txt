@@ -1,0 +1,10 @@
+In parameter choice num 0 / 4999 avg score was: 0.5942627401837928. This is the best score so far
+
+In parameter choice num 1 / 4999 avg score was: 0.6077443609022556. This is the best score so far
+
+In parameter choice num 2 / 4999 avg score was: 0.6111779448621555. This is the best score so far
+
+In parameter choice num 3 / 4999 avg score was: 0.6138095238095238. This is the best score so far
+
+In parameter choice num 16 / 4999 avg score was: 0.6148127235083757. This is the best score so far
+

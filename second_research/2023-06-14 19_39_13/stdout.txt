@@ -1,0 +1,338 @@
+configs types debug
+[<class 'pandas.core.frame.DataFrame'>, <class 'pandas.core.frame.DataFrame'>, <class 'pandas.core.frame.DataFrame'>, <class 'pandas.core.frame.DataFrame'>]
+**************************************************
+Distribution of categorical variables in data:**************************************************
+Gender:
+X['gender'].value_counts(): 
+0    78
+1    54
+Name: gender, dtype: int64
+X_train['gender'].value_counts():
+0    67
+1    45
+Name: gender, dtype: int64
+X_test['gender'].value_counts():
+0    11
+1     9
+Name: gender, dtype: int64
+
+**************************************************
+Treatment_group (coil):
+X['Treatment_group'].value_counts():
+ 0    75
+1    57
+Name: Treatment_group, dtype: int64
+X_train['Treatment_group'].value_counts():
+0    65
+1    47
+Name: Treatment_group, dtype: int64
+X_test['Treatment_group'].value_counts():
+1    10
+0    10
+Name: Treatment_group, dtype: int64
+Response to treatment:
+
+**************************************************
+['6-weeks_HDRS21_class'].value_counts():
+1    80
+0    52
+Name: 6-weeks_HDRS21_class, dtype: int64
+y_train['6-weeks_HDRS21_class'].value_counts():
+1    68
+0    44
+Name: 6-weeks_HDRS21_class, dtype: int64
+y_test['6-weeks_HDRS21_class'].value_counts():
+1    12
+0     8
+Name: 6-weeks_HDRS21_class, dtype: int64
+
+**************************************************
+Principal components:
+X_train first 100 pcs explained variance ratios=
+[5.51932616e-01 1.74737106e-01 6.19023581e-02 4.11006046e-02
+ 2.19042529e-02 1.63933867e-02 1.46917478e-02 1.32699532e-02
+ 1.18498228e-02 9.08878246e-03 8.11995573e-03 6.11722413e-03
+ 4.63255844e-03 4.02454925e-03 3.82904414e-03 3.67591507e-03
+ 3.43157214e-03 3.10712603e-03 2.59490182e-03 2.44838939e-03
+ 2.33633894e-03 2.19023721e-03 1.98944887e-03 1.76341220e-03
+ 1.73030534e-03 1.63442556e-03 1.58183470e-03 1.43822710e-03
+ 1.36017173e-03 1.33724384e-03 1.21333805e-03 1.19059629e-03
+ 1.05009433e-03 9.63563592e-04 9.20447727e-04 8.82649736e-04
+ 8.30428902e-04 8.21488087e-04 7.54403163e-04 7.26151434e-04
+ 6.80829054e-04 6.57959571e-04 6.49301310e-04 6.13060616e-04
+ 5.46853406e-04 5.26932097e-04 4.96142814e-04 4.91826252e-04
+ 4.60371607e-04 4.40142580e-04 4.32499445e-04 4.13346352e-04
+ 3.83816876e-04 3.69867698e-04 3.45272156e-04 3.33838276e-04
+ 3.19078559e-04 3.15887867e-04 3.06909265e-04 2.76361103e-04
+ 2.66894156e-04 2.60630944e-04 2.44770561e-04 2.39211192e-04
+ 2.17409857e-04 2.15857943e-04 2.03154892e-04 1.98086114e-04
+ 1.82134814e-04 1.75613693e-04 1.65434464e-04 1.60918396e-04
+ 1.54537037e-04 1.53138317e-04 1.52281130e-04 1.38877919e-04
+ 1.38692346e-04 1.27553024e-04 1.18873471e-04 1.10714730e-04
+ 1.07425095e-04 1.03718303e-04 9.89750225e-05 9.58663618e-05
+ 9.22602824e-05 8.40939799e-05 8.23763559e-05 7.82311236e-05
+ 7.49359585e-05 7.46422892e-05 7.22616487e-05 6.62792318e-05
+ 6.14558655e-05 6.01821864e-05 5.41268031e-05 4.98330752e-05
+ 4.94137927e-05 4.71365935e-05 4.52918720e-05 4.16358414e-05]
+X_train sum of ratios by the ith ratio for 100 ratios:
+[0.5519326158022857, 0.726669722033038, 0.7885720800988487, 0.8296726846640599, 0.8515769376026233, 0.8679703242551896, 0.8826620720890269, 0.8959320252780425, 0.9077818480544174, 0.9168706305158716, 0.9249905862473963, 0.9311078103754581, 0.9357403688200032, 0.9397649180659635, 0.9435939622017506, 0.947269877271284, 0.9507014494127024, 0.9538085754457091, 0.9564034772678559, 0.9588518666607572, 0.9611882056015926, 0.9633784428121397, 0.9653678916775559, 0.9671313038808788, 0.968861609218156, 0.9704960347774546, 0.9720778694764066, 0.9735160965768055, 0.9748762683093013, 0.9762135121503983, 0.9774268502014828, 0.9786174464911789, 0.979667540820323, 0.9806311044123894, 0.9815515521393753, 0.9824342018758345, 0.9832646307774625, 0.9840861188642306, 0.9848405220273128, 0.9855666734613877, 0.9862475025156612, 0.9869054620866544, 0.9875547633966755, 0.9881678240129678, 0.9887146774189564, 0.9892416095155773, 0.989737752329352, 0.9902295785814599, 0.9906899501886837, 0.9911300927682979, 0.9915625922134796, 0.9919759385650964, 0.9923597554410727, 0.9927296231390833, 0.9930748952954208, 0.9934087335709685, 0.9937278121304565, 0.9940436999974298, 0.9943506092628778, 0.9946269703662187, 0.9948938645220963, 0.9951544954659716, 0.9953992660269911, 0.9956384772189638, 0.9958558870757266, 0.9960717450191713, 0.9962748999112199, 0.9964729860255611, 0.9966551208393613, 0.996830734532213, 0.9969961689958577, 0.9971570873917369, 0.9973116244288952, 0.9974647627457044, 0.9976170438759516, 0.9977559217949314, 0.9978946141412937, 0.9980221671655088, 0.9981410406364665, 0.9982517553667123, 0.9983591804616111, 0.998462898764888, 0.9985618737873755, 0.9986577401491562, 0.9987500004315755, 0.9988340944114711, 0.99891647076737, 0.9989947018909943, 0.9990696378494734, 0.9991442801386581, 0.9992165417873506, 0.9992828210191205, 0.9993442768846433, 0.9994044590710759, 0.9994585858741385, 0.9995084189493064, 0.9995578327420019, 0.9996049693355069, 0.9996502612075361, 0.9996918970489399]
+In X_train, 48 principal components explain over 99% of variance
+In X_train, 9 principal components explain over 90% of variance
+
+~~~~~~~~~~ RANDOMIZED SEARCH CV ~~~~~~~~~~
+Fitting 5 folds for each of 10 candidates, totalling 50 fits
+Parameter choice num 0 / 9 - starting...
+0 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [0 1 1 0 1 1 1 1 1 1 0 1 1 1 1 1 0 0 1 0 0 1 1]
+scoring metric: f_beta, score: 0.6410256410256411 
+[CV 1/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(64, 19, 37), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.641 total time=   5.4s
+1 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 0 1 1 1 1 1 1 1 0 1 1 1 1 0 1 1 0 1 1 0 1 1]
+scoring metric: f_beta, score: 0.6976744186046512 
+[CV 2/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(64, 19, 37), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.698 total time=   5.5s
+2 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [0 1 1 1 1 1 1 1 0 1 0 1 0 1 1 1 1 1 1 0 1 1]
+scoring metric: f_beta, score: 0.5555555555555556 
+[CV 3/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(64, 19, 37), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.556 total time=   3.3s
+3 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [0 1 0 0 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 0 1 1]
+scoring metric: f_beta, score: 0.5555555555555556 
+[CV 4/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(64, 19, 37), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.556 total time=   2.0s
+4 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 0 0 1 0 0 1 0 1 1 1 0 1 1 1 0 1 1 0 0 0]
+scoring metric: f_beta, score: 0.48387096774193544 
+New improvement!
+New best score is 0.5867364276966678
+In parameter choice num 0 / 9 avg score was: 0.5867364276966678.
+updating 2023-06-14 19_39_13\search_statistics.txt...
+statistics file updated successfully with new improvement in score message!
+Best parameter choice score by now is 0.5867364276966678
+In parameter choice num 0 / 9 avg score was: 0.5867364276966678.
+[CV 5/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(64, 19, 37), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.484 total time=   2.2s
+Parameter choice num 1 / 9 - starting...
+5 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 0 0 1 0 0 0 0 0 1 0 0 1 0 0 1 1 1 0 0 0 1 0]
+scoring metric: f_beta, score: 0.4347826086956521 
+[CV 1/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(67, 10, 16), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.435 total time=   4.1s
+6 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [0 0 0 0 0 0 1 0 1 1 0 1 0 1 0 0 0 1 0 0 0 0 0]
+scoring metric: f_beta, score: 0.2631578947368421 
+[CV 2/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(67, 10, 16), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.263 total time=   1.9s
+7 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 0 0 1 1 1 0 1 0 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.5555555555555556 
+[CV 3/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(67, 10, 16), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.556 total time=   1.7s
+8 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [0 0 0 0 0 1 0 1 1 1 0 0 0 1 1 1 1 0 0 1 0 1]
+scoring metric: f_beta, score: 0.37735849056603776 
+[CV 4/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(67, 10, 16), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.377 total time=   1.3s
+9 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 0 0 1 0 1 0 1 0 1 0 0 0 0 0 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.5645161290322581 
+Best parameter choice score by now is 0.5867364276966678
+In parameter choice num 1 / 9 avg score was: 0.43907413571726905.
+[CV 5/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(67, 10, 16), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.565 total time=   1.3s
+Parameter choice num 2 / 9 - starting...
+10 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 0 0 0 0 0 1 0 0 1 1 1 1 1 0 0 1 0 1 1 1 0 1]
+scoring metric: f_beta, score: 0.5645161290322581 
+[CV 1/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(16, 16, 67), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.565 total time=   0.9s
+11 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 0 1 1 1 1 1 0 0 1 1 1 1 0 1 1 1 1 1 1 1 1 0]
+scoring metric: f_beta, score: 0.6395348837209304 
+[CV 2/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(16, 16, 67), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.640 total time=   1.0s
+12 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 0 0 0 1 0 1 1 1 1 1 1 1 1 1 0 1 1 1 1]
+scoring metric: f_beta, score: 0.5555555555555556 
+[CV 3/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(16, 16, 67), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.556 total time=   0.7s
+13 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [0 1 1 0 1 1 0 0 0 0 0 1 0 1 0 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.49180327868852464 
+[CV 4/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(16, 16, 67), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.492 total time=   1.2s
+14 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [0 1 1 1 1 1 1 0 1 1 1 0 1 1 1 1 1 1 0 0 0 1]
+scoring metric: f_beta, score: 0.7051282051282052 
+New improvement!
+New best score is 0.5913076104250947
+In parameter choice num 2 / 9 avg score was: 0.5913076104250947.
+updating 2023-06-14 19_39_13\search_statistics.txt...
+statistics file updated successfully with new improvement in score message!
+Best parameter choice score by now is 0.5913076104250947
+In parameter choice num 2 / 9 avg score was: 0.5913076104250947.
+[CV 5/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(16, 16, 67), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.705 total time=   0.9s
+Parameter choice num 3 / 9 - starting...
+15 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [0 1 0 1 0 0 1 0 1 1 1 0 0 1 0 1 0 1 1 1 0 1 1]
+scoring metric: f_beta, score: 0.6818181818181819 
+[CV 1/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(49, 37, 37), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.682 total time=   0.9s
+16 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 0 1 1 1 0 1 0 1 1 1 1 1 0 0 1 1 0 1 1 1 1 1]
+scoring metric: f_beta, score: 0.5487804878048781 
+[CV 2/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(49, 37, 37), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.549 total time=   1.5s
+17 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 0 1 1 0 0 1 1 1 1 1 1 1 0 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.5555555555555556 
+[CV 3/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(49, 37, 37), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.556 total time=   0.7s
+18 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [0 0 1 0 1 1 0 0 1 1 1 1 0 1 1 0 0 1 0 1 0 1]
+scoring metric: f_beta, score: 0.5737704918032788 
+[CV 4/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(49, 37, 37), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.574 total time=   1.1s
+19 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 0 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6914893617021276 
+New improvement!
+New best score is 0.6102828157368043
+In parameter choice num 3 / 9 avg score was: 0.6102828157368043.
+updating 2023-06-14 19_39_13\search_statistics.txt...
+statistics file updated successfully with new improvement in score message!
+Best parameter choice score by now is 0.6102828157368043
+In parameter choice num 3 / 9 avg score was: 0.6102828157368043.
+[CV 5/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(49, 37, 37), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.691 total time=   1.6s
+Parameter choice num 4 / 9 - starting...
+20 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [0 1 0 1 1 0 1 1 1 1 1 0 1 0 0 0 1 1 1 1 1 1 0]
+scoring metric: f_beta, score: 0.6081081081081081 
+[CV 1/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(49, 13, 25), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.608 total time=   1.1s
+21 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [0 0 1 0 0 0 1 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 0]
+scoring metric: f_beta, score: 0.6756756756756757 
+[CV 2/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(49, 13, 25), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.676 total time=   0.6s
+22 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 0 1 1 1 1 0 1 1 0 1 0 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6470588235294118 
+[CV 3/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(49, 13, 25), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.647 total time=   0.7s
+23 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6179775280898877 
+[CV 4/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(49, 13, 25), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.618 total time=   1.1s
+24 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [0 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6914893617021276 
+New improvement!
+New best score is 0.6480618994210421
+In parameter choice num 4 / 9 avg score was: 0.6480618994210421.
+updating 2023-06-14 19_39_13\search_statistics.txt...
+statistics file updated successfully with new improvement in score message!
+Best parameter choice score by now is 0.6480618994210421
+In parameter choice num 4 / 9 avg score was: 0.6480618994210421.
+[CV 5/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(49, 13, 25), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.691 total time=   1.3s
+Parameter choice num 5 / 9 - starting...
+25 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 0 0 0 1 1 1 0 1 1 1 1 1 1 1 0 1 1]
+scoring metric: f_beta, score: 0.6976744186046512 
+[CV 1/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(46, 67, 40), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.698 total time=   1.6s
+26 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [0 1 0 0 1 0 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 0 1]
+scoring metric: f_beta, score: 0.6081081081081081 
+[CV 2/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(46, 67, 40), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.608 total time=   2.1s
+27 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 0 0 1 1 1 1 1 1 0 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.5294117647058824 
+[CV 3/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(46, 67, 40), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.529 total time=   1.0s
+28 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 0 1 0 0 1 1 0 1 1 0 1 1 1 0 1 1 1 0 1 0 1]
+scoring metric: f_beta, score: 0.5797101449275363 
+[CV 4/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(46, 67, 40), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.580 total time=   1.3s
+29 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 0 1 1 1 1 1 1 0 1 1 1 0 1 1 1 0]
+scoring metric: f_beta, score: 0.6395348837209304 
+Best parameter choice score by now is 0.6480618994210421
+In parameter choice num 5 / 9 avg score was: 0.6108878640134217.
+[CV 5/5] END classifier=MLPClassifier(random_state=42), classifier__activation=relu, classifier__alpha=0.005, classifier__hidden_layer_sizes=(46, 67, 40), classifier__learning_rate=invscaling, classifier__max_iter=800, classifier__solver=sgd, classifier__verbose=False, pca__n_components=10;, score=0.640 total time=   1.8s
+Parameter choice num 6 / 9 - starting...
+30 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 0 0 0 0 0 0 1 0 1 0 1 1 1 0 0 0 1]
+scoring metric: f_beta, score: 0.48387096774193544 

@@ -1,0 +1,16 @@
+In parameter choice num 0 / 999 avg score was: 0.5724721437103162. This is the best score so far
+
+In parameter choice num 1 / 999 avg score was: 0.661013723137109. This is the best score so far
+
+In parameter choice num 4 / 999 avg score was: 0.6704501776214464. This is the best score so far
+
+In parameter choice num 81 / 999 avg score was: 0.6781270903010034. This is the best score so far
+
+In parameter choice num 106 / 999 avg score was: 0.679081271915055. This is the best score so far
+
+In parameter choice num 191 / 999 avg score was: 0.6809329331322188. This is the best score so far
+
+In parameter choice num 196 / 999 avg score was: 0.6878767746856622. This is the best score so far
+
+In parameter choice num 382 / 999 avg score was: 0.6920540698789586. This is the best score so far
+

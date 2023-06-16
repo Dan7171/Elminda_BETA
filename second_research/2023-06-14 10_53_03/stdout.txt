@@ -1,0 +1,1613 @@
+configs types debug
+[<class 'pandas.core.frame.DataFrame'>, <class 'pandas.core.frame.DataFrame'>, <class 'pandas.core.frame.DataFrame'>, <class 'pandas.core.frame.DataFrame'>]
+**************************************************
+Distribution of categorical variables in data:**************************************************
+Gender:
+X['gender'].value_counts(): 
+0    78
+1    54
+Name: gender, dtype: int64
+X_train['gender'].value_counts():
+0    67
+1    45
+Name: gender, dtype: int64
+X_test['gender'].value_counts():
+0    11
+1     9
+Name: gender, dtype: int64
+
+**************************************************
+Treatment_group (coil):
+X['Treatment_group'].value_counts():
+ 0    75
+1    57
+Name: Treatment_group, dtype: int64
+X_train['Treatment_group'].value_counts():
+0    65
+1    47
+Name: Treatment_group, dtype: int64
+X_test['Treatment_group'].value_counts():
+1    10
+0    10
+Name: Treatment_group, dtype: int64
+Response to treatment:
+
+**************************************************
+['6-weeks_HDRS21_class'].value_counts():
+1    80
+0    52
+Name: 6-weeks_HDRS21_class, dtype: int64
+y_train['6-weeks_HDRS21_class'].value_counts():
+1    68
+0    44
+Name: 6-weeks_HDRS21_class, dtype: int64
+y_test['6-weeks_HDRS21_class'].value_counts():
+1    12
+0     8
+Name: 6-weeks_HDRS21_class, dtype: int64
+
+~~~~~~~~~~ RANDOMIZED SEARCH CV ~~~~~~~~~~
+Fitting 5 folds for each of 40 candidates, totalling 200 fits
+Parameter choice num 0 / 4999 - starting...
+0 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.714 total time=   0.1s
+1 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6372549019607843 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.637 total time=   0.0s
+2 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6179775280898877 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.618 total time=   0.1s
+3 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6185567010309279 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.619 total time=   0.0s
+4 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6914893617021276 
+New improvement!
+New best score is 0.6559128414138884
+In parameter choice num 0 / 4999 avg score was: 0.6559128414138884. This is the best score so far
+updating 2023-06-14 10_53_03\search_statistics.txt...
+statistics file updated successfully with new improvement in score message!
+Best parameter choice score by now is 0.6559128414138884
+In parameter choice num 0 / 4999 avg score was: 0.6559128414138884. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.691 total time=   0.0s
+Parameter choice num 1 / 4999 - starting...
+5 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=35, classifier__weights=distance;, score=0.686 total time=   0.0s
+6 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6372549019607843 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=35, classifier__weights=distance;, score=0.637 total time=   0.0s
+7 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6179775280898877 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=35, classifier__weights=distance;, score=0.618 total time=   0.1s
+8 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=35, classifier__weights=distance;, score=0.644 total time=   0.0s
+9 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6914893617021276 
+Best parameter choice score by now is 0.6559128414138884
+In parameter choice num 1 / 4999 avg score was: 0.6553121315984729. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=35, classifier__weights=distance;, score=0.691 total time=   0.0s
+Parameter choice num 2 / 4999 - starting...
+10 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.714 total time=   0.1s
+11 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 1]
+scoring metric: f_beta, score: 0.6122448979591836 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.612 total time=   0.1s
+12 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6179775280898877 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.618 total time=   0.0s
+13 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.644 total time=   0.0s
+14 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6914893617021276 
+Best parameter choice score by now is 0.6559128414138884
+In parameter choice num 2 / 4999 avg score was: 0.6559123716945113. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.691 total time=   0.0s
+Parameter choice num 3 / 4999 - starting...
+15 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=38, classifier__weights=distance;, score=0.686 total time=   0.0s
+16 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=38, classifier__weights=distance;, score=0.660 total time=   0.0s
+17 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.5913978494623656 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=38, classifier__weights=distance;, score=0.591 total time=   0.1s
+18 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=38, classifier__weights=distance;, score=0.644 total time=   0.0s
+19 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6632653061224489 
+Best parameter choice score by now is 0.6559128414138884
+In parameter choice num 3 / 4999 avg score was: 0.6489758760629891. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=38, classifier__weights=distance;, score=0.663 total time=   0.1s
+Parameter choice num 4 / 4999 - starting...
+20 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.686 total time=   0.1s
+21 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1]
+scoring metric: f_beta, score: 0.6372549019607843 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.637 total time=   0.0s
+22 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.5913978494623656 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.591 total time=   0.1s
+23 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.644 total time=   0.1s
+24 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+Best parameter choice score by now is 0.6559128414138884
+In parameter choice num 4 / 4999 avg score was: 0.6545554663896859. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.714 total time=   0.0s
+Parameter choice num 5 / 4999 - starting...
+25 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=41, classifier__weights=distance;, score=0.686 total time=   0.0s
+26 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=41, classifier__weights=distance;, score=0.660 total time=   0.0s
+27 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.5913978494623656 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=41, classifier__weights=distance;, score=0.591 total time=   0.0s
+28 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=41, classifier__weights=distance;, score=0.644 total time=   0.0s
+29 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6632653061224489 
+Best parameter choice score by now is 0.6559128414138884
+In parameter choice num 5 / 4999 avg score was: 0.6489758760629891. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=41, classifier__weights=distance;, score=0.663 total time=   0.1s
+Parameter choice num 6 / 4999 - starting...
+30 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.686 total time=   0.0s
+31 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1]
+scoring metric: f_beta, score: 0.6372549019607843 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.637 total time=   0.1s
+32 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6185567010309279 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.619 total time=   0.0s
+33 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.644 total time=   0.0s
+34 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+New improvement!
+New best score is 0.6599872367033983
+In parameter choice num 6 / 4999 avg score was: 0.6599872367033983. This is the best score so far
+updating 2023-06-14 10_53_03\search_statistics.txt...
+statistics file updated successfully with new improvement in score message!
+Best parameter choice score by now is 0.6599872367033983
+In parameter choice num 6 / 4999 avg score was: 0.6599872367033983. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.714 total time=   0.1s
+Parameter choice num 7 / 4999 - starting...
+35 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=44, classifier__weights=distance;, score=0.686 total time=   0.0s
+36 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=44, classifier__weights=distance;, score=0.660 total time=   0.1s
+37 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6185567010309279 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=44, classifier__weights=distance;, score=0.619 total time=   0.0s
+38 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=44, classifier__weights=distance;, score=0.644 total time=   0.0s
+39 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+Best parameter choice score by now is 0.6599872367033983
+In parameter choice num 7 / 4999 avg score was: 0.6590094871129961. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=44, classifier__weights=distance;, score=0.686 total time=   0.0s
+Parameter choice num 8 / 4999 - starting...
+40 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.660 total time=   0.1s
+41 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.660 total time=   0.0s
+42 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.644 total time=   0.0s
+43 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.644 total time=   0.1s
+44 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+New improvement!
+New best score is 0.6644338288276268
+In parameter choice num 8 / 4999 avg score was: 0.6644338288276268. This is the best score so far
+updating 2023-06-14 10_53_03\search_statistics.txt...
+statistics file updated successfully with new improvement in score message!
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 8 / 4999 avg score was: 0.6644338288276268. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.714 total time=   0.1s
+Parameter choice num 9 / 4999 - starting...
+45 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=47, classifier__weights=distance;, score=0.660 total time=   0.1s
+46 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=47, classifier__weights=distance;, score=0.660 total time=   0.0s
+47 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6185567010309279 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=47, classifier__weights=distance;, score=0.619 total time=   0.1s
+48 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=47, classifier__weights=distance;, score=0.644 total time=   0.1s
+49 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 9 / 4999 avg score was: 0.653830056850325. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=auto, classifier__n_neighbors=47, classifier__weights=distance;, score=0.686 total time=   0.1s
+Parameter choice num 10 / 4999 - starting...
+50 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.714 total time=   0.0s
+51 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6372549019607843 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.637 total time=   0.1s
+52 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6179775280898877 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.618 total time=   0.0s
+53 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6185567010309279 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.619 total time=   0.1s
+54 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6914893617021276 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 10 / 4999 avg score was: 0.6559128414138884. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.691 total time=   0.1s
+Parameter choice num 11 / 4999 - starting...
+55 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=35, classifier__weights=distance;, score=0.686 total time=   0.1s
+56 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6372549019607843 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=35, classifier__weights=distance;, score=0.637 total time=   0.1s
+57 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6179775280898877 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=35, classifier__weights=distance;, score=0.618 total time=   0.1s
+58 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=35, classifier__weights=distance;, score=0.644 total time=   0.1s
+59 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6914893617021276 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 11 / 4999 avg score was: 0.6553121315984729. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=35, classifier__weights=distance;, score=0.691 total time=   0.1s
+Parameter choice num 12 / 4999 - starting...
+60 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.714 total time=   0.1s
+61 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 1]
+scoring metric: f_beta, score: 0.6122448979591836 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.612 total time=   0.1s
+62 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6179775280898877 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.618 total time=   0.1s
+63 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.644 total time=   0.1s
+64 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6914893617021276 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 12 / 4999 avg score was: 0.6559123716945113. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.691 total time=   0.0s
+Parameter choice num 13 / 4999 - starting...
+65 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=38, classifier__weights=distance;, score=0.686 total time=   0.1s
+66 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=38, classifier__weights=distance;, score=0.660 total time=   0.1s
+67 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.5913978494623656 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=38, classifier__weights=distance;, score=0.591 total time=   0.1s
+68 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=38, classifier__weights=distance;, score=0.644 total time=   0.1s
+69 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6632653061224489 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 13 / 4999 avg score was: 0.6489758760629891. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=38, classifier__weights=distance;, score=0.663 total time=   0.0s
+Parameter choice num 14 / 4999 - starting...
+70 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.686 total time=   0.1s
+71 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1]
+scoring metric: f_beta, score: 0.6372549019607843 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.637 total time=   0.1s
+72 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.5913978494623656 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.591 total time=   0.0s
+73 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.644 total time=   0.0s
+74 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 14 / 4999 avg score was: 0.6545554663896859. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.714 total time=   0.0s
+Parameter choice num 15 / 4999 - starting...
+75 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=41, classifier__weights=distance;, score=0.686 total time=   0.1s
+76 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=41, classifier__weights=distance;, score=0.660 total time=   0.0s
+77 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.5913978494623656 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=41, classifier__weights=distance;, score=0.591 total time=   0.1s
+78 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=41, classifier__weights=distance;, score=0.644 total time=   0.0s
+79 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6632653061224489 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 15 / 4999 avg score was: 0.6489758760629891. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=41, classifier__weights=distance;, score=0.663 total time=   0.0s
+Parameter choice num 16 / 4999 - starting...
+80 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.686 total time=   0.1s
+81 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1]
+scoring metric: f_beta, score: 0.6372549019607843 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.637 total time=   0.1s
+82 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6185567010309279 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.619 total time=   0.1s
+83 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.644 total time=   0.1s
+84 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 16 / 4999 avg score was: 0.6599872367033983. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.714 total time=   0.0s
+Parameter choice num 17 / 4999 - starting...
+85 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=44, classifier__weights=distance;, score=0.686 total time=   0.0s
+86 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=44, classifier__weights=distance;, score=0.660 total time=   0.1s
+87 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6185567010309279 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=44, classifier__weights=distance;, score=0.619 total time=   0.1s
+88 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=44, classifier__weights=distance;, score=0.644 total time=   0.1s
+89 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 17 / 4999 avg score was: 0.6590094871129961. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=44, classifier__weights=distance;, score=0.686 total time=   0.1s
+Parameter choice num 18 / 4999 - starting...
+90 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.660 total time=   0.1s
+91 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.660 total time=   0.1s
+92 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.644 total time=   0.1s
+93 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.644 total time=   0.1s
+94 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 18 / 4999 avg score was: 0.6644338288276268. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.714 total time=   0.1s
+Parameter choice num 19 / 4999 - starting...
+95 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=47, classifier__weights=distance;, score=0.660 total time=   0.1s
+96 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=47, classifier__weights=distance;, score=0.660 total time=   0.1s
+97 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6185567010309279 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=47, classifier__weights=distance;, score=0.619 total time=   0.1s
+98 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=47, classifier__weights=distance;, score=0.644 total time=   0.1s
+99 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 19 / 4999 avg score was: 0.653830056850325. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=ball_tree, classifier__n_neighbors=47, classifier__weights=distance;, score=0.686 total time=   0.1s
+Parameter choice num 20 / 4999 - starting...
+100 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.714 total time=   0.1s
+101 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6372549019607843 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.637 total time=   0.1s
+102 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6179775280898877 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.618 total time=   0.1s
+103 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6185567010309279 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.619 total time=   0.1s
+104 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6914893617021276 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 20 / 4999 avg score was: 0.6559128414138884. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.691 total time=   0.1s
+Parameter choice num 21 / 4999 - starting...
+105 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=35, classifier__weights=distance;, score=0.686 total time=   0.1s
+106 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6372549019607843 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=35, classifier__weights=distance;, score=0.637 total time=   0.1s
+107 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6179775280898877 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=35, classifier__weights=distance;, score=0.618 total time=   0.1s
+108 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=35, classifier__weights=distance;, score=0.644 total time=   0.1s
+109 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6914893617021276 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 21 / 4999 avg score was: 0.6553121315984729. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=35, classifier__weights=distance;, score=0.691 total time=   0.1s
+Parameter choice num 22 / 4999 - starting...
+110 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.714 total time=   0.1s
+111 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 1]
+scoring metric: f_beta, score: 0.6122448979591836 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.612 total time=   0.2s
+112 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6179775280898877 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.618 total time=   0.1s
+113 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.644 total time=   0.1s
+114 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6914893617021276 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 22 / 4999 avg score was: 0.6559123716945113. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.691 total time=   0.0s
+Parameter choice num 23 / 4999 - starting...
+115 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=38, classifier__weights=distance;, score=0.686 total time=   0.0s
+116 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=38, classifier__weights=distance;, score=0.660 total time=   0.0s
+117 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.5913978494623656 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=38, classifier__weights=distance;, score=0.591 total time=   0.0s
+118 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=38, classifier__weights=distance;, score=0.644 total time=   0.1s
+119 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6632653061224489 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 23 / 4999 avg score was: 0.6489758760629891. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=38, classifier__weights=distance;, score=0.663 total time=   0.0s
+Parameter choice num 24 / 4999 - starting...
+120 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.686 total time=   0.0s
+121 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1]
+scoring metric: f_beta, score: 0.6372549019607843 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.637 total time=   0.1s
+122 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.5913978494623656 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.591 total time=   0.0s
+123 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.644 total time=   0.0s
+124 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 24 / 4999 avg score was: 0.6545554663896859. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.714 total time=   0.0s
+Parameter choice num 25 / 4999 - starting...
+125 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=41, classifier__weights=distance;, score=0.686 total time=   0.1s
+126 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=41, classifier__weights=distance;, score=0.660 total time=   0.1s
+127 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.5913978494623656 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=41, classifier__weights=distance;, score=0.591 total time=   0.1s
+128 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=41, classifier__weights=distance;, score=0.644 total time=   0.2s
+129 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6632653061224489 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 25 / 4999 avg score was: 0.6489758760629891. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=41, classifier__weights=distance;, score=0.663 total time=   0.2s
+Parameter choice num 26 / 4999 - starting...
+130 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.686 total time=   0.3s
+131 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1]
+scoring metric: f_beta, score: 0.6372549019607843 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.637 total time=   0.2s
+132 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6185567010309279 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.619 total time=   0.3s
+133 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.644 total time=   0.2s
+134 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 26 / 4999 avg score was: 0.6599872367033983. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.714 total time=   0.3s
+Parameter choice num 27 / 4999 - starting...
+135 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=44, classifier__weights=distance;, score=0.686 total time=   0.2s
+136 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=44, classifier__weights=distance;, score=0.660 total time=   0.2s
+137 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6185567010309279 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=44, classifier__weights=distance;, score=0.619 total time=   0.2s
+138 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=44, classifier__weights=distance;, score=0.644 total time=   0.3s
+139 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 27 / 4999 avg score was: 0.6590094871129961. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=44, classifier__weights=distance;, score=0.686 total time=   0.3s
+Parameter choice num 28 / 4999 - starting...
+140 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.660 total time=   0.2s
+141 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.660 total time=   0.2s
+142 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.644 total time=   0.1s
+143 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.644 total time=   0.2s
+144 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 28 / 4999 avg score was: 0.6644338288276268. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.714 total time=   0.2s
+Parameter choice num 29 / 4999 - starting...
+145 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=47, classifier__weights=distance;, score=0.660 total time=   0.2s
+146 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=47, classifier__weights=distance;, score=0.660 total time=   0.3s
+147 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6185567010309279 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=47, classifier__weights=distance;, score=0.619 total time=   0.4s
+148 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=47, classifier__weights=distance;, score=0.644 total time=   0.2s
+149 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 29 / 4999 avg score was: 0.653830056850325. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=kd_tree, classifier__n_neighbors=47, classifier__weights=distance;, score=0.686 total time=   0.1s
+Parameter choice num 30 / 4999 - starting...
+150 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.714 total time=   0.2s
+151 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6372549019607843 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.637 total time=   0.1s
+152 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6179775280898877 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.618 total time=   0.1s
+153 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6185567010309279 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.619 total time=   0.1s
+154 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6914893617021276 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 30 / 4999 avg score was: 0.6559128414138884. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=35, classifier__weights=uniform;, score=0.691 total time=   0.2s
+Parameter choice num 31 / 4999 - starting...
+155 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=35, classifier__weights=distance;, score=0.686 total time=   0.1s
+156 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6372549019607843 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=35, classifier__weights=distance;, score=0.637 total time=   0.2s
+157 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6179775280898877 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=35, classifier__weights=distance;, score=0.618 total time=   0.1s
+158 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=35, classifier__weights=distance;, score=0.644 total time=   0.1s
+159 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6914893617021276 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 31 / 4999 avg score was: 0.6553121315984729. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=35, classifier__weights=distance;, score=0.691 total time=   0.2s
+Parameter choice num 32 / 4999 - starting...
+160 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.714 total time=   0.2s
+161 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 1]
+scoring metric: f_beta, score: 0.6122448979591836 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.612 total time=   0.0s
+162 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [0 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6179775280898877 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.618 total time=   0.1s
+163 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.644 total time=   0.0s
+164 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6914893617021276 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 32 / 4999 avg score was: 0.6559123716945113. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=38, classifier__weights=uniform;, score=0.691 total time=   0.0s
+Parameter choice num 33 / 4999 - starting...
+165 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=38, classifier__weights=distance;, score=0.686 total time=   0.0s
+166 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=38, classifier__weights=distance;, score=0.660 total time=   0.0s
+167 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.5913978494623656 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=38, classifier__weights=distance;, score=0.591 total time=   0.0s
+168 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=38, classifier__weights=distance;, score=0.644 total time=   0.0s
+169 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6632653061224489 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 33 / 4999 avg score was: 0.6489758760629891. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=38, classifier__weights=distance;, score=0.663 total time=   0.0s
+Parameter choice num 34 / 4999 - starting...
+170 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.686 total time=   0.0s
+171 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1]
+scoring metric: f_beta, score: 0.6372549019607843 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.637 total time=   0.0s
+172 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.5913978494623656 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.591 total time=   0.0s
+173 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.644 total time=   0.0s
+174 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 34 / 4999 avg score was: 0.6545554663896859. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=41, classifier__weights=uniform;, score=0.714 total time=   0.0s
+Parameter choice num 35 / 4999 - starting...
+175 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=41, classifier__weights=distance;, score=0.686 total time=   0.0s
+176 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=41, classifier__weights=distance;, score=0.660 total time=   0.0s
+177 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.5913978494623656 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=41, classifier__weights=distance;, score=0.591 total time=   0.0s
+178 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=41, classifier__weights=distance;, score=0.644 total time=   0.0s
+179 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6632653061224489 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 35 / 4999 avg score was: 0.6489758760629891. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=41, classifier__weights=distance;, score=0.663 total time=   0.0s
+Parameter choice num 36 / 4999 - starting...
+180 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.686 total time=   0.0s
+181 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1]
+scoring metric: f_beta, score: 0.6372549019607843 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.637 total time=   0.0s
+182 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6185567010309279 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.619 total time=   0.0s
+183 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.644 total time=   0.2s
+184 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 36 / 4999 avg score was: 0.6599872367033983. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=44, classifier__weights=uniform;, score=0.714 total time=   0.0s
+Parameter choice num 37 / 4999 - starting...
+185 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=44, classifier__weights=distance;, score=0.686 total time=   0.0s
+186 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=44, classifier__weights=distance;, score=0.660 total time=   0.0s
+187 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6185567010309279 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=44, classifier__weights=distance;, score=0.619 total time=   0.0s
+188 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=44, classifier__weights=distance;, score=0.644 total time=   0.1s
+189 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 37 / 4999 avg score was: 0.6590094871129961. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=44, classifier__weights=distance;, score=0.686 total time=   0.1s
+Parameter choice num 38 / 4999 - starting...
+190 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.660 total time=   0.2s
+191 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.660 total time=   0.2s
+192 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.644 total time=   0.2s
+193 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.644 total time=   0.1s
+194 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.7142857142857142 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 38 / 4999 avg score was: 0.6644338288276268. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=47, classifier__weights=uniform;, score=0.714 total time=   0.2s
+Parameter choice num 39 / 4999 - starting...
+195 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 1/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=47, classifier__weights=distance;, score=0.660 total time=   0.1s
+196 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6603773584905661 
+[CV 2/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=47, classifier__weights=distance;, score=0.660 total time=   0.1s
+197 / 24999 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1]
+scoring metric: f_beta, score: 0.6185567010309279 
+[CV 3/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=47, classifier__weights=distance;, score=0.619 total time=   0.5s
+198 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6435643564356436 
+[CV 4/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=47, classifier__weights=distance;, score=0.644 total time=   0.2s
+199 / 24999 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: f_beta, score: 0.6862745098039215 
+Best parameter choice score by now is 0.6644338288276268
+In parameter choice num 39 / 4999 avg score was: 0.653830056850325. This is the best score so far
+[CV 5/5] END classifier=KNeighborsClassifier(), classifier__algorithm=brute, classifier__n_neighbors=47, classifier__weights=distance;, score=0.686 total time=   0.1s
+-----------------------
+ New CV report 
+-----------------------
+* Classifier: 
+ KNeighborsClassifier(n_neighbors=47)
+* User arguments: 
+ {'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'f_beta', 'both': True, 'cv': 5, 'n_iter': 5000, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True, 'lite_mode': True, 'test_size': 0.15, 'stdout_to_file': True, 'beta': 0.3}
+* Pipeline details: 
+ Pipeline(steps=[('scaler', StandardScaler()),
+                ('classifier', KNeighborsClassifier(n_neighbors=47))])
+* Best Hyperparametes picked in cross validation: (cv's best score): 
+ {'classifier__weights': 'uniform', 'classifier__n_neighbors': 47, 'classifier__algorithm': 'auto', 'classifier': KNeighborsClassifier(n_neighbors=47)}
+* Best features by (selectKbest): 
+ 
+* Scorer_used: f_beta
+* CV Score (cv's best score for best hyperparametes): 0.664 +/- 0.026 (see score func in hyperparams)  
+
+* Confusion matrix: 
+ [[ 1 43]
+ [ 0 68]]
+[[TN FP
+[FN TP]]
+* Response rate:  0.6071428571428571
+* CV Precision:  0.6126126126126126
+* CV Recall:  1.0
+* CV Accuracy:  0.6160714285714286
+* CV F1:  0.7597765363128491
+<<<<<<<<<<<<<<<<<<<<< GSCVrunner.py finished successfuly<<<<<<<<<<<<<<<<<<<<<

@@ -1,0 +1,2 @@
+In parameter choice num 0 / 999 avg score was: 0.5586013036366807.
+

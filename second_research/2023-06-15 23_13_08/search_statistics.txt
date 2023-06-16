@@ -1,0 +1,10 @@
+In parameter choice num 0 / 2999 avg score was: 0.5928514284939456.
+
+In parameter choice num 1 / 2999 avg score was: 0.6248444115563536.
+
+In parameter choice num 7 / 2999 avg score was: 0.6261214702222213.
+
+In parameter choice num 8 / 2999 avg score was: 0.7256071169114648.
+
+In parameter choice num 962 / 2999 avg score was: 0.7457547264773259.
+
