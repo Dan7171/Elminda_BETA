@@ -69,4 +69,4 @@ if args['exhaustive_grid_search']:
     args['n_iter'] = None
 
 if args['scoring_method'] == 'f_beta':
-    args['beta'] = 0.3
+    args['beta'] = 0.35

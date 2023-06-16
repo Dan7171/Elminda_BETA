@@ -842,7 +842,7 @@ for config in splitted_congifs:
     # # fix imbalance in train set
     # if args['balance_y_values']:
     #     X_train, y_train = balance_y_values(X_train, y_train, method='SMOTE')
-    # *******************************
+    # ********************************
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
             # param_pipe_list = [[param2a,pipe_smote_2a]]
