@@ -499,7 +499,6 @@ if args['classification']:
         #                                           n_estimators=5, random_state=42, subsample=0.95)}
 
         "pca__n_components": [30],
-        'classifier__bootstrap': [True, False],
         'classifier__loss' : ["log_loss", "deviance", "exponential"],
         'classifier__n_estimators': [2000], # number of trees
         'classifier__learning_rate': [0.001],
