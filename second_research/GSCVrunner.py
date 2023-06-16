@@ -498,11 +498,20 @@ if args['classification']:
         #                                           min_samples_leaf=29, min_samples_split=64,
         #                                           n_estimators=5, random_state=42, subsample=0.95)}
 
-        "pca__n_components": [30],
-        'classifier__loss' : ["log_loss", "deviance", "exponential"],
-        'classifier__n_estimators': [2000], # number of trees
-        'classifier__learning_rate': [0.001],
-        "classifier": [clf6]
+        # "pca__n_components": [30],
+        # 'classifier__loss' : ["log_loss", "deviance", "exponential"],
+        # 'classifier__n_estimators': [2000], # number of trees
+        # 'classifier__learning_rate': [0.001],
+        # "classifier": [clf6]
+
+         'pca__n_components':[50],
+         'classifier__subsample': [0.95],
+         'classifier__n_estimators': [100,1000,10000],
+         'classifier__min_samples_split': [10, 20, 30, 50, 50,64, 74, 90,2],
+         'classifier__min_samples_leaf': [2,5,10,25,27,29,31,40],
+         'classifier__max_features': [None],
+         'classifier__learning_rate': [0.0001],
+         'classifier': [clf6]
     }
 
     param6b = {  # GRADIENT BOOSTING + kbest
