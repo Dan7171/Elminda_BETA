@@ -1,6 +1,6 @@
 import math
 from functools import reduce
-from sklearn.metrics import roc_curve, roc_auc_score
+from sklearn.metrics import roc_curve
 
 from matplotlib import pyplot as plt
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
@@ -104,14 +104,16 @@ def generate_random_architectures(first_layer_size_options: tuple = (3, 5, 10, 2
     return list(architectures)
 
 def get_pcs_num_explains_p_ratio_of_var(p_ratio,ratios):
+    assert(0 < p_ratio < 1)
     ratio_sums = [0 for r in ratios]
     ratio_sums[0] = ratios[0]
-    pc_index_p_ratio_of_var_explained = -1 if not ratios[0] > p_ratio else 0
+    pc_index_p_ratio_of_var_explained = -1 if  ratios[0] < p_ratio else 0 # first pc which togeteher with previous pcs explains over p_ratio of var
     # print pcs var explaining ability
     for i in range(1, len(ratios)):
         ratio_sums[i] = ratio_sums[i - 1] + ratios[i]
         if ratio_sums[i] > p_ratio:
-            pc_index_p_ratio_of_var_explained  =  i
+            pc_index_p_ratio_of_var_explained = i
+            break
     return pc_index_p_ratio_of_var_explained
 
 def print_conclusions(df=None, pipe=None, search=None, best_cv_iter_yts_list_ndarray=None, best_cv_iter_yps_list_ndarray=None,
@@ -133,7 +135,7 @@ def print_conclusions(df=None, pipe=None, search=None, best_cv_iter_yts_list_nda
         if 'kBest' in pipe.named_steps:
             selector = search.best_estimator_.named_steps['kBest']
             selected_features = df.columns[selector.get_support()].tolist()
-        print("* Best features by (selectKbest): \n", selected_features)
+            print("* Best features by (selectKbest): \n", selected_features)
 
         # score
         print("* Scorer_used:", args['scoring_method'])  # scoring method used for cv as scorer param
@@ -154,45 +156,16 @@ def print_conclusions(df=None, pipe=None, search=None, best_cv_iter_yts_list_nda
         cm = confusion_matrix(y_true, y_pred)
         cm_fig = metrics.ConfusionMatrixDisplay.from_predictions(y_true,y_pred)
 
-    # Create a new figure for the confusion matrix
-    plt.figure()
-    # Plot confusion matrix with annotations
-    cm_fig.plot(cmap=plt.cm.Blues, values_format='d')
-    plt.title('Confusion Matrix')
-    plt.xlabel('Predicted Labels')
-    plt.ylabel('True Labels')
-
-    # # fig.ax_.set_title(name)
-    # plt.figure()
-    # plt.imshow(cm, cmap=plt.cm.Blues)
-    # plt.title('Confusion Matrix')
-    # plt.xlabel('Predicted Labels')
-    # plt.ylabel('True Labels')
-    # plt.xticks([0, 1])
-    # plt.yticks([0, 1])
-    # plt.colorbar()
-
     cm_with_legend = str(cm) + "\n" + "[[TN FP\n[FN TP]]"
     print("* Confusion matrix: \n", cm_with_legend)
 
-
-
-    # calculate Response rate:
-
+    # calculate Response rate for X_train:
     if not test:
         y_train_responders_cnt = 0
-
-        if args['classification']:
-            positive_label = 1  # can vary in different expirements
-            for y_val in y_train.values:
-                if y_val == positive_label:
-                    y_train_responders_cnt += 1
-
-        else:  # regression
-            for y_val in y_train.values:
-                if y_val < -50:
-                    y_train_responders_cnt += 1
-
+        positive_label = 1  # can vary in different expirements
+        for y_val in y_train.values:
+            if y_val == positive_label:
+                y_train_responders_cnt += 1
         print("* Response rate: ", y_train_responders_cnt / len(y_train))
 
     true_count = cm[0][0] + cm[1][1]
@@ -225,7 +198,6 @@ def print_conclusions(df=None, pipe=None, search=None, best_cv_iter_yts_list_nda
             "scorer_score_mean": str(score_mean),
             "scorer_score_std": str(score_std),
             "accuracy": accuracy,
-
             "precision": precision,
             "recall": recall,
             "f1": f1,
@@ -250,8 +222,8 @@ def print_conclusions(df=None, pipe=None, search=None, best_cv_iter_yts_list_nda
         y_pred_prob_positives = search.predict_proba(X_train)[:, 1]
         label = "Train"
 
-    fpr, tpr, thresholds = roc_curve(test, pred, pos_label=1)
-    roc_auc = 1- roc_auc_score(test,y_pred_prob_positives)
+    fpr, tpr, thresholds = roc_curve(test, y_pred_prob_positives)
+    roc_auc = roc_auc_score(test,y_pred_prob_positives)
     plt.figure()
 
     # Plot ROC curve
@@ -261,12 +233,8 @@ def print_conclusions(df=None, pipe=None, search=None, best_cv_iter_yts_list_nda
     plt.ylim([0.0, 1.05])
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title(f'{label}\nReceiver Operating Characteristic (ROC) (Positive == responders (y is 1)) for random cutoffs')
+    plt.title(f'{label}\n ROC-AUC for random cutoffs')
     plt.legend(loc="lower right")
-    # plt.show()
-    # print("Try this as a ways to print report :")
-    # print(classification_report(y_true=best_cv_iter_yts_list,y_pred=best_cv_iter_yps_list ))
-    # print("CV report saved to  ", file_path)
     print("-----------------------\n End of CV report \n-----------------------", '\n' * 3)
 
 
@@ -365,6 +333,59 @@ def CV_Score(y_true, y_pred):
 def scorer():
     return make_scorer(CV_Score)
 
+def get_top_k_contributions_and_contributors(k = 3,all_pcs=None):
+    # 1.Find k features with max contribution
+
+    feature_contributions = [0 for _ in
+                             X_train.columns]  # contribution to (influence on) the explained var from each features
+    for i, pc in enumerate(all_pcs):
+        for j, contribution in enumerate(pc):
+            feature_contributions[j] += abs(contribution)
+    # Sort the array while preserving the original indices
+    sorted_arr = sorted(enumerate(feature_contributions), key=lambda x: x[1])[
+                 ::-1]  # sorted tuples of item and original index
+    sorted_contributions = [sorted_arr[i][1] for i in range(len(sorted_arr))]
+    sum_sorted_contributions = sum(sorted_contributions)
+    for i in range(len(sorted_contributions)):
+        sorted_contributions[i] = sorted_contributions[i] / sum_sorted_contributions
+    sum_sorted_contributions_scaled = sum(sorted_contributions)
+    # Print the sorted array with original indices
+    top_k_contributions = sorted_contributions[:k]
+    top_k_contributors = [""] * k
+    for i in range(k):
+        contributor_col_index = sorted_arr[i][0]
+        contributor = X_train.columns[contributor_col_index]
+        top_k_contributors[i] = contributor
+        print(f"Feature (contributor) i = {i}: name =  {contributor}, Value (contribution) = {top_k_contributions[i]}")
+    print(f"top_k_contribution sum : {sum(top_k_contributions)}")
+    print(f"=> {k} most contributing features (out of {len(sorted_contributions)} features in total) are explaining  {(sum(top_k_contributions)/sum_sorted_contributions_scaled):.5f} of variance")
+    return top_k_contributions, top_k_contributors
+
+
+def make_fig_contributions(top_contributors,top_contributions,k):
+    plt.figure(figsize=(15, 15))
+    plt.xticks(rotation=45)
+    plt.xticks()
+    plt.yticks()
+    plt.bar(top_contributors, top_contributions)
+
+    # Set the x-axis label
+    plt.xlabel(f'Feature')
+    # Set the y-axis label
+    plt.ylabel('Contribution to explained var')
+    # Set the title of the plot]
+    plt.title(f'Contribution for top {k} feature to variance in X_train samples')
+
+def make_fig_heatmap(X):
+
+    # Calculate correlation matrix
+    corr_matrix = X.corr()
+
+    # Create heatmap using seaborn
+    plt.figure()  # Adjust figure size as needed
+    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt='.2f', square=True, xticklabels=True, yticklabels=True)
+    plt.title('Correlation Heatmap')
+    # Display the heatmap
 
 # ===================================================
 
@@ -574,11 +595,16 @@ if args['classification']:
         # 'classifier__learning_rate': [0.001],
         # "classifier": [clf6]
 
-         'pca__n_components':[50],
-         'classifier__subsample': [0.95],
-         'classifier__n_estimators': [100,1000,10000],
-         'classifier__min_samples_split': [10, 20, 30, 50, 50,64, 74, 90,2],
-         'classifier__min_samples_leaf': [2,5,10,25,27,29,31,40],
+        #'pca__n_components': 54, 'classifier__subsample': 0.9, 'classifier__n_estimators': 2,
+        # 'classifier__min_samples_split': 66, 'classifier__min_samples_leaf': 32, 'classifier__max_features': None,
+        # 'classifier__max_depth': 120, 'classifier__learning_rate': 0.0001,
+
+         'pca__n_components':[75],
+         'classifier__subsample': [0.9],
+         'classifier__n_estimators': [15],
+         'classifier__min_samples_split': range(56,76,2),
+         'classifier__min_samples_leaf': range(29,41,2),
+         'classifier__max_depth': [120],
          'classifier__max_features': [None],
          'classifier__learning_rate': [0.0001],
          'classifier': [clf6]
@@ -867,62 +893,6 @@ elif args["split_rows"] in ['h1', 'h7', 'h1h7']:  # split by 'Treatment_group' (
         splitted_congifs.append([X_train, X_test, y_train, y_test])
 
 
-def get_top_k_contributions_and_contributors(k = 15,all_pcs=None):
-    # 1.Find k features with max contribution
-
-    feature_contributions = [0 for _ in
-                             X_train.columns]  # contribution to (influence on) the explained var from each features
-    for i, pc in enumerate(all_pcs):
-        for j, contribution in enumerate(pc):
-            feature_contributions[j] += abs(contribution)
-    # Sort the array while preserving the original indices
-    sorted_arr = sorted(enumerate(feature_contributions), key=lambda x: x[1])[
-                 ::-1]  # sorted tuples of item and original index
-    sorted_contributions = [sorted_arr[i][1] for i in range(len(sorted_arr))]
-    sum_sorted_contributions = sum(sorted_contributions)
-    for i in range(len(sorted_contributions)):
-        sorted_contributions[i] = sorted_contributions[i] / sum_sorted_contributions
-    # Print the sorted array with original indices
-    top_k_contributions = sorted_contributions[:k]
-    top_k_contributors = X_train.columns[:k]
-    for i in range(k):
-        print(f"Feature: {top_k_contributors[i]}, Value (contribution): {top_k_contributions[i]}")
-    print(f"top_k_contribution sum : {sum(top_k_contributions)}")
-    print(f"all contribution sum (assert equals 1) : {sum(sorted_contributions)}")
-    return top_k_contributions, top_k_contributors
-
-
-def make_fig_contributions(top_contributors,top_contributions,k):
-    plt.figure()
-    plt.xticks(rotation=45)
-    plt.xticks(fontsize=5)
-    plt.yticks(fontsize=5)
-    plt.bar(top_contributors, top_contributions)
-    # Set the x-axis label
-    plt.xlabel(f'Feature')
-    # Set the y-axis label
-    plt.ylabel('Contribution to explained var')
-    # Set the title of the plot]
-    plt.title(f'Contribution for top {k} feature to variance in X_train samples')
-
-def make_fig_heatmap(X):
-
-    # Calculate correlation matrix
-    corr_matrix = X.corr()
-
-    # Create heatmap using seaborn
-    plt.figure(figsize=(10, 8))  # Adjust figure size as needed
-    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt='.2f', square=True)
-
-    # Add labels and title
-    plt.xticks(np.arange(15) + 0.5, range(1, 16))
-    plt.yticks(np.arange(15) + 0.5, range(1, 16))
-    plt.xlabel('Feature A')
-    plt.ylabel('Feature B')
-    plt.title('Correlation Heatmap')
-
-    # Display the heatmap
-
 # run the full process of cv, and test on the sets
 for config in splitted_congifs:
     for i in range(4):
@@ -936,14 +906,14 @@ for config in splitted_congifs:
     report_pca = PCA()
     X_train_for_pca = scaler.fit_transform(X_train.copy())
     report_pca.fit(X_train_for_pca)
-    k = 15
     all_pcs = report_pca.components_
 
     # find k features in data that has the largest relative contribution to explained variance in X values
+    k = 12
     top_contributions, top_contributors = get_top_k_contributions_and_contributors(k=k, all_pcs=all_pcs)
 
     make_fig_contributions(top_contributors, top_contributions, k)
-    make_fig_heatmap(X_train)
+    make_fig_heatmap(X_train[top_contributors])
 
     #2. Find pcs which explaining (contributing to explained var) over 90 and 99% of variance
     ratios = report_pca.explained_variance_ratio_
@@ -982,9 +952,9 @@ for config in splitted_congifs:
         if args['lite_mode']:  # just for debugging. using one small grid
             # param_pipe_list = [[param2a,pipe_smote_2a]]
             # param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
-            # param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
+            param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
             # param_pipe_list = [[param7a, pipe_smote_7a]] # CATBOOST - BUGS
-            param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
+            # param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
 
             # param_pipe_list = [[param3b, pipe_smote_3b]] # CHECKED
             # param_pipe_list = [[param6b, pipe_smote_6b]] # CHECKED
