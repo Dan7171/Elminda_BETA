@@ -1,11 +1,14 @@
 import math
 from functools import reduce
+from sklearn.metrics import roc_curve, roc_auc_score
 
 from matplotlib import pyplot as plt
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
 from sklearn.svm import SVC
 import numpy as np
 import pandas as pd
+import seaborn as sns
+
 from sklearn.metrics import classification_report
 import datetime
 from sklearn.model_selection import train_test_split
@@ -100,57 +103,98 @@ def generate_random_architectures(first_layer_size_options: tuple = (3, 5, 10, 2
     print(f"created {num_of_architectures} networks with avg size of layers {avg_num_of_layers_in_network}")
     return list(architectures)
 
+def get_pcs_num_explains_p_ratio_of_var(p_ratio,ratios):
+    ratio_sums = [0 for r in ratios]
+    ratio_sums[0] = ratios[0]
+    pc_index_p_ratio_of_var_explained = -1 if not ratios[0] > p_ratio else 0
+    # print pcs var explaining ability
+    for i in range(1, len(ratios)):
+        ratio_sums[i] = ratio_sums[i - 1] + ratios[i]
+        if ratio_sums[i] > p_ratio:
+            pc_index_p_ratio_of_var_explained  =  i
+    return pc_index_p_ratio_of_var_explained
 
-def print_conclusions(df, pipe, search, best_cv_iter_yts_list_ndarray=None, best_cv_iter_yps_list_ndarray=None,folder="out_folder"):
-    print("-----------------------\n New CV report \n-----------------------")
-    if args['classification']:
-        name = pipe.named_steps['classifier']
-        print("* Classifier: \n", name)
+def print_conclusions(df=None, pipe=None, search=None, best_cv_iter_yts_list_ndarray=None, best_cv_iter_yps_list_ndarray=None,
+                      folder="out_folder",test=False,y_true=None,y_pred=None):
+    if not test:
+        print("-----------------------\n New CV report \n-----------------------")
+        if args['classification']:
+            name = pipe.named_steps['classifier']
+            print("* Classifier: \n", name)
+        else:
+            name = pipe.named_steps['regressor']
+            print("* Regressor: \n", name)
+        print("* User arguments: \n", args)
+        print("* Pipeline details: \n", str(pipe))
+        print("* Best Hyperparametes picked in cross validation: (cv's best score): \n", search.best_params_)
+
+        # features Kbest selected
+        selected_features = ""
+        if 'kBest' in pipe.named_steps:
+            selector = search.best_estimator_.named_steps['kBest']
+            selected_features = df.columns[selector.get_support()].tolist()
+        print("* Best features by (selectKbest): \n", selected_features)
+
+        # score
+        print("* Scorer_used:", args['scoring_method'])  # scoring method used for cv as scorer param
+        score_mean = search.cv_results_['mean_test_score'][search.best_index_]
+        score_std = search.cv_results_['std_test_score'][search.best_index_]
+        print("* CV Score (cv's best score for best hyperparametes): %.3f +/- %.3f (see score func in hyperparams) " % (
+            score_mean, score_std), "\n")
+
+
+    if not test:
+        print("*** Train (CV best iter) ***")
+        cm = confusion_matrix(best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray)
+        # confusion matrix plot making:
+        cm_fig = metrics.ConfusionMatrixDisplay.from_predictions(best_cv_iter_yts_list_ndarray,
+                                                              best_cv_iter_yps_list_ndarray)
     else:
-        name = pipe.named_steps['regressor']
-        print("* Regressor: \n", name)
-    print("* User arguments: \n", args)
-    print("* Pipeline details: \n", str(pipe))
-    print("* Best Hyperparametes picked in cross validation: (cv's best score): \n", search.best_params_)
+        print("*** Test ***")
+        cm = confusion_matrix(y_true, y_pred)
+        cm_fig = metrics.ConfusionMatrixDisplay.from_predictions(y_true,y_pred)
 
-    # features Kbest selected
-    selected_features = ""
-    if 'kBest' in pipe.named_steps:
-        selector = search.best_estimator_.named_steps['kBest']
-        selected_features = df.columns[selector.get_support()].tolist()
-    print("* Best features by (selectKbest): \n", selected_features)
+    # Create a new figure for the confusion matrix
+    plt.figure()
+    # Plot confusion matrix with annotations
+    cm_fig.plot(cmap=plt.cm.Blues, values_format='d')
+    plt.title('Confusion Matrix')
+    plt.xlabel('Predicted Labels')
+    plt.ylabel('True Labels')
 
-    # score
-    print("* Scorer_used:", args['scoring_method'])  # scoring method used for cv as scorer param
-    score_mean = search.cv_results_['mean_test_score'][search.best_index_]
-    score_std = search.cv_results_['std_test_score'][search.best_index_]
-    print("* CV Score (cv's best score for best hyperparametes): %.3f +/- %.3f (see score func in hyperparams) " % (
-        score_mean, score_std), "\n")
+    # # fig.ax_.set_title(name)
+    # plt.figure()
+    # plt.imshow(cm, cmap=plt.cm.Blues)
+    # plt.title('Confusion Matrix')
+    # plt.xlabel('Predicted Labels')
+    # plt.ylabel('True Labels')
+    # plt.xticks([0, 1])
+    # plt.yticks([0, 1])
+    # plt.colorbar()
 
-    cm = confusion_matrix(best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray)
     cm_with_legend = str(cm) + "\n" + "[[TN FP\n[FN TP]]"
     print("* Confusion matrix: \n", cm_with_legend)
 
-    # confusion matrix plot making:
-    fig = metrics.ConfusionMatrixDisplay.from_predictions(best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray)
 
-    fig.ax_.set_title(name)
 
     # calculate Response rate:
-    y_train_responders_cnt = 0
 
-    if args['classification']:
-        positive_label = 1  # can vary in different expirements
-        for y_val in y_train.values:
-            if y_val == positive_label:
-                y_train_responders_cnt += 1
+    if not test:
+        y_train_responders_cnt = 0
 
-    else:  # regression
-        for y_val in y_train.values:
-            if y_val < -50:
-                y_train_responders_cnt += 1
+        if args['classification']:
+            positive_label = 1  # can vary in different expirements
+            for y_val in y_train.values:
+                if y_val == positive_label:
+                    y_train_responders_cnt += 1
 
-    print("* Response rate: ", y_train_responders_cnt / len(y_train))
+        else:  # regression
+            for y_val in y_train.values:
+                if y_val < -50:
+                    y_train_responders_cnt += 1
+
+        print("* Response rate: ", y_train_responders_cnt / len(y_train))
+
     true_count = cm[0][0] + cm[1][1]
     false_count = cm[0][1] + cm[1][0]
     total = true_count + false_count
@@ -165,38 +209,64 @@ def print_conclusions(df, pipe, search, best_cv_iter_yts_list_ndarray=None, best
 
     # save cross val scores and params in tuning.csv for tracking
     # csv column names and values in a row:
-    d = {
-        "date": str(datetime.date.today()),  # date, hour
-        "classifier": str(pipe.named_steps['classifier']),
-        "pipe_named_steps": str(pipe.named_steps),  # all pipe steps, including the classifier as estimator
-        "best_params": str(search.best_params_),
-        #  "best_index": search.best_index_ ,
-        "selected_features": str(selected_features),
-        "user_inputs": str(args),  # runArguments.args
-        "responders_rate": str(((cm[1][0] + cm[1][1]) / total)),  # responders / total
-        "X_train_size(num of rows in cv input df)": str(total),
-        "scorer_used": args['scoring_method'],
-        # scoring method used for cv as scorer param should be one of (accuracy,precision,recall,f1
-        "scorer_score_mean": str(score_mean),
-        "scorer_score_std": str(score_std),
-        "accuracy": accuracy,
+    if not test:
+        d = {
+            "date": str(datetime.date.today()),  # date, hour
+            "classifier": str(pipe.named_steps['classifier']),
+            "pipe_named_steps": str(pipe.named_steps),  # all pipe steps, including the classifier as estimator
+            "best_params": str(search.best_params_),
+            #  "best_index": search.best_index_ ,
+            "selected_features": str(selected_features),
+            "user_inputs": str(args),  # runArguments.args
+            "responders_rate": str(((cm[1][0] + cm[1][1]) / total)),  # responders / total
+            "X_train_size(num of rows in cv input df)": str(total),
+            "scorer_used": args['scoring_method'],
+            # scoring method used for cv as scorer param should be one of (accuracy,precision,recall,f1
+            "scorer_score_mean": str(score_mean),
+            "scorer_score_std": str(score_std),
+            "accuracy": accuracy,
 
-        "precision": precision,
-        "recall": recall,
-        "f1": f1,
-        "confusion_matrix": cm_with_legend,
-        "param_grid_searched_at": str(param)
-    }
-    # save to cv:
-    tmp = pd.DataFrame(d, index=[d.keys()])
-    # file_path = 'tuning.csv'
-    file_path = os.path.join(folder,'tuning.csv')
-    open(file_path, 'a').close()
-    tmp.to_csv(file_path, index=False)
+            "precision": precision,
+            "recall": recall,
+            "f1": f1,
+            "confusion_matrix": cm_with_legend,
+            "param_grid_searched_at": str(param)
+        }
+        # save to cv:
+        tmp = pd.DataFrame(d, index=[d.keys()])
+        # file_path = 'tuning.csv'
+        file_path = os.path.join(folder,'tuning.csv')
+        open(file_path, 'a').close()
+        tmp.to_csv(file_path, index=False)
+        print("train CV report saved to  ", file_path)
 
-    print("Try this as a ways to print report :")
-    print(classification_report(y_true=best_cv_iter_yts_list,y_pred=best_cv_iter_yps_list ))
-    print("CV report saved to  ", file_path)
+    # roc auc
+    if test:
+        test, pred = y_test, y_pred
+        y_pred_prob_positives = search.predict_proba(X_test)[:, 1]
+        label = "Test"
+    else:
+        test, pred = best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray
+        y_pred_prob_positives = search.predict_proba(X_train)[:, 1]
+        label = "Train"
+
+    fpr, tpr, thresholds = roc_curve(test, pred, pos_label=1)
+    roc_auc = 1- roc_auc_score(test,y_pred_prob_positives)
+    plt.figure()
+
+    # Plot ROC curve
+    plt.plot(fpr, tpr, label='ROC curve(area = %0.3f)' % roc_auc)
+    plt.plot([0, 1], [0, 1], 'k--')  # random predictions curve
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title(f'{label}\nReceiver Operating Characteristic (ROC) (Positive == responders (y is 1)) for random cutoffs')
+    plt.legend(loc="lower right")
+    # plt.show()
+    # print("Try this as a ways to print report :")
+    # print(classification_report(y_true=best_cv_iter_yts_list,y_pred=best_cv_iter_yps_list ))
+    # print("CV report saved to  ", file_path)
     print("-----------------------\n End of CV report \n-----------------------", '\n' * 3)
 
 
@@ -580,13 +650,21 @@ if args['classification']:
         #  'classifier': MLPClassifier(alpha=0.001, hidden_layer_sizes=(93, 99, 104, 94, 92),
         #                              learning_rate='invscaling', max_iter=1500, random_state=42,
         #                              solver='sgd')}
-        "pca__n_components": [45],
-        'classifier__hidden_layer_sizes': [(a,b,c,d,e) for a in range(85,105) for b in range(95,105) for c in range(100,110) for d in range(90,100) for e in range(87,95)],
+        #
+        # {'pca__n_components': 50, 'classifier__verbose': False, 'classifier__solver': 'sgd',
+        #  'classifier__learning_rate': 'invscaling', 'classifier__hidden_layer_sizes': (92, 100, 100, 101, 85, 75),
+        #  'classifier__alpha': 0.01, 'classifier__activation': 'relu',
+        #  'classifier': MLPClassifier(alpha=0.01, hidden_layer_sizes=(92, 100, 100, 101, 85, 75),
+        #                              learning_rate='invscaling', random_state=42, solver='sgd')}
+        "pca__n_components": [70],
+        'classifier__hidden_layer_sizes': [(a,b,c,d,e,f) for a in range(91,95,2) for b in range(98,103,2)
+                                           for c in range(97,105,2) for d in range(97,105,2)
+                                           for e in range(83,88,2) for f in range(73,78,2)],
         'classifier__activation':  ['relu'],
         'classifier__solver': ['sgd'],
-        'classifier__alpha': [0.001],
+        'classifier__alpha': [0.01],
         'classifier__learning_rate': ['invscaling'],
-        'classifier__max_iter': [1500],
+        # 'classifier__max_iter': [500],
         'classifier__verbose': [False],  # details prints of loss
         "classifier": [clf8]
     }
@@ -788,36 +866,89 @@ elif args["split_rows"] in ['h1', 'h7', 'h1h7']:  # split by 'Treatment_group' (
 
         splitted_congifs.append([X_train, X_test, y_train, y_test])
 
+
+def get_top_k_contributions_and_contributors(k = 15,all_pcs=None):
+    # 1.Find k features with max contribution
+
+    feature_contributions = [0 for _ in
+                             X_train.columns]  # contribution to (influence on) the explained var from each features
+    for i, pc in enumerate(all_pcs):
+        for j, contribution in enumerate(pc):
+            feature_contributions[j] += abs(contribution)
+    # Sort the array while preserving the original indices
+    sorted_arr = sorted(enumerate(feature_contributions), key=lambda x: x[1])[
+                 ::-1]  # sorted tuples of item and original index
+    sorted_contributions = [sorted_arr[i][1] for i in range(len(sorted_arr))]
+    sum_sorted_contributions = sum(sorted_contributions)
+    for i in range(len(sorted_contributions)):
+        sorted_contributions[i] = sorted_contributions[i] / sum_sorted_contributions
+    # Print the sorted array with original indices
+    top_k_contributions = sorted_contributions[:k]
+    top_k_contributors = X_train.columns[:k]
+    for i in range(k):
+        print(f"Feature: {top_k_contributors[i]}, Value (contribution): {top_k_contributions[i]}")
+    print(f"top_k_contribution sum : {sum(top_k_contributions)}")
+    print(f"all contribution sum (assert equals 1) : {sum(sorted_contributions)}")
+    return top_k_contributions, top_k_contributors
+
+
+def make_fig_contributions(top_contributors,top_contributions,k):
+    plt.figure()
+    plt.xticks(rotation=45)
+    plt.xticks(fontsize=5)
+    plt.yticks(fontsize=5)
+    plt.bar(top_contributors, top_contributions)
+    # Set the x-axis label
+    plt.xlabel(f'Feature')
+    # Set the y-axis label
+    plt.ylabel('Contribution to explained var')
+    # Set the title of the plot]
+    plt.title(f'Contribution for top {k} feature to variance in X_train samples')
+
+def make_fig_heatmap(X):
+
+    # Calculate correlation matrix
+    corr_matrix = X.corr()
+
+    # Create heatmap using seaborn
+    plt.figure(figsize=(10, 8))  # Adjust figure size as needed
+    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt='.2f', square=True)
+
+    # Add labels and title
+    plt.xticks(np.arange(15) + 0.5, range(1, 16))
+    plt.yticks(np.arange(15) + 0.5, range(1, 16))
+    plt.xlabel('Feature A')
+    plt.ylabel('Feature B')
+    plt.title('Correlation Heatmap')
+
+    # Display the heatmap
+
 # run the full process of cv, and test on the sets
 for config in splitted_congifs:
-    print("configs types debug")
-    print([type(config[i]) for i in range(4)])
     for i in range(4):
         if isinstance(config[i], pd.Series):  # convert to data frame to make scorer work
             config[i] = config[i].to_frame()
 
-    X_train, X_test, y_train, y_test = config[0], config[1], config[2], config[
-        3]
+    X_train, X_test, y_train, y_test = config[0], config[1], config[2], config[3]
 
-    X_train_for_pca = X_train.copy()
-    report_pca = PCA(n_components=100)
+
+    # Analyze X_train with PCA:
+    report_pca = PCA()
+    X_train_for_pca = scaler.fit_transform(X_train.copy())
     report_pca.fit(X_train_for_pca)
-    n = 100
-    first_n_pcs = report_pca.components_[:n]
-    first_n_ratios = report_pca.explained_variance_ratio_[:n]
-    first_n_ratio_sums = [0 for i in range(n)]
-    first_n_ratio_sums[0] = first_n_ratios[0]
-    pc_index_99_percent_of_var_explained = -1 if not first_n_ratios[0] > 0.99 else 0
-    pc_index_90_percent_of_var_explained = -1 if not first_n_ratios[0] > 0.90 else 0
+    k = 15
+    all_pcs = report_pca.components_
 
-    for i in range(1,n):
-        first_n_ratio_sums[i] = first_n_ratio_sums[i-1] + first_n_ratios[i]
-        if first_n_ratio_sums[i] > 0.99:
-            if pc_index_99_percent_of_var_explained == -1:
-                pc_index_99_percent_of_var_explained = i
-        if first_n_ratio_sums[i] > 0.9:
-            if pc_index_90_percent_of_var_explained == -1:
-                pc_index_90_percent_of_var_explained = i
+    # find k features in data that has the largest relative contribution to explained variance in X values
+    top_contributions, top_contributors = get_top_k_contributions_and_contributors(k=k, all_pcs=all_pcs)
+
+    make_fig_contributions(top_contributors, top_contributions, k)
+    make_fig_heatmap(X_train)
+
+    #2. Find pcs which explaining (contributing to explained var) over 90 and 99% of variance
+    ratios = report_pca.explained_variance_ratio_
+    index_90 = get_pcs_num_explains_p_ratio_of_var(0.99,ratios)
+    index_99 = get_pcs_num_explains_p_ratio_of_var(0.9,ratios)
 
     print(f"**************************************************\n"
           f"Distribution of categorical variables in data:"
@@ -838,14 +969,10 @@ for config in splitted_congifs:
           f"y_test['6-weeks_HDRS21_class'].value_counts():\n{y_test['6-weeks_HDRS21_class'].value_counts()}\n"
           f"\n**************************************************\n"
           f"Principal components:\n"
-          f"X_train first {n} pcs explained variance ratios=\n"
-          f"{first_n_ratios}\n"
-          f"X_train sum of ratios by the ith ratio for {n} ratios:\n"
-          f"{first_n_ratio_sums}\n"
-          f"In X_train, {pc_index_99_percent_of_var_explained + 1} principal components explain over 99% of variance\n"
-          f"In X_train, {pc_index_90_percent_of_var_explained + 1} principal components explain over 90% of variance\n"
+         
+          f"In X_train, {index_90 + 1} principal components explain over 99% of variance\n"
+          f"In X_train, {index_99 + 1} principal components explain over 90% of variance\n"
           )
-
 
     # # fix imbalance in train set
     # if args['balance_y_values']:
@@ -855,9 +982,9 @@ for config in splitted_congifs:
         if args['lite_mode']:  # just for debugging. using one small grid
             # param_pipe_list = [[param2a,pipe_smote_2a]]
             # param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
-            param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
+            # param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
             # param_pipe_list = [[param7a, pipe_smote_7a]] # CATBOOST - BUGS
-            # param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
+            param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
 
             # param_pipe_list = [[param3b, pipe_smote_3b]] # CHECKED
             # param_pipe_list = [[param6b, pipe_smote_6b]] # CHECKED
@@ -929,6 +1056,11 @@ for config in splitted_congifs:
         best_cv_iter_yts_list_ndarray = np.concatenate(
             best_cv_iter_yts_list)  # print some more conclusions and details about the winning cv parmas and pipe and save them to csv
         print_conclusions(X_train, pipe, search, best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray,folder)
+
+
+        # predict:
+        # y_pred = search.predict(X_test)
+        # print_conclusions(search=search,y_true=y_test,y_pred=y_pred)
 
 print(f"<<<<<<<<<<<<<<<<<<<<< GSCVrunner.py finished successfuly<<<<<<<<<<<<<<<<<<<<<")
 if args['stdout_to_file']:
