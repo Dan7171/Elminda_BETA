@@ -599,12 +599,18 @@ if args['classification']:
         # 'classifier__min_samples_split': 66, 'classifier__min_samples_leaf': 32, 'classifier__max_features': None,
         # 'classifier__max_depth': 120, 'classifier__learning_rate': 0.0001,
 
-         'pca__n_components':[75],
-         'classifier__subsample': [0.9],
-         'classifier__n_estimators': [15],
-         'classifier__min_samples_split': range(56,76,2),
-         'classifier__min_samples_leaf': range(29,41,2),
-         'classifier__max_depth': [120],
+        # {'pca__n_components': 52, 'classifier__subsample': 0.8, 'classifier__n_estimators': 20,
+        #  'classifier__min_samples_split': 82, 'classifier__min_samples_leaf': 27, 'classifier__max_features': None,
+        #  'classifier__max_depth': 100, 'classifier__learning_rate': 0.0001,
+        #  'classifier': GradientBoostingClassifier(learning_rate=0.0001, max_depth=100,
+        #                                           min_samples_leaf=27, min_samples_split=82,
+        #                                           n_estimators=20, random_state=42, subsample=0.8)}
+         'pca__n_components':[52,62,72],
+         'classifier__subsample': [0.8],
+         'classifier__n_estimators': [20],
+         'classifier__min_samples_split': range(72,90,2),
+         'classifier__min_samples_leaf': range(21,35,2) + range(29,41,2),
+         'classifier__max_depth': [90,95,100,105, 110, 120],
          'classifier__max_features': [None],
          'classifier__learning_rate': [0.0001],
          'classifier': [clf6]
@@ -963,9 +969,9 @@ for config in splitted_congifs:
         if args['lite_mode']:  # just for debugging. using one small grid
             # param_pipe_list = [[param2a,pipe_smote_2a]]
             # param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
-            # param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
+            param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
             # param_pipe_list = [[param7a, pipe_smote_7a]] # CATBOOST - BUGS
-            param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
+            # param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
 
             # param_pipe_list = [[param3b, pipe_smote_3b]] # CHECKED
             # param_pipe_list = [[param6b, pipe_smote_6b]] # CHECKED
