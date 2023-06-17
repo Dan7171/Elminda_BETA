@@ -609,7 +609,7 @@ if args['classification']:
          'classifier__subsample': [0.8],
          'classifier__n_estimators': [20],
          'classifier__min_samples_split': range(72,90,2),
-         'classifier__min_samples_leaf': range(21,35,2) + range(29,41,2),
+         'classifier__min_samples_leaf': list(range(21,35,2)) + list(range(29,41,2)),
          'classifier__max_depth': [90,95,100,105, 110, 120],
          'classifier__max_features': [None],
          'classifier__learning_rate': [0.0001],
