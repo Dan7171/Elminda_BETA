@@ -682,17 +682,28 @@ if args['classification']:
         #  'classifier__alpha': 0.01, 'classifier__activation': 'relu',
         #  'classifier': MLPClassifier(alpha=0.01, hidden_layer_sizes=(92, 100, 100, 101, 85, 75),
         #                              learning_rate='invscaling', random_state=42, solver='sgd')}
-        "pca__n_components": [70],
-        'classifier__hidden_layer_sizes': [(a,b,c,d,e,f) for a in range(91,95,2) for b in range(98,103,2)
-                                           for c in range(97,105,2) for d in range(97,105,2)
-                                           for e in range(83,88,2) for f in range(73,78,2)],
+
+        # {'pca__n_components': 53,
+        # 'classifier__verbose': False, 'classifier__solver': 'sgd', 'classifier__max_iter': 1200,
+        # 'classifier__learning_rate': 'invscaling', 'classifier__hidden_layer_sizes': (70, 36, 25, 40, 73),
+        # 'classifier__alpha': 0.001, 'classifier__activation': 'relu',
+        # 'classifier': MLPClassifier(alpha=0.001, hidden_layer_sizes=(70, 36, 25, 40, 73),
+        #               learning_rate='invscaling', max_iter=1200, random_state=42,
+        #               solver='sgd')}
+
+        "pca__n_components": [75],
+        'classifier__hidden_layer_sizes': [(a,b,c,d,e) for a in range(68,74) for b in range(34,39)
+                                           for c in range(22,28) for d in range(38,43)
+                                           for e in range(70,76)],
         'classifier__activation':  ['relu'],
         'classifier__solver': ['sgd'],
-        'classifier__alpha': [0.01],
+        'classifier__alpha': [0.001],
         'classifier__learning_rate': ['invscaling'],
-        # 'classifier__max_iter': [500],
+        'classifier__max_iter': [500],
         'classifier__verbose': [False],  # details prints of loss
         "classifier": [clf8]
+
+
     }
     param8b = {  # MLPClassifier (neural network) + KBEST
         "kBest__k": range(4, 80, 8),
@@ -952,9 +963,9 @@ for config in splitted_congifs:
         if args['lite_mode']:  # just for debugging. using one small grid
             # param_pipe_list = [[param2a,pipe_smote_2a]]
             # param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
-            param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
+            # param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
             # param_pipe_list = [[param7a, pipe_smote_7a]] # CATBOOST - BUGS
-            # param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
+            param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
 
             # param_pipe_list = [[param3b, pipe_smote_3b]] # CHECKED
             # param_pipe_list = [[param6b, pipe_smote_6b]] # CHECKED
