@@ -85,9 +85,9 @@ def get_X_y (y_name,X_version): # for use in GSCVrunner
         # if X_version == 1: # no filtering, remain with the basic version
         #    do nothing
         #    leave in comment
-        if(X_version == 2): # basic filtering
+        if X_version == 2: # basic filtering
             X_specific = pd.read_csv("X_new_york_only(basic_filter)_no_gamma.csv")
-        if(X_version == 3): # hard filtering- predictors only
+        if X_version == 3: # hard filtering- predictors only
             X_specific = pd.read_csv("X_new_york_only(predictors_only)_no_gamma.csv")
     else: # use both research 1 and research 2,for now works in classification only
         all_data = pd.read_csv('all_data.csv')

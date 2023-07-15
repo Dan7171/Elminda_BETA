@@ -1,2 +1,0 @@
-In parameter choice num 0 / 0 avg score was: 0.602558510954313.
-

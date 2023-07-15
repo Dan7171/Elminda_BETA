@@ -1,17 +1,22 @@
 import math
 from functools import reduce
+from sklearn.metrics import roc_curve
+
 from matplotlib import pyplot as plt
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
 from sklearn.svm import SVC
 import numpy as np
 import pandas as pd
 import seaborn as sns
+
+from sklearn.metrics import classification_report
 import datetime
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn import metrics
+from sklearn.model_selection import cross_val_score
 from sklearn.feature_selection import SelectKBest, f_classif, f_regression, mutual_info_classif
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import fbeta_score
@@ -25,11 +30,17 @@ import main_caller_r2
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import confusion_matrix, f1_score, accuracy_score, roc_auc_score, precision_score, recall_score
 from sklearn.metrics import make_scorer
+from sklearn.datasets import load_iris
+from sklearn.utils import shuffle
 import random
+from sklearn.base import BaseEstimator, TransformerMixin
 import os
+from scipy.stats import randint
 from runArguments import args
 from sklearn.experimental import enable_halving_search_cv  # noqa
+from sklearn.model_selection import HalvingRandomSearchCV
 from imblearn.over_sampling import SMOTE
+from sklearn.datasets import make_classification
 from imblearn.pipeline import Pipeline as imb_Pipeline
 import sys
 
@@ -90,11 +101,13 @@ def generate_random_architectures(first_layer_size_options: tuple = (3, 5, 10, 2
     print(f"created {num_of_architectures} networks with avg size of layers {avg_num_of_layers_in_network}")
     return list(architectures)
 
-def get_pcs_num_explains_p_ratio_of_var(p_ratio,ratios):
-    assert(0 < p_ratio < 1)
+
+def get_pcs_num_explains_p_ratio_of_var(p_ratio, ratios):
+    assert (0 < p_ratio < 1)
     ratio_sums = [0 for r in ratios]
     ratio_sums[0] = ratios[0]
-    pc_index_p_ratio_of_var_explained = -1 if  ratios[0] < p_ratio else 0 # first pc which togeteher with previous pcs explains over p_ratio of var
+    pc_index_p_ratio_of_var_explained = -1 if ratios[
+                                                  0] < p_ratio else 0  # first pc which togeteher with previous pcs explains over p_ratio of var
     # print pcs var explaining ability
     for i in range(1, len(ratios)):
         ratio_sums[i] = ratio_sums[i - 1] + ratios[i]
@@ -103,8 +116,9 @@ def get_pcs_num_explains_p_ratio_of_var(p_ratio,ratios):
             break
     return pc_index_p_ratio_of_var_explained
 
-def print_conclusions(df=None, pipe=None, search=None, best_cv_iter_yts_list_ndarray=None, best_cv_iter_yps_list_ndarray=None,
-                      folder="out_folder",test=False,y_true=None,y_pred=None):
+
+def print_conclusions(df=None, pipe=None, search=None,
+                      folder="out_folder", test=False, y_true=None, y_pred=None):
     if not test:
         label = 'train'
         print("-----------------------\n New CV report \n-----------------------")
@@ -115,8 +129,6 @@ def print_conclusions(df=None, pipe=None, search=None, best_cv_iter_yts_list_nda
             name = pipe.named_steps['regressor']
             print("* Regressor: \n", name)
         print("* User arguments: \n", args)
-
-
 
         print("* Pipeline details: \n", str(pipe))
         print("* Best Hyperparametes picked in cross validation: (cv's best score): \n", search.best_params_)
@@ -134,14 +146,12 @@ def print_conclusions(df=None, pipe=None, search=None, best_cv_iter_yts_list_nda
         score_std = search.cv_results_['std_test_score'][search.best_index_]
         print("* CV Score (cv's best score for best hyperparametes): %.3f +/- %.3f (see score func in hyperparams) " % (
             score_mean, score_std), "\n")
-        y_true, y_pred = best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray
 
     else:
         label = 'test'
 
     labels = ['Non responsive', 'Responsive']
     cm = confusion_matrix(y_true, y_pred)
-
     # Create a figure and plot the confusion matrix
     fig, ax = plt.subplots()
     im = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
@@ -168,7 +178,7 @@ def print_conclusions(df=None, pipe=None, search=None, best_cv_iter_yts_list_nda
                     color="white" if cm[i, j] > thresh else "black")
 
     # Save the figure to a PNG file
-    figpath = os.path.join(folder,f'{label}_cm.png')
+    figpath = os.path.join(folder, f'{label}_cm.png')
     fig.savefig(figpath)  # Replace 'path/to/save' with the desired file path
 
     cm_with_legend = str(cm) + "\n" + "[[TN FP\n[FN TP]]"
@@ -222,22 +232,20 @@ def print_conclusions(df=None, pipe=None, search=None, best_cv_iter_yts_list_nda
         # save to cv:
         tmp = pd.DataFrame(d, index=[d.keys()])
         # file_path = 'tuning.csv'
-        file_path = os.path.join(folder,'tuning.csv')
+        file_path = os.path.join(folder, 'tuning.csv')
         open(file_path, 'a').close()
         tmp.to_csv(file_path, index=False)
         print("train CV report saved to  ", file_path)
 
     # roc auc
     if test:
-        test, pred = y_test, y_pred
         y_pred_prob_positives = search.predict_proba(X_test)[:, 1]
         label = "Test"
     else:
-        test, pred = best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray
         y_pred_prob_positives = search.predict_proba(X_train)[:, 1]
         label = "Train"
 
-    fpr, tpr, thresholds = metrics.roc_curve(test, y_pred_prob_positives)
+    fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred_prob_positives)
     roc_auc = metrics.auc(fpr, tpr)
     fig = plt.figure()
     plt.title('Receiver Operating Characteristic')
@@ -251,7 +259,6 @@ def print_conclusions(df=None, pipe=None, search=None, best_cv_iter_yts_list_nda
     plt.show()
     figpath = os.path.join(folder, f'roc_auc_{label}.png')
     fig.savefig(figpath)
-
 
     print("-----------------------\n End of CV report \n-----------------------", '\n' * 3)
 
@@ -308,8 +315,6 @@ def CV_Score(y_true, y_pred):
     max_param_choice_idx = args['n_iter'] - 1
     max_split_index = total_splits - 1
 
-    
-
     if idx == 0:
         param_choice_str = f"Parameter choice num {param_choice_idx} / {max_param_choice_idx} - starting..."
         print(param_choice_str)
@@ -319,7 +324,7 @@ def CV_Score(y_true, y_pred):
     print("fold's predicted y\n", y_pred)
     print(f"scoring metric: {my_scorer}, score: {cvscore} ")
     print("Debug\n>>>")
-    predicted_correctly = len(y_true[y_true==y_pred])
+    predicted_correctly = len(y_true[y_true == y_pred])
     predicted_in_total = len(y_true)
     print(f"predicted correctly / predicted_in_total = {predicted_correctly} / {predicted_in_total}")
     print("<<<")
@@ -354,7 +359,8 @@ def CV_Score(y_true, y_pred):
 def scorer():
     return make_scorer(CV_Score)
 
-def get_top_k_contributions_and_contributors(k = 3,all_pcs=None):
+
+def get_top_k_contributions_and_contributors(k=3, all_pcs=None):
     # 1.Find k features with max contribution
 
     feature_contributions = [0 for _ in
@@ -379,45 +385,47 @@ def get_top_k_contributions_and_contributors(k = 3,all_pcs=None):
         top_k_contributors[i] = contributor
         print(f"Feature (contributor) i = {i}: name =  {contributor}, Value (contribution) = {top_k_contributions[i]}")
     print(f"top_k_contribution sum : {sum(top_k_contributions)}")
-    print(f"=> {k} most contributing features (out of {len(sorted_contributions)} features in total) are explaining  {(sum(top_k_contributions)/sum_sorted_contributions_scaled):.5f} of variance")
+    print(
+        f"=> {k} most contributing features (out of {len(sorted_contributions)} features in total) are explaining  {(sum(top_k_contributions) / sum_sorted_contributions_scaled):.5f} of variance")
     return top_k_contributions, top_k_contributors
 
 
-def make_fig_contributions(top_contributors, top_contributions,k):
-
+def make_fig_contributions(top_contributors, top_contributions, k):
     k = len(top_contributions)
 
-    fig = plt.figure(figsize=(14,12))
+    fig = plt.figure(figsize=(14, 12))
     labels = top_contributors + ['expecteds contribution']
     # Generate gradual colors for the bars
-    colors = plt.cm.viridis(np.linspace(0, 1, len(top_contributions)+1))
+    colors = plt.cm.viridis(np.linspace(0, 1, len(top_contributions) + 1))
     num_features_data = 1388
-    expected_contrib = [1/num_features_data]
+    expected_contrib = [1 / num_features_data]
     # Plot the bar graph
     contributions = top_contributions + expected_contrib
-    plt.bar(range(len(contributions)), contributions , color=colors)
+    plt.bar(range(len(contributions)), contributions, color=colors)
 
     plt.title('Contribution')
     # Set the x-axis labels
     plt.xticks(range(len(labels)), labels, rotation=45, ha='right')
 
-    figpath = os.path.join(folder,'contributions_pca_x_train.png')
+    figpath = os.path.join(folder, 'contributions_pca_x_train.png')
     fig.savefig(figpath)  # Replace 'path/to/save' with the desired file path
 
 
 def make_fig_heatmap(X):
-
     # Calculate correlation matrix
     corr_matrix = X.corr()
 
     # Create heatmap using seaborn
-    fig = plt.figure(figsize=(17,17))  # Adjust figure size as needed
-    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt='.2f', square=True, xticklabels=True, yticklabels=True,annot_kws={"fontsize": 9})
+    fig = plt.figure(figsize=(17, 17))  # Adjust figure size as needed
+    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt='.2f', square=True, xticklabels=True, yticklabels=True,
+                annot_kws={"fontsize": 9})
     plt.title('Correlation Heatmap')
     figpath = os.path.join(folder, 'corellations_contributors_pcs_x_train.png')
     fig.savefig(figpath)
     # Display the heatmap
-def make_fig_kbest(features,feature_scores):
+
+
+def make_fig_kbest(features, feature_scores):
     fig = plt.figure(figsize=(14, 12))
     labels = features
     # Generate gradual colors for the bars
@@ -426,7 +434,6 @@ def make_fig_kbest(features,feature_scores):
     # Plot the bar graph
     plt.bar(range(len(labels)), feature_scores, color=colors)
 
-
     plt.title(f'p values of best k({k}) features (train set)')
 
     # Set the x-axis labels
@@ -434,21 +441,22 @@ def make_fig_kbest(features,feature_scores):
     figpath = os.path.join(folder, 'kbest.png')
     fig.savefig(figpath)
 
+
 # ******************************************* MAIN ****************************************************
 
 print(" >>>>>>>>>>>>>>>>>>>>> STARTING MAIN OF GSCVrunner.py >>>>>>>>>>>>>>>>>>>>>")
 now = datetime.datetime.now()
-folder = now.strftime("%Y-%m-%d %H_%M_%S")
+folder = now.strftime("%Y-%m-%d %H_%M_%S") + args['output_folder_label']
 if not os.path.isdir(folder):
     os.mkdir(folder)
 if args['stdout_to_file']:
-    logfile_name = os.path.join(folder,'stdout.txt')
+    logfile_name = os.path.join(folder, 'stdout.txt')
     print(f"see stdout in {logfile_name}")
     if os.path.exists(logfile_name):
         os.remove(logfile_name)
     log_file = open(logfile_name, 'a')
     sys.stdout = sys.stderr = log_file
-search_statistics = os.path.join(folder,"search_statistics.txt")
+search_statistics = os.path.join(folder, "search_statistics.txt")
 if os.path.exists(search_statistics):
     os.remove(search_statistics)
 if args['classification']:
@@ -490,7 +498,7 @@ if args['classification']:
 
     # LOGISTIC REGRESSION + pca
     param1a = {
-        "pca__n_components": [1,3,5,7,9,11],
+        "pca__n_components": [1, 3, 5, 7, 9, 11],
         "classifier__C": [0.001, 0.01, 0.1, 1, 10, 100],
         "classifier__penalty": ['l2'],
         "classifier": [clf1]
@@ -568,8 +576,8 @@ if args['classification']:
     }
     # RANDOM FOREST + pca
     param5a = {
-        "pca__n_components": range(10,200,20),
-        'classifier__n_estimators':[10000], # number of trees
+        "pca__n_components": range(10, 200, 20),
+        'classifier__n_estimators': [10000],  # number of trees
         "classifier__n_jobs": [-1],
         "classifier": [clf5]
 
@@ -587,80 +595,27 @@ if args['classification']:
     }
     # GRADIENT BOOSTING + pca
     param6a = {
-        #{'pca__n_components': 52, 'classifier__subsample': 0.8, 'classifier__n_estimators': 20,
-         # 'classifier__min_samples_split': 82, 'classifier__min_samples_leaf': 27, 'classifier__max_features': None,
-         #'classifier__max_depth': 100, 'classifier__learning_rate': 0.0001,
-         #'classifier': GradientBoostingClassifier(learning_rate=0.0001, max_depth=100,
-         #                                         min_samples_leaf=27, min_samples_split=82,
-         #                                         n_estimators=20, random_state=42, subsample=0.8)}
 
-        # {'pca__n_components': 54, 'classifier__subsample': 0.95, 'classifier__n_estimators': 5,
-        #  'classifier__min_samples_split': 64, 'classifier__min_samples_leaf': 29, 'classifier__max_features': None,
-        #  'classifier__max_depth': 140, 'classifier__learning_rate': 0.0001,
-        #  'classifier': GradientBoostingClassifier(learning_rate=0.0001, max_depth=140,
-        #                                           min_samples_leaf=29, min_samples_split=64,
-        #                                           n_estimators=5, random_state=42, subsample=0.95)}
-
-        # "pca__n_components": [30],
-        # 'classifier__loss' : ["log_loss", "deviance", "exponential"],
-        # 'classifier__n_estimators': [2000], # number of trees
-        # 'classifier__learning_rate': [0.001],
-        # "classifier": [clf6]
-
-        #'pca__n_components': 54, 'classifier__subsample': 0.9, 'classifier__n_estimators': 2,
-        # 'classifier__min_samples_split': 66, 'classifier__min_samples_leaf': 32, 'classifier__max_features': None,
-        # 'classifier__max_depth': 120, 'classifier__learning_rate': 0.0001,
-
-        # {'pca__n_components': 52, 'classifier__subsample': 0.8, 'classifier__n_estimators': 20,
-        #  'classifier__min_samples_split': 82, 'classifier__min_samples_leaf': 27, 'classifier__max_features': None,
-        #  'classifier__max_depth': 100, 'classifier__learning_rate': 0.0001,
-        #  'classifier': GradientBoostingClassifier(learning_rate=0.0001, max_depth=100,
-        #                                           min_samples_leaf=27, min_samples_split=82,
-        #                                           n_estimators=20, random_state=42, subsample=0.8)}
-        #
-        # {'pca__n_components': 52, 'classifier__subsample': 0.8, 'classifier__n_estimators': 20,
-        #  'classifier__min_samples_split': 82, 'classifier__min_samples_leaf': 27, 'classifier__max_features': None,
-        #  'classifier__max_depth': 100, 'classifier__learning_rate': 0.0001,
-        #
-
-
-        # t1
-        # 'pca__n_components': [12],
-        # 'classifier__subsample': [0.8],
-        # 'classifier__n_estimators': [20],
-        # 'classifier__min_samples_split': [82],
-        # 'classifier__min_samples_leaf': [27],
-        # 'classifier__max_depth': [100],
-        # 'classifier__max_features': [None],
-        # 'classifier__learning_rate': [0.0001],
-        # 'classifier': [clf6]
-
-        # {'pca__n_components': 62, 'classifier__subsample': 0.8, 'classifier__n_estimators': 20,
-        #  'classifier__min_samples_split': 86, 'classifier__min_samples_leaf': 29, 'classifier__max_features': None,
-        #  'classifier__max_depth': 120, 'classifier__learning_rate': 0.0001,
-        #  'classifier': GradientBoostingClassifier(learning_rate=0.0001, max_depth=120,
-        #                                           min_samples_leaf=29, min_samples_split=86,
-        #                                           n_estimators=20, random_state=42, subsample=0.8)}
-         'pca__n_components':[54],
-         'classifier__subsample': [0.95],
-         'classifier__n_estimators': [5],
-         'classifier__min_samples_split':[64],
-         'classifier__min_samples_leaf': [29],
-         'classifier__max_depth': [140],
-         'classifier__max_features': [None],
-         'classifier__learning_rate': [0.0001],
-         'classifier': [clf6]
+        'pca__n_components': [54],
+        'classifier__subsample': [0.95],
+        'classifier__n_estimators': [5],
+        'classifier__min_samples_split': [64],
+        'classifier__min_samples_leaf': [29],
+        'classifier__max_depth': [140],
+        'classifier__max_features': [None],
+        'classifier__learning_rate': [0.0001],
+        'classifier': [clf6]
     }
     # GRADIENT BOOSTING + kbest
     param6b = {
         # reason I tried this classifier params:
         "kBest__k": [15],
         'classifier__subsample': [0.9],
-         'classifier__n_estimators': range(10,30,5),
-         'classifier__min_samples_split':range(60,100,5),
-         'classifier__min_samples_leaf': range(10,40,5),
-        'classifier__max_features':  [None],
-        'classifier__max_depth': range(80,120,5),
+        'classifier__n_estimators': range(10, 30, 5),
+        'classifier__min_samples_split': range(60, 100, 5),
+        'classifier__min_samples_leaf': range(10, 40, 5),
+        'classifier__max_features': [None],
+        'classifier__max_depth': range(80, 120, 5),
         'classifier__learning_rate': [0.0001],
         "classifier": [clf6]
     }
@@ -691,61 +646,16 @@ if args['classification']:
     _2_layers = [(i, j) for i in range(1, 200, 4) for j in range(1, 200, 4)]
     # MLPClassifier + pca
     param8a = {
-        #{'pca__n_components': 53, 'classifier__verbose': False, 'classifier__solver': 'sgd', 'classifier__max_iter': 1500, 'classifier__learning_rate': 'invscaling',
-        # 'classifier__hidden_layer_sizes': (33, 44, 35, 39), 'classifier__alpha': 0.001, 'classifier__activation': 'relu', 'classifier': MLPClassifier(alpha=0.001, hidden_layer_sizes=(33, 44, 35, 39),
-              # learning_rate='invscaling', max_iter=1500, random_state=42,
-              # solver='sgd')}
 
-        # {'pca__n_components': 54, 'classifier__verbose': False, 'classifier__solver': 'sgd',
-        #  'classifier__max_iter': 1000, 'classifier__learning_rate': 'invscaling',
-        #  'classifier__hidden_layer_sizes': (40, 25, 40, 45), 'classifier__alpha': 0.001,
-        #  'classifier__activation': 'tanh', 'classifier': MLPClassifier(activation='tanh', alpha=0.001,
-        #                                                                hidden_layer_sizes=(40, 25, 40, 45),
-        #                                                                learning_rate='invscaling',
-        #                                                                max_iter=1000, random_state=42, solver='sgd')}
-
-        # {'pca__n_components': 53, 'classifier__verbose': False, 'classifier__solver': 'sgd',
-        #  'classifier__max_iter': 1200, 'classifier__learning_rate': 'invscaling',
-        #  'classifier__hidden_layer_sizes': (70, 36, 25, 40, 73), 'classifier__alpha': 0.001,
-        #  'classifier__activation': 'relu',
-        #  'classifier': MLPClassifier(alpha=0.001, hidden_layer_sizes=(70, 36, 25, 40, 73),
-        #                              learning_rate='invscaling', max_iter=1200, random_state=42,
-        #                              solver='sgd')}
-
-        # {'pca__n_components': 50, 'classifier__verbose': False, 'classifier__solver': 'sgd',
-        #  'classifier__max_iter': 1500, 'classifier__learning_rate': 'invscaling',
-        #  'classifier__hidden_layer_sizes': (93, 99, 104, 94, 92), 'classifier__alpha': 0.001,
-        #  'classifier__activation': 'relu',
-        #  'classifier': MLPClassifier(alpha=0.001, hidden_layer_sizes=(93, 99, 104, 94, 92),
-        #                              learning_rate='invscaling', max_iter=1500, random_state=42,
-        #                              solver='sgd')}
-        #
-        # {'pca__n_components': 50, 'classifier__verbose': False, 'classifier__solver': 'sgd',
-        #  'classifier__learning_rate': 'invscaling', 'classifier__hidden_layer_sizes': (92, 100, 100, 101, 85, 75),
-        #  'classifier__alpha': 0.01, 'classifier__activation': 'relu',
-        #  'classifier': MLPClassifier(alpha=0.01, hidden_layer_sizes=(92, 100, 100, 101, 85, 75),
-        #                              learning_rate='invscaling', random_state=42, solver='sgd')}
-
-        # {'pca__n_components': 53,
-        # 'classifier__verbose': False, 'classifier__solver': 'sgd', 'classifier__max_iter': 1200,
-        # 'classifier__learning_rate': 'invscaling', 'classifier__hidden_layer_sizes': (70, 36, 25, 40, 73),
-        # 'classifier__alpha': 0.001, 'classifier__activation': 'relu',
-        # 'classifier': MLPClassifier(alpha=0.001, hidden_layer_sizes=(70, 36, 25, 40, 73),
-        #               learning_rate='invscaling', max_iter=1200, random_state=42,
-        #               solver='sgd')}
-
-
-
-        "pca__n_components": [52,53,54],
-        'classifier__hidden_layer_sizes': [(70, 36, 25, 40, 73)],
-        'classifier__activation':  ['relu'],
+        "pca__n_components": [53],
+        'classifier__hidden_layer_sizes': _3_layers,
+        'classifier__activation': ['relu'],
         'classifier__solver': ['sgd'],
         'classifier__alpha': [0.001],
         'classifier__learning_rate': ['invscaling'],
-        'classifier__max_iter': [1200],
+        # 'classifier__max_iter': [100],
         'classifier__verbose': [False],  # details prints of loss
         "classifier": [clf8]
-
 
     }
     # MLPClassifier + KBEST
@@ -771,7 +681,7 @@ if args['classification']:
         "classifier": [clf2]
     }
     param_2_classifier_only = {
-        "classifier__n_neighbors": range(30,50,2),
+        "classifier__n_neighbors": range(30, 50, 2),
         "classifier__weights": ['uniform', 'distance'],
         "classifier__algorithm": ['auto', 'ball_tree', 'kd_tree', 'brute'],
         "classifier": [clf2]
@@ -798,12 +708,12 @@ if args['classification']:
         'classifier__activation': ['relu'],
         'classifier__solver': ['sgd', 'adam'],
         'classifier__alpha': [0.01, 0.001, 0.0001],
-        'classifier__learning_rate': ['adaptive','invscaling'],
+        'classifier__learning_rate': ['adaptive', 'invscaling'],
         'classifier__max_iter': [700],
         'classifier__verbose': [False],  # details prints of loss
         "classifier": [clf8]
     }
-    param_8_dimension_red_only= {
+    param_8_dimension_red_only = {
         # 'classifier__hidden_layer_sizes': _3_layers,
         # {'pca__n_components': 35, 'classifier__verbose': False, 'classifier__solver': 'sgd',
         #  'classifier__max_iter': 700, 'classifier__learning_rate': 'invscaling',
@@ -812,21 +722,21 @@ if args['classification']:
         #                              learning_rate='invscaling', max_iter=700, random_state=42,
         #                              solver='sgd')}
 
-        #* Best Hyperparametes picked in cross validation: (cv's best score):
-            # {'pca__n_components': 10, 'classifier__verbose': False, 'classifier__solver': 'sgd', 'classifier__max_iter': 800,
+        # * Best Hyperparametes picked in cross validation: (cv's best score):
+        # {'pca__n_components': 10, 'classifier__verbose': False, 'classifier__solver': 'sgd', 'classifier__max_iter': 800,
         # 'classifier__learning_rate': 'invscaling', 'classifier__hidden_layer_sizes': (33, 10, 10),
         # 'classifier__alpha': 0.01, 'classifier__activation': 'relu', 'classifier': MLPClassifier(alpha=0.01, hidden_layer_sizes=(33, 10, 10),
-            #   learning_rate='invscaling', max_iter=800, random_state=42,
-            #   solver='sgd')}
+        #   learning_rate='invscaling', max_iter=800, random_state=42,
+        #   solver='sgd')}
 
-        #{'pca__n_components': 10, 'classifier__verbose': False, 'classifier__solver': 'sgd',
+        # {'pca__n_components': 10, 'classifier__verbose': False, 'classifier__solver': 'sgd',
         # 'classifier__max_iter': 800, 'classifier__learning_rate': 'invscaling', 'classifier__hidden_layer_sizes': (33, 10, 10), 'classifier__alpha': 0.01, 'classifier__activation': 'relu', 'classifier': MLPClassifier(alpha=0.01, hidden_layer_sizes=(33, 10, 10),
-              # learning_rate='invscaling', max_iter=800, random_state=42,
-              #solver='sgd')}
+        # learning_rate='invscaling', max_iter=800, random_state=42,
+        # solver='sgd')}
 
         "pca__n_components": [100],
         'classifier__hidden_layer'
-        '_sizes' :  [(1,1,1)] + _3_layers,
+        '_sizes': [(1, 1, 1)] + _3_layers,
         'classifier__activation': ['relu'],
         'classifier__solver': ['sgd'],
         'classifier__alpha': [0.005],
@@ -855,7 +765,8 @@ if args['classification']:
         steps=[("scaler", scaler), ("classifier", param_2_classifier_only["classifier"][0])])
     pipe3a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param3a["classifier"][0])])
     pipe3b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param3b["classifier"][0])])
-    pipe3_classifier_only = Pipeline(steps=[("scaler", scaler), ("classifier", param_3_classifier_only["classifier"][0])])
+    pipe3_classifier_only = Pipeline(
+        steps=[("scaler", scaler), ("classifier", param_3_classifier_only["classifier"][0])])
     pipe4a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param4a["classifier"][0])])
     pipe4b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param4b["classifier"][0])])
     pipe5a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param5a["classifier"][0])])
@@ -863,14 +774,17 @@ if args['classification']:
     pipe5 = Pipeline(steps=[("scaler", scaler), ("classifier", param5["classifier"][0])])
     pipe6a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param6a["classifier"][0])])
     pipe6b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param6b["classifier"][0])])
-    pipe6_classifier_only = Pipeline(steps=[("scaler", scaler), ("classifier", param_6_classifier_only["classifier"][0])])
+    pipe6_classifier_only = Pipeline(
+        steps=[("scaler", scaler), ("classifier", param_6_classifier_only["classifier"][0])])
     pipe7a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param7a["classifier"][0])])
     pipe7b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param7b["classifier"][0])])
     # pipe7c = Pipeline(steps=[("scaler", scaler), ("classifier", param7c["classifier"][0])])
     pipe8a = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param8a["classifier"][0])])
     pipe8b = Pipeline(steps=[("scaler", scaler), ("kBest", kBest_selector), ("classifier", param8b["classifier"][0])])
-    pipe8_classifier_only = Pipeline(steps=[("scaler", scaler), ("classifier", param_8_classifier_only["classifier"][0])])
-    pipe8_dimension_red_only = Pipeline(steps=[("scaler", scaler), ("pca", pca), ("classifier", param_8_dimension_red_only["classifier"][0])])
+    pipe8_classifier_only = Pipeline(
+        steps=[("scaler", scaler), ("classifier", param_8_classifier_only["classifier"][0])])
+    pipe8_dimension_red_only = Pipeline(
+        steps=[("scaler", scaler), ("pca", pca), ("classifier", param_8_dimension_red_only["classifier"][0])])
     pipe_smote_1a = imb_Pipeline(
         steps=[("smote", sm), ("scaler", scaler), ("pca", pca), ("classifier", param1a["classifier"][0])])
     pipe_smote_2a = imb_Pipeline(
@@ -889,7 +803,7 @@ if args['classification']:
         steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param1b["classifier"][0])])
     pipe_smote_3b = imb_Pipeline(
         steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param3b["classifier"][0])])
-    pipe_smote_5a =  imb_Pipeline(
+    pipe_smote_5a = imb_Pipeline(
         steps=[("smote", sm), ("scaler", scaler), ("pca", pca), ("classifier", param5a["classifier"][0])])
     pipe_smote_6b = imb_Pipeline(
         steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param6b["classifier"][0])])
@@ -898,7 +812,7 @@ if args['classification']:
     pipe_smote_8b = imb_Pipeline(
         steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param8b["classifier"][0])])
     pipe_smote_6_smote_no_dimension_red = imb_Pipeline(
-            steps=[("smote", sm), ("scaler", scaler), ("classifier", param6_smote_no_dimension_red["classifier"][0])])
+        steps=[("smote", sm), ("scaler", scaler), ("classifier", param6_smote_no_dimension_red["classifier"][0])])
 
 # Grid Search
 splits = []  # each split is a list of : [X_train, X_test,y_train, y_test]
@@ -959,8 +873,8 @@ for config in splits:
     # make_fig_heatmap(X_train[top_contributors])
     # Find pcs which explaining (contributing to explained var) over 90 and 99% of variance
     ratios = report_pca.explained_variance_ratio_
-    index_90 = get_pcs_num_explains_p_ratio_of_var(0.99,ratios)
-    index_99 = get_pcs_num_explains_p_ratio_of_var(0.9,ratios)
+    index_90 = get_pcs_num_explains_p_ratio_of_var(0.99, ratios)
+    index_99 = get_pcs_num_explains_p_ratio_of_var(0.9, ratios)
     print(f"In X_train, {index_90 + 1} principal components explain over 99% of variance\n")
     print(f"In X_train, {index_99 + 1} principal components explain over 90% of variance\n")
     print(f"**************************************************\n"
@@ -985,7 +899,7 @@ for config in splits:
 
     k = 50
     selector = SelectKBest(k=k)
-    X_new = selector.fit_transform(X_train,y_train)
+    X_new = selector.fit_transform(X_train, y_train)
     selected_indices = selector.get_support(indices=True)
     feature_scores = selector.scores_
     best_k_features = list(X_train.iloc[:, list(selected_indices)].columns)
@@ -994,7 +908,7 @@ for config in splits:
     print(f"On X train:\n{k} Feature scores:\n")
     for i in range(len(best_k_features)):
         print(f"i = {i}")
-        print("feature ",best_k_features[i])
+        print("feature ", best_k_features[i])
         print("score (f_classif) ", feature_scores[i])
         print("p_val ", selector.pvalues_[i])
 
@@ -1023,7 +937,7 @@ for config in splits:
             # param_pipe_list = [[param5,pipe_smote_5a]]
             # param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
             # param_pipe_list = [[param7a, pipe_smote_7a]] # CATBOOST - BUGS
-            param_pipe_list = [[param8a, pipe_smote_8a]] # CHECKED
+            param_pipe_list = [[param8a, pipe_smote_8a]]  # CHECKED
             # param_pipe_list = [[param3b, pipe_smote_3b]] # CHECKED
             # param_pipe_list = [[param6b, pipe_smote_6b]] # CHECKED
             # param_pipe_list = [[param7b, pipe_smote_7b]] # CATBOOST - BUGS
@@ -1053,33 +967,17 @@ for config in splits:
             search.fit(X_train.astype(float), y_train)
         else:  # randomized search
             print("~~~~~~~~~~ RANDOMIZED SEARCH CV ~~~~~~~~~~")
-
-
             search = RandomizedSearchCV(estimator=pipe, param_distributions=param, n_iter=args["n_iter"], cv=args["cv"],
-                                        n_jobs=args['n_jobs'], verbose=3, random_state=args['rs'], scoring=scorer(),
-                                        refit=True)
-
-            # search = RandomizedSearchCV(estimator=pipe, param_distributions=param, n_iter=args["n_iter"], cv=args["cv"],
-            #                         n_jobs=args['n_jobs'], verbose=3, random_state=args['rs'], scoring='accuracy',
-            #                         refit=True)
+                                    n_jobs=args['n_jobs'], verbose=2, random_state=args['rs'], scoring=args['scoring_method'],
+                                    refit=True)
 
         n_splits = args['cv']  # num of splits in cv_iter (cv parameter n_splits)
         total_splits = args["n_iter"] * n_splits  # num of iterations in search * num of folds
         search.fit(X_train.astype(float), y_train)
-
-        best_cv_iter_idx = search.best_index_  # index of the iteration in cross val search which had best parsms (0<=best_cv_iter_idx <=niter)
-        best_cv_iter_first_split_idx = best_cv_iter_idx * n_splits
-        best_cv_iter_all_splits_indices = range(best_cv_iter_first_split_idx,
-                                                best_cv_iter_first_split_idx + n_splits
-                                                )  # the exact range of the 5 test scores of the best index configuration
-        best_cv_iter_yps_list = [all_splits_yps[i] for i in best_cv_iter_all_splits_indices]
-        best_cv_iter_yps_list_ndarray = np.concatenate(best_cv_iter_yps_list)  # turn to nd_array
-        best_cv_iter_yts_list = [all_splits_yts[index] for index in best_cv_iter_all_splits_indices]
-        best_cv_iter_yts_list_ndarray = np.concatenate(
-            best_cv_iter_yts_list)
-        print_conclusions(X_train, pipe, search, best_cv_iter_yts_list_ndarray, best_cv_iter_yps_list_ndarray,folder=folder)
+        y_pred = search.predict(X_train)
+        print_conclusions(X_train, pipe, search, y_pred = y_pred,y_true=y_train,folder=folder)
         y_pred = search.predict(X_test)
-        print_conclusions(search=search,y_true=y_test,y_pred=y_pred,test=True,folder= folder)
+        print_conclusions(search=search, y_true=y_test, y_pred=y_pred, test=True, folder=folder)
 
 print(f"<<<<<<<<<<<<<<<<<<<<< GSCVrunner.py finished successfuly<<<<<<<<<<<<<<<<<<<<<")
 if args['stdout_to_file']:

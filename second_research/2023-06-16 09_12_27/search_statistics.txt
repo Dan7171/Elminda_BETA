@@ -1,4 +1,0 @@
-In parameter choice num 0 / 9999 avg score was: 0.6765139577201289.
-
-In parameter choice num 1 / 9999 avg score was: 0.6778602350030921.
-

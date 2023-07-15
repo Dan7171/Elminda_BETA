@@ -1,2 +1,0 @@
-In parameter choice num 0 / 4999 avg score was: 0.6716312436401194. This is the best score so far
-

@@ -26,7 +26,7 @@ args = {
     "classification_type": "normal",
     # "normal" = 2 classes: < 50% change, => 50% change / "extreme" = 3 classes:  <30% , 30-70% , >70% change
 
-    "scoring_method": 'f_beta',  # "accuracy" /'f1'/ 'roc_auc' /'precision' /'recall'/'f_beta' (sklearn metrics score funcs)
+    "scoring_method": 'f1',  # "accuracy" /'f1'/ 'roc_auc' /'precision' /'recall'/'f_beta' (sklearn metrics score funcs)
 
     "both": True,
     # (for now works on classificatin only) True- train on both research 1 and research 2 data , False- train on
@@ -38,9 +38,9 @@ args = {
     # "balance_y_values": False,
     # ,  # working for clasification only. balancing the number of responsive and non responsive (y categories)
 
-    "n_iter": 2000, # param for randomized cv - num of combinations to try in randomized search
+    "n_iter": 200, # param for randomized cv - num of combinations to try in randomized search
 
-    "n_jobs": 1,
+    "n_jobs":1,
     # num of threads each model is generating to speed up grid search. Changes can cause unexpected behaviour
 
     "use_gamma_columns": True, # read comment!!
@@ -55,9 +55,13 @@ args = {
 
     # "halving": False, # out of order
 
-    "stdout_to_file": True
+    "stdout_to_file": False,
+
+    "significant": False,
 
 }
+free_text = "_MLP"
+args['output_folder_label'] = args['scoring_method'] + "_" + str(args['n_iter']) + free_text
 # if args["both"] or args["balance_y_values"]:
 #     args['classification'] = True
 

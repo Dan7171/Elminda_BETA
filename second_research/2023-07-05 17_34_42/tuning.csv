@@ -1,0 +1,13 @@
+date,classifier,pipe_named_steps,best_params,selected_features,user_inputs,responders_rate,X_train_size(num of rows in cv input df),scorer_used,scorer_score_mean,scorer_score_std,accuracy,precision,recall,f1,confusion_matrix,param_grid_searched_at
+2023-07-05,"MLPClassifier(alpha=0.001, hidden_layer_sizes=(70, 36, 25, 40, 73),
+              learning_rate='invscaling', max_iter=1200, random_state=42,
+              solver='sgd')","{'smote': SMOTE(random_state=42, sampling_strategy='minority'), 'scaler': StandardScaler(), 'pca': PCA(), 'classifier': MLPClassifier(alpha=0.001, hidden_layer_sizes=(70, 36, 25, 40, 73),
+              learning_rate='invscaling', max_iter=1200, random_state=42,
+              solver='sgd')}","{'pca__n_components': 53, 'classifier__verbose': False, 'classifier__solver': 'sgd', 'classifier__max_iter': 1200, 'classifier__learning_rate': 'invscaling', 'classifier__hidden_layer_sizes': (70, 36, 25, 40, 73), 'classifier__alpha': 0.001, 'classifier__activation': 'relu', 'classifier': MLPClassifier(alpha=0.001, hidden_layer_sizes=(70, 36, 25, 40, 73),
+              learning_rate='invscaling', max_iter=1200, random_state=42,
+              solver='sgd')}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'f_beta', 'both': True, 'cv': 5, 'n_iter': 2, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True, 'lite_mode': True, 'test_size': 0.15, 'stdout_to_file': False, 'significant': False, 'beta': 0.5}",0.6071428571428571,112,f_beta,0.7416010523427403,0.11955910500989861,0.6875,0.726027397260274,0.7794117647058824,0.75177304964539,"[[24 20]
+ [15 53]]
+[[TN FP
+[FN TP]]","{'pca__n_components': [53], 'classifier__hidden_layer_sizes': [(70, 36, 25, 40, 73)], 'classifier__activation': ['relu'], 'classifier__solver': ['sgd'], 'classifier__alpha': [0.001], 'classifier__learning_rate': ['invscaling'], 'classifier__max_iter': [1200], 'classifier__verbose': [False], 'classifier': [MLPClassifier(alpha=0.001, hidden_layer_sizes=(70, 36, 25, 40, 73),
+              learning_rate='invscaling', max_iter=1200, random_state=42,
+              solver='sgd')]}"
