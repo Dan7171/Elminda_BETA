@@ -1,14 +1,17 @@
-import math
-from functools import reduce
-from sklearn.metrics import roc_curve
 
+import math
+import shutil
+import subprocess
+from functools import reduce
+
+import sklearn.metrics
+from sklearn.metrics import roc_curve
 from matplotlib import pyplot as plt
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
 from sklearn.svm import SVC
 import numpy as np
 import pandas as pd
 import seaborn as sns
-
 from sklearn.metrics import classification_report
 import datetime
 from sklearn.model_selection import train_test_split
@@ -16,7 +19,6 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn import metrics
-from sklearn.model_selection import cross_val_score
 from sklearn.feature_selection import SelectKBest, f_classif, f_regression, mutual_info_classif
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import fbeta_score
@@ -30,17 +32,11 @@ import main_caller_r2
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import confusion_matrix, f1_score, accuracy_score, roc_auc_score, precision_score, recall_score
 from sklearn.metrics import make_scorer
-from sklearn.datasets import load_iris
-from sklearn.utils import shuffle
 import random
-from sklearn.base import BaseEstimator, TransformerMixin
 import os
-from scipy.stats import randint
 from runArguments import args
 from sklearn.experimental import enable_halving_search_cv  # noqa
-from sklearn.model_selection import HalvingRandomSearchCV
 from imblearn.over_sampling import SMOTE
-from sklearn.datasets import make_classification
 from imblearn.pipeline import Pipeline as imb_Pipeline
 import sys
 
@@ -118,10 +114,13 @@ def get_pcs_num_explains_p_ratio_of_var(p_ratio, ratios):
 
 
 def print_conclusions(df=None, pipe=None, search=None,
-                      folder="out_folder", test=False, y_true=None, y_pred=None):
-    if not test:
-        label = 'train'
-        print("-----------------------\n New CV report \n-----------------------")
+                      folder="out_folder", mode=None, y_true=None, y_pred=None):
+    """
+    Prints a detailed report for some pipeline results (train or test)
+    """
+    label = mode # cv / train / test
+    if mode == 'cv':
+        print(f"-----------------------\n New {label} report \n-----------------------")
         if args['classification']:
             name = pipe.named_steps['classifier']
             print("* Classifier: \n", name)
@@ -144,20 +143,16 @@ def print_conclusions(df=None, pipe=None, search=None,
         print("* Scorer_used:", args['scoring_method'])  # scoring method used for cv as scorer param
         score_mean = search.cv_results_['mean_test_score'][search.best_index_]
         score_std = search.cv_results_['std_test_score'][search.best_index_]
-        print("* CV Score (cv's best score for best hyperparametes): %.3f +/- %.3f (see score func in hyperparams) " % (
-            score_mean, score_std), "\n")
+        print(
+            f"* CV mean_test_score {args['scoring_method']} ( over {args['cv']} folds - (cv's best score for best hyperparametes): %.3f +/- %.3f (see score func in hyperparams) " % (
+                score_mean, score_std), "\n")
 
-    else:
-        label = 'test'
 
-    labels = ['Non responsive', 'Responsive']
+    labels = ['Non-responsive', 'Responsive']
     cm = confusion_matrix(y_true, y_pred)
     # Create a figure and plot the confusion matrix
     fig, ax = plt.subplots()
     im = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
-
-    # # Add colorbar
-    # cbar = ax.figure.colorbar(im, ax=ax)
 
     # Set labels and title
     ax.set(xticks=np.arange(cm.shape[1]),
@@ -166,8 +161,8 @@ def print_conclusions(df=None, pipe=None, search=None,
            xlabel='Predicted label', ylabel='True label',
            title='Confusion Matrix')
 
-    # Rotate the x-axis labels if needed
-    plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+    # # Rotate the x-axis labels if needed
+    # plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 
     # Loop over data dimensions and create text annotations
     thresh = cm.max() / 2.0
@@ -179,13 +174,14 @@ def print_conclusions(df=None, pipe=None, search=None,
 
     # Save the figure to a PNG file
     figpath = os.path.join(folder, f'{label}_cm.png')
+    # fig.set_size_inches(8, 12)  # Adjust the height (6 inches) as needed
     fig.savefig(figpath)  # Replace 'path/to/save' with the desired file path
 
     cm_with_legend = str(cm) + "\n" + "[[TN FP\n[FN TP]]"
     print("* Confusion matrix: \n", cm_with_legend)
 
     # calculate Response rate for X_train:
-    if not test:
+    if mode == 'cv':
         y_train_responders_cnt = 0
         positive_label = 1  # can vary in different experiments
         for y_val in y_train.values:
@@ -200,14 +196,15 @@ def print_conclusions(df=None, pipe=None, search=None,
     recall = cm[1][1] / (cm[1][1] + cm[1][0])
     accuracy = true_count / total
     f1 = 2 * (precision * recall) / (precision + recall)
-    print("* CV Precision: ", precision)
-    print("* CV Recall: ", recall)
-    print("* CV Accuracy: ", accuracy)
-    print("* CV F1: ", f1)
+    print("* Precision: ", precision)
+    print("* Recall: ", recall)
+    print("* Accuracy: ", accuracy)
+    print("* F1: ", f1)
+    print(f"* F-Beta (beta = {args['beta']}): ", fbeta_score(y_true, y_pred, beta=args['beta']))  # beta = weight given to recall (weight given to precision is always 1)
 
     # save cross val scores and params in tuning.csv for tracking
     # csv column names and values in a row:
-    if not test:
+    if mode == 'cv':
         d = {
             "date": str(datetime.date.today()),  # date, hour
             "classifier": str(pipe.named_steps['classifier']),
@@ -237,30 +234,64 @@ def print_conclusions(df=None, pipe=None, search=None,
         tmp.to_csv(file_path, index=False)
         print("train CV report saved to  ", file_path)
 
-    # roc auc
-    if test:
-        y_pred_prob_positives = search.predict_proba(X_test)[:, 1]
-        label = "Test"
-    else:
-        y_pred_prob_positives = search.predict_proba(X_train)[:, 1]
-        label = "Train"
+    save_roc_auc = True
+    if mode in ("test", "train"):
+        if save_roc_auc:
+            # roc auc
+            if mode == "test":
+                y_pred_prob_positives = search.predict_proba(X_test)[:, 1]
+                # label = "Test"
+            elif mode == "train":
+                y_pred_prob_positives = search.predict_proba(X_train)[:, 1]
+                # label = "Train"
 
-    fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred_prob_positives)
-    roc_auc = metrics.auc(fpr, tpr)
-    fig = plt.figure()
-    plt.title('Receiver Operating Characteristic')
-    plt.plot(fpr, tpr, 'b', label='AUC = %0.2f' % roc_auc)
-    plt.legend(loc='lower right')
-    plt.plot([0, 1], [0, 1], 'r--')
-    plt.xlim([0, 1])
-    plt.ylim([0, 1])
-    plt.ylabel('True Positive Rate')
-    plt.xlabel('False Positive Rate')
-    plt.show()
-    figpath = os.path.join(folder, f'roc_auc_{label}.png')
-    fig.savefig(figpath)
+            fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred_prob_positives)
 
-    print("-----------------------\n End of CV report \n-----------------------", '\n' * 3)
+            # Calculate the Area Under the ROC Curve (AUC)
+            roc_auc = metrics.auc(fpr, tpr)
+
+            # Create a figure and plot the ROC curve
+            plt.figure()
+            plt.plot(fpr, tpr, color='blue', lw=2, label='ROC curve (AUC = %0.2f)' % roc_auc)
+            plt.plot([0, 1], [0, 1], color='gray', linestyle='--')
+            plt.xlim([-0.02, 1.02])
+            plt.ylim([-0.02, 1.02])
+            plt.xlabel('False Positive Rate')
+            plt.ylabel('True Positive Rate')
+            plt.title('Receiver Operating Characteristic (ROC) Curve')
+            plt.legend(loc='lower right')
+
+            # Save the figure to a PNG file
+            figpath = os.path.join(folder, f'roc_auc_{label}.png')
+            plt.savefig(figpath)
+
+            # Show the plot (optional)
+            plt.show()
+    print(f"-----------------------\n End of {label} report \n-----------------------", '\n' * 3)
+
+
+def ci(X_test, y_test,model,score):
+    # dummy = sklearn.dummy.DummyClassifier(strategy="constant", constant=1)
+    dummy_predictions =  [1]*len(y_test)
+    scores_model = []
+    scores_dummy = []
+
+    for n in range(500):
+        random_indices = np.random.choice(X_test.index, size=len(X_test), replace=True)
+        X_test_new = X_test.loc[random_indices,:]
+        y_test_new = y_test.loc[random_indices,:]
+        if score == 'precision':
+            scores_model.append(precision_score(y_test_new, model.predict(X_test_new)))
+            scores_dummy.append(precision_score(y_test_new,dummy_predictions))
+        elif score == 'accuracy':
+            scores_model.append(accuracy_score(y_test_new, model.predict(X_test_new)))
+            scores_dummy.append(accuracy_score(y_test_new, dummy_predictions))
+
+        elif score == 'f1':
+            scores_model.append(f1_score(y_true=y_test_new, y_pred = model.predict(X_test_new)))
+            scores_dummy.append(f1_score(y_true=y_test_new,  y_pred = dummy_predictions))
+
+    return np.quantile(scores_model,[0.025,0.975]),np.quantile(scores_dummy,[0.025,0.975])
 
 
 def reset_column_to_original_labels(df, col, original_lables):
@@ -300,8 +331,12 @@ def CV_Score(y_true, y_pred):
     elif my_scorer == 'recall':
         cvscore = recall_score(y_true, y_pred)
     elif my_scorer == 'f_beta':
+        if args['beta']:
+            beta = args['beta']
+        else:
+            beta = 0.5
         cvscore = fbeta_score(y_true, y_pred,
-                              beta=0.5)  # beta = weight given to recall (weight given to precision is always 1)
+                            beta)  # beta = weight given to recall (weight given to precision is always 1)
 
     if cvscore is None:
         print("problem - cvscore is nan.check y_true, y_pred...")
@@ -323,7 +358,7 @@ def CV_Score(y_true, y_pred):
     print("fold's true y \n", y_true)
     print("fold's predicted y\n", y_pred)
     print(f"scoring metric: {my_scorer}, score: {cvscore} ")
-    print("Debug\n>>>")
+    print(">>>")
     predicted_correctly = len(y_true[y_true == y_pred])
     predicted_in_total = len(y_true)
     print(f"predicted correctly / predicted_in_total = {predicted_correctly} / {predicted_in_total}")
@@ -336,7 +371,7 @@ def CV_Score(y_true, y_pred):
         if choice_avg_score > best_score_by_now[0]:
             best_score_by_now[0] = choice_avg_score
             improvement_report_str = f"New best score is {best_score_by_now[0]}"
-            # parmams_str = f"chosen parameters: {pipe.get_params()}" # param configuration chose
+            # parmam_str = f"chosen parameters: {pipe.get_params()}" # param configuration chose
 
         if improvement_report_str is not None:  # improvement in score
             print("New improvement!")
@@ -449,6 +484,9 @@ now = datetime.datetime.now()
 folder = now.strftime("%Y-%m-%d %H_%M_%S") + args['output_folder_label']
 if not os.path.isdir(folder):
     os.mkdir(folder)
+shutil.copyfile(os.path.join(os.getcwd(),"GSCVrunner_new.py"),os.path.join(folder,"GSCVrunner_new.py"))
+shutil.copyfile(os.path.join(os.getcwd(),"runArguments.py"),os.path.join(folder,"runArguments.py"))
+
 if args['stdout_to_file']:
     logfile_name = os.path.join(folder, 'stdout.txt')
     print(f"see stdout in {logfile_name}")
@@ -570,42 +608,55 @@ if args['classification']:
     }
     # RANDOM FOREST NO DIMENSION REDUCTION
     param5 = {
-        'classifier__n_estimators': [10000],  # number of trees
         "classifier__n_jobs": [-1],
+        #
+        # "classifier__bootstrap": [True, False],
+        # 'classifier__n_estimators': [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000],  # number of trees
+        # "classifier__max_depth": [None, 10, 20, 50, 100, 200],
+        # "classifier__max_features": ['auto', 'sqrt'],
+        # 'classifier__min_samples_split': [2, 5, 10],
+        # 'classifier__min_samples_leaf': [1, 2, 4, 6, 10],
         "classifier": [clf5]
     }
+
     # RANDOM FOREST + pca
     param5a = {
-        "pca__n_components": range(10, 200, 20),
-        'classifier__n_estimators': [10000],  # number of trees
+        "pca__n_components": [71],
         "classifier__n_jobs": [-1],
+#        'classifier__n_estimators': [5000],  # number of trees
+        "classifier__max_depth": [75],
+        "classifier__max_features": [2,10,100,'auto'],
+        'classifier__min_samples_split': [7],
+        'classifier__min_samples_leaf': [5],
         "classifier": [clf5]
 
+    #     {'pca__n_components': 71, 'classifier__min_samples_split': 7, 'classifier__min_samples_leaf': 5,
+    #      'classifier__max_features': 2, 'classifier__max_depth': 75, 'classifier__bootstrap': True,
+    #      'classifier': RandomForestClassifier(max_depth=75, max_features=2, min_samples_leaf=5,
+    #                                           min_samples_split=7, random_state=42)}
+    #
     }
     # RANDOM FOREST + kbest
     param5b = {
-
-        "kBest__k": range(2, 40, 10),
-        'classifier__bootstrap': [True, False],
-        "classifier__max_depth": range(150, 160),
-        "classifier__min_samples_split": range(2, 10),
-        "classifier__min_samples_leaf": range(2, 10),
-        "classifier__max_features": ['auto', 'sqrt'],
+        "kBest__k": [5,10,15,20,30, 50, 100, 300,550],
+        'classifier__n_estimators': [10,20,30,40,50,60,70,80,100, 500, 2000],  # number of trees
+        "classifier__n_jobs": [-1],
+        "classifier__max_depth": [None, 3, 6, 10, 50, 100],
+        "classifier__max_features": ['sqrt', 'log2',None],
+        'classifier__min_samples_split': [2, 5, 10,40],
+        'classifier__min_samples_leaf': [1, 2, 4,7,10],
         "classifier": [clf5]
     }
     # GRADIENT BOOSTING + pca
     param6a = {
 
-        'pca__n_components': [54],
-        'classifier__subsample': [0.95],
-        'classifier__n_estimators': [5],
-        'classifier__min_samples_split': [64],
-        'classifier__min_samples_leaf': [29],
-        'classifier__max_depth': [140],
-        'classifier__max_features': [None],
-        'classifier__learning_rate': [0.0001],
-        'classifier': [clf6]
+        'pca__n_components': [54], 'classifier__subsample': [0.8], 'classifier__n_estimators': [20],
+         'classifier__min_samples_split': [82],
+        'classifier__min_samples_leaf': [27],
+         'classifier__max_features': [None], 'classifier__max_depth': [100], 'classifier__learning_rate': [0.0001],
+         'classifier': [clf6]
     }
+
     # GRADIENT BOOSTING + kbest
     param6b = {
         # reason I tried this classifier params:
@@ -621,13 +672,12 @@ if args['classification']:
     }
     # CATBOOST CLASSIFIER + pca
     param7a = {
-        "pca__n_components": range(2, 60, 10),
-        'classifier__n_estimators': range(2, 1000, 30),
-        "classifier__learning_rate": [0.0001, 0.01, 0.1],
-        'classifier__subsample': [0.1, 0.5, 0.7, 1.0],
-        'classifier__max_depth': range(3, 500, 20),
-        "classifier": [clf7]
+        "pca__n_components": [15, 20, 25],
+        "classifier": [clf7],
+        "classifier__depth": [2, 3],
+        "classifier__l2_leaf_reg": [2, 3]
     }
+
     # CATBOOST CLASSIFIER + kbest
     param7b = {
         "kBest__k": range(4, 60, 8),
@@ -645,15 +695,19 @@ if args['classification']:
     _3_layers = [(i, j, k) for i in range(10, 70, 3) for j in range(10, 70, 3) for k in range(10, 70, 3)]
     _2_layers = [(i, j) for i in range(1, 200, 4) for j in range(1, 200, 4)]
     # MLPClassifier + pca
+    param8 = {
+        "classifier": [clf8]
+    }
+
     param8a = {
 
         "pca__n_components": [53],
-        'classifier__hidden_layer_sizes': _3_layers,
-        'classifier__activation': ['relu'],
+        'classifier__hidden_layer_sizes':[(70, 36, 25, 40, 73)],
+        # 'classifier__activation': ['relu'],
         'classifier__solver': ['sgd'],
         'classifier__alpha': [0.001],
         'classifier__learning_rate': ['invscaling'],
-        # 'classifier__max_iter': [100],
+        'classifier__max_iter': [1200],
         'classifier__verbose': [False],  # details prints of loss
         "classifier": [clf8]
 
@@ -694,13 +748,7 @@ if args['classification']:
         "classifier": [clf3]
     }
     param_6_classifier_only = {
-        'classifier__n_estimators': range(2, 50, 4),
-        'classifier__learning_rate': [0.0001],
-        'classifier__max_depth': range(60, 140, 10),
-        'classifier__min_samples_split': range(58, 102, 4),
-        'classifier__min_samples_leaf': range(20, 40, 2),
-        'classifier__max_features': ['auto', None],
-        'classifier__subsample': [0.7, 0.8, 0.9],
+
         "classifier": [clf6]
     }
     param_8_classifier_only = {
@@ -805,6 +853,12 @@ if args['classification']:
         steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param3b["classifier"][0])])
     pipe_smote_5a = imb_Pipeline(
         steps=[("smote", sm), ("scaler", scaler), ("pca", pca), ("classifier", param5a["classifier"][0])])
+
+    pipe_5_scaler_smote_rf = imb_Pipeline(
+        steps=[("scaler", scaler), ("smote", sm), ("classifier", param5["classifier"][0])])
+    pipe_smote_5b = imb_Pipeline(
+        steps=[("scaler", scaler), ("smote", sm), ("kBest", kBest_selector), ("classifier", param5a["classifier"][0])])
+
     pipe_smote_6b = imb_Pipeline(
         steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param6b["classifier"][0])])
     pipe_smote_7b = imb_Pipeline(
@@ -813,7 +867,6 @@ if args['classification']:
         steps=[("smote", sm), ("scaler", scaler), ("kBest", kBest_selector), ("classifier", param8b["classifier"][0])])
     pipe_smote_6_smote_no_dimension_red = imb_Pipeline(
         steps=[("smote", sm), ("scaler", scaler), ("classifier", param6_smote_no_dimension_red["classifier"][0])])
-
 # Grid Search
 splits = []  # each split is a list of : [X_train, X_test,y_train, y_test]
 if (args["split_rows"] == 'normal'):  # regular test train split  =  don't drop subjects:
@@ -861,86 +914,81 @@ for config in splits:
             config[i] = config[i].to_frame()
     X_train, X_test, y_train, y_test = config[0], config[1], config[2], config[3]
 
-    # Analyze X_train with PCA:
-    report_pca = PCA()
-    X_train_for_pca = scaler.fit_transform(X_train.copy())
-    report_pca.fit(X_train_for_pca)
-    all_pcs = report_pca.components_
-    # find k features in data that has the largest relative contribution to explained variance in X values
-    k = 50
-    top_contributions, top_contributors = get_top_k_contributions_and_contributors(k=k, all_pcs=all_pcs)
-    # make_fig_contributions(top_contributors, top_contributions, k)
-    # make_fig_heatmap(X_train[top_contributors])
-    # Find pcs which explaining (contributing to explained var) over 90 and 99% of variance
-    ratios = report_pca.explained_variance_ratio_
-    index_90 = get_pcs_num_explains_p_ratio_of_var(0.99, ratios)
-    index_99 = get_pcs_num_explains_p_ratio_of_var(0.9, ratios)
-    print(f"In X_train, {index_90 + 1} principal components explain over 99% of variance\n")
-    print(f"In X_train, {index_99 + 1} principal components explain over 90% of variance\n")
-    print(f"**************************************************\n"
-          f"Distribution of categorical variables in data:"
-          f"**************************************************\n"
-          "Gender:\n"
-          f"X['gender'].value_counts(): \n{X['gender'].value_counts()}\n"
-          f"X_train['gender'].value_counts():\n{X_train['gender'].value_counts()}\n"
-          f"X_test['gender'].value_counts():\n{X_test['gender'].value_counts()}\n"
-          f"\n**************************************************\n"
-          "Treatment_group (coil):\n"
-          f"X['Treatment_group'].value_counts():\n {X['Treatment_group'].value_counts()}\n"
-          f"X_train['Treatment_group'].value_counts():\n{X_train['Treatment_group'].value_counts()}\n"
-          f"X_test['Treatment_group'].value_counts():\n{X_test['Treatment_group'].value_counts()}\n"
-          "Response to treatment:\n"
-          f"\n**************************************************\n"
-          f"['6-weeks_HDRS21_class'].value_counts():\n{y['6-weeks_HDRS21_class'].value_counts()}\n"
-          f"y_train['6-weeks_HDRS21_class'].value_counts():\n{y_train['6-weeks_HDRS21_class'].value_counts()}\n"
-          f"y_test['6-weeks_HDRS21_class'].value_counts():\n{y_test['6-weeks_HDRS21_class'].value_counts()}\n"
-          f"\n**************************************************\n"
-          f"Principal components:\n")
+    add_train_data_reports = False
+    if add_train_data_reports:
+        # Analyze X_train with PCA:
+        report_pca = PCA()
+        X_train_for_pca = scaler.fit_transform(X_train.copy())
+        report_pca.fit(X_train_for_pca)
+        all_pcs = report_pca.components_
+        # find k features in data that has the largest relative contribution to explained variance in X values
+        k = 100
+        top_contributions, top_contributors = get_top_k_contributions_and_contributors(k=k, all_pcs=all_pcs)
+        # make_fig_contributions(top_contributors, top_contributions, k)
+        # make_fig_heatmap(X_train[top_contributors])
+        # Find pcs which explaining (contributing to explained var) over 90 and 99% of variance
+        ratios = report_pca.explained_variance_ratio_
+        index_90 = get_pcs_num_explains_p_ratio_of_var(0.99, ratios)
+        index_99 = get_pcs_num_explains_p_ratio_of_var(0.9, ratios)
+        print(f"In X_train, {index_90 + 1} principal components explain over 99% of variance\n")
+        print(f"In X_train, {index_99 + 1} principal components explain over 90% of variance\n")
+        print(f"**************************************************\n"
+              f"Distribution of categorical variables in data:"
+              f"**************************************************\n"
+              "Gender:\n"
+              f"X['gender'].value_counts(): \n{X['gender'].value_counts()}\n"
+              f"X_train['gender'].value_counts():\n{X_train['gender'].value_counts()}\n"
+              f"X_test['gender'].value_counts():\n{X_test['gender'].value_counts()}\n"
+              f"\n**************************************************\n"
+              "Treatment_group (coil):\n"
+              f"X['Treatment_group'].value_counts():\n {X['Treatment_group'].value_counts()}\n"
+              f"X_train['Treatment_group'].value_counts():\n{X_train['Treatment_group'].value_counts()}\n"
+              f"X_test['Treatment_group'].value_counts():\n{X_test['Treatment_group'].value_counts()}\n"
+              "Response to treatment:\n"
+              f"\n**************************************************\n"
+              f"['6-weeks_HDRS21_class'].value_counts():\n{y['6-weeks_HDRS21_class'].value_counts()}\n"
+              f"y_train['6-weeks_HDRS21_class'].value_counts():\n{y_train['6-weeks_HDRS21_class'].value_counts()}\n"
+              f"y_test['6-weeks_HDRS21_class'].value_counts():\n{y_test['6-weeks_HDRS21_class'].value_counts()}\n"
+              f"\n**************************************************\n"
+              f"Principal components:\n")
 
-    k = 50
-    selector = SelectKBest(k=k)
-    X_new = selector.fit_transform(X_train, y_train)
-    selected_indices = selector.get_support(indices=True)
-    feature_scores = selector.scores_
-    best_k_features = list(X_train.iloc[:, list(selected_indices)].columns)
-    # print("Selected indices:", selected_indices)
-    print(f"K = {k}  best of X train (SelectKbest)")
-    print(f"On X train:\n{k} Feature scores:\n")
-    for i in range(len(best_k_features)):
-        print(f"i = {i}")
-        print("feature ", best_k_features[i])
-        print("score (f_classif) ", feature_scores[i])
-        print("p_val ", selector.pvalues_[i])
-
-    # make_fig_kbest(feature_scores,best_k_features)
-    # if args['significant']:
-    #     significant_t_test = ['Ratio_Relative_Power_Norm_Delta Over Beta2_C6',
-    #            'Ratio_Relative_Power_Norm_Delta Over Beta2_P10', 'Ratio_Relative_Power_Norm_Delta Over Beta2_P6',
-    #            'Ratio_Relative_Power_Norm_Delta Over Beta2_P8', 'Single_Mean_Power_Abs_Delta_Fpz']
-    #
-    #     # option 1 - significat from interference
-    #     # X_train = X_train[significant_t_test]
-    #     # X_test = X_test[significant_t_test]
-    #
-    #     # opption 2 - comnbination of k best and pca top contributors
-    #
-    #     # best_features_pca_kbest = list(set(top_contributors).union(set(best_k_features)))
-    #     # X_train = X_train[best_features_pca_kbest]
-    #     # X _test = X_test[best_features_pca_kbest]
+        k = 100
+        selector = SelectKBest(k=k)
+        X_new = selector.fit_transform(X_train, y_train)
+        selected_indices = selector.get_support(indices=True)
+        feature_scores = selector.scores_
+        best_k_features = list(X_train.iloc[:, list(selected_indices)].columns)
+        # print("Selected indices:", selected_indices)
+        print(f"K = {k}  best of X train (SelectKbest)")
+        print(f"On X train:\n{k} Feature scores:\n")
+        for i in range(len(best_k_features)):
+            print(f"i = {i}")
+            print("feature ", best_k_features[i])
+            print("score (f_classif) ", feature_scores[i])
+            print("p_val ", selector.pvalues_[i])
 
     if args['classification']:
         if args['lite_mode']:  # just for debugging. using one small grid
             # param_pipe_list = [[param2a,pipe_smote_2a]]
             # param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
-            # param_pipe_list = [[param5, pipe5]]
+            # param_pipe_list = [[param5a, pipe_smote_5a]]
             # param_pipe_list = [[param5a, pipe5a]]
-            # param_pipe_list = [[param5,pipe_smote_5a]]
+            # param_pipe_list = [[param5a,pipe_smote_5a]]
+
+            param_pipe_list = [[param5b,pipe_smote_5b]]
+
+            # param_pipe_list = [[param5, pipe5]]
+
+            # param_pipe_list = [[param7a,pipe7a]]
+            # param_pipe_list = [[param7a,pipe_smote_7a]]
+            # param_pipe_list = [[param_6_classifier_only,pipe6_classifier_only  ]]
             # param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
-            # param_pipe_list = [[param7a, pipe_smote_7a]] # CATBOOST - BUGS
-            param_pipe_list = [[param8a, pipe_smote_8a]]  # CHECKED
+            # param_pipe_list = [[param7a, pipe_smote_7a]] # CATBOOST
+            # param_pipe_list = [[param8a, pipe_smote_8a]]  # CHECKED
+            # param_pipe_list = [[param8, pipe8_classifier_only]]
             # param_pipe_list = [[param3b, pipe_smote_3b]] # CHECKED
             # param_pipe_list = [[param6b, pipe_smote_6b]] # CHECKED
-            # param_pipe_list = [[param7b, pipe_smote_7b]] # CATBOOST - BUGS
+            # param_pipe_list = [[param7b, pipe_smote_7b]] # CATBOOST
             # param_pipe_list = [[param_2_classifier_only, pipe2_classifier_only]]
             # param_pipe_list = [[param_3_classifier_only, pipe3_classifier_only]]
             # param_pipe_list = [[param_6_classifier_only, pipe6_classifier_only]]
@@ -950,7 +998,8 @@ for config in splits:
             # param_pipe_list = [[param_8_dimension_red_only,pipe8_dimension_red_only]]
         else:  # more than one model
             # pipe is represent the steps we want to execute, param represents which args we want to execute with
-            param_pipe_list = []  # put all the pipe and param paris you want
+            param_pipe_list = []  # put all the pipe and param pairs you want
+
     for pair in param_pipe_list:
         total_folds = [0]  # counter
         all_splits_yts, all_splits_yps = [], []  # all_splits_yts and all_splits_yps are lists of vectors, one vector for each split (n_iter * n_splits len).
@@ -968,18 +1017,46 @@ for config in splits:
         else:  # randomized search
             print("~~~~~~~~~~ RANDOMIZED SEARCH CV ~~~~~~~~~~")
             search = RandomizedSearchCV(estimator=pipe, param_distributions=param, n_iter=args["n_iter"], cv=args["cv"],
-                                    n_jobs=args['n_jobs'], verbose=2, random_state=args['rs'], scoring=args['scoring_method'],
-                                    refit=True)
+                                        n_jobs=args['n_jobs'], verbose=3, random_state=args['rs'], scoring=scorer(),
+                                        refit=True)
 
         n_splits = args['cv']  # num of splits in cv_iter (cv parameter n_splits)
         total_splits = args["n_iter"] * n_splits  # num of iterations in search * num of folds
         search.fit(X_train.astype(float), y_train)
-        y_pred = search.predict(X_train)
-        print_conclusions(X_train, pipe, search, y_pred = y_pred,y_true=y_train,folder=folder)
-        y_pred = search.predict(X_test)
-        print_conclusions(search=search, y_true=y_test, y_pred=y_pred, test=True, folder=folder)
+
+        # REPORT 1 -
+        # Print report about cross-validation (selection of the best hyper-parameters)
+
+        search.fit(X_train.astype(float), y_train)
+        best_cv_iter_idx = search.best_index_  # index of the iteration in cross val search which had best parsms (0<=best_cv_iter_idx <=niter)
+        best_cv_iter_first_split_idx = best_cv_iter_idx * n_splits
+        best_cv_iter_all_splits_indices = range(best_cv_iter_first_split_idx,
+                                                best_cv_iter_first_split_idx + n_splits)  # the exact range of the 5 test scores of the best index configuration
+        best_cv_iter_yps_list = [all_splits_yps[i] for i in best_cv_iter_all_splits_indices]
+        best_cv_iter_yps_list_ndarray = np.concatenate(best_cv_iter_yps_list)  # turn to nd_array
+        best_cv_iter_yts_list = [all_splits_yts[index] for index in best_cv_iter_all_splits_indices]
+        best_cv_iter_yts_list_ndarray = np.concatenate(best_cv_iter_yts_list)
+
+        print_conclusions(X_train, pipe, search, y_pred=best_cv_iter_yps_list_ndarray,
+                          y_true=best_cv_iter_yts_list_ndarray, mode='cv', folder=folder)
+
+        # REPORT 2 -
+        # Print report about trained model after refit on Xtrain and prediction on y_train
+        y_pred_on_train_data = search.predict(X_train)
+        print_conclusions(X_train, pipe, search, y_pred=y_pred_on_train_data, y_true=y_train, mode='train',
+                          folder=folder)
+
+        # REPORT 3 -
+        # Print report about final prediction on test set (Xtest)
+        y_pred_on_test_data = search.predict(X_test)
+        print_conclusions(search=search, y_true=y_test, y_pred=y_pred_on_test_data, mode='test', folder=folder)
+
+        ci_metrics = ['precision','accuracy','f1']
+        for metric in ci_metrics:
+            ci_model, ci_dummy   = ci(X_test,y_test,search,metric)
+            print(f"CIs of {metric} - generated by bootstrapping from test set:\nTrained Model CI: {ci_model} Dummy (baseline) Model CI (Always predicts 1): {ci_dummy}")
+            print("Intersection <=> models are significantly different")
 
 print(f"<<<<<<<<<<<<<<<<<<<<< GSCVrunner.py finished successfuly<<<<<<<<<<<<<<<<<<<<<")
 if args['stdout_to_file']:
     log_file.close()
-

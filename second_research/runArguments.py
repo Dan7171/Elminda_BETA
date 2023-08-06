@@ -26,7 +26,7 @@ args = {
     "classification_type": "normal",
     # "normal" = 2 classes: < 50% change, => 50% change / "extreme" = 3 classes:  <30% , 30-70% , >70% change
 
-    "scoring_method": 'f1',  # "accuracy" /'f1'/ 'roc_auc' /'precision' /'recall'/'f_beta' (sklearn metrics score funcs)
+    "scoring_method": 'precision',  # "accuracy" /'f1'/ 'roc_auc' /'precision' /'recall'/'f_beta' (sklearn metrics score funcs)
 
     "both": True,
     # (for now works on classificatin only) True- train on both research 1 and research 2 data , False- train on
@@ -34,11 +34,7 @@ args = {
 
     "cv": 5,  # param for cv
 
-    # old and wrong way to do smote
-    # "balance_y_values": False,
-    # ,  # working for clasification only. balancing the number of responsive and non responsive (y categories)
-
-    "n_iter": 200, # param for randomized cv - num of combinations to try in randomized search
+    "n_iter": 300, # param for randomized cv - num of combinations to try in randomized search
 
     "n_jobs":1,
     # num of threads each model is generating to speed up grid search. Changes can cause unexpected behaviour
@@ -55,22 +51,22 @@ args = {
 
     # "halving": False, # out of order
 
-    "stdout_to_file": False,
+    "stdout_to_file":False,
 
     "significant": False,
 
 }
-free_text = "_MLP"
-args['output_folder_label'] = args['scoring_method'] + "_" + str(args['n_iter']) + free_text
+free_text = "_RF_TUNED"
+# free_text = "_TMP"
+args['output_folder_label'] = "_"+ args['scoring_method'] + "_" + str(args['n_iter']) + free_text
+
 # if args["both"] or args["balance_y_values"]:
 #     args['classification'] = True
 
-# if not args['classification']:
-#     # args["balance_y_values"] = False
-#     # args["both"] = False
 
 if args['exhaustive_grid_search']:
     args['n_iter'] = None
+args['beta'] = 0.5
+# if args['scoring_method'] == 'f_beta':
+#     args['beta'] = 0.5
 
-if args['scoring_method'] == 'f_beta':
-    args['beta'] = 0.5
