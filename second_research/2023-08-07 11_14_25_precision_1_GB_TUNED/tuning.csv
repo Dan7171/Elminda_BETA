@@ -1,0 +1,13 @@
+date,classifier,pipe_named_steps,best_params,selected_features,user_inputs,responders_rate,X_train_size(num of rows in cv input df),scorer_used,scorer_score_mean,scorer_score_std,accuracy,precision,recall,f1,confusion_matrix,param_grid_searched_at
+2023-08-07,"GradientBoostingClassifier(learning_rate=0.0001, max_depth=100,
+                           min_samples_leaf=27, min_samples_split=82,
+                           n_estimators=20, random_state=42, subsample=0.8)","{'smote': SMOTE(random_state=42, sampling_strategy='minority'), 'scaler': StandardScaler(), 'pca': PCA(), 'classifier': GradientBoostingClassifier(learning_rate=0.0001, max_depth=100,
+                           min_samples_leaf=27, min_samples_split=82,
+                           n_estimators=20, random_state=42, subsample=0.8)}","{'pca__n_components': 54, 'classifier__subsample': 0.8, 'classifier__n_estimators': 20, 'classifier__min_samples_split': 82, 'classifier__min_samples_leaf': 27, 'classifier__max_features': None, 'classifier__max_depth': 100, 'classifier__learning_rate': 0.0001, 'classifier': GradientBoostingClassifier(learning_rate=0.0001, max_depth=100,
+                           min_samples_leaf=27, min_samples_split=82,
+                           n_estimators=20, random_state=42, subsample=0.8)}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'precision', 'both': True, 'cv': 5, 'n_iter': 1, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True, 'lite_mode': True, 'test_size': 0.15, 'stdout_to_file': True, 'significant': False, 'output_folder_label': '_precision_1_GB_TUNED', 'beta': 0.5}",0.6071428571428571,112,precision,0.6841991341991341,0.1554775630592114,0.5803571428571429,0.6842105263157895,0.5735294117647058,0.6239999999999999,"[[26 18]
+ [29 39]]
+[[TN FP
+[FN TP]]","{'pca__n_components': [54], 'classifier__subsample': [0.8], 'classifier__n_estimators': [20], 'classifier__min_samples_split': [82], 'classifier__min_samples_leaf': [27], 'classifier__max_features': [None], 'classifier__max_depth': [100], 'classifier__learning_rate': [0.0001], 'classifier': [GradientBoostingClassifier(learning_rate=0.0001, max_depth=100,
+                           min_samples_leaf=27, min_samples_split=82,
+                           n_estimators=20, random_state=42, subsample=0.8)]}"

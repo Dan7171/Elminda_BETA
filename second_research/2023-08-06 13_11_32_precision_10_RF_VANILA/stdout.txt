@@ -1,0 +1,181 @@
+~~~~~~~~~~ RANDOMIZED SEARCH CV ~~~~~~~~~~
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Parameter choice num 0 / 9 - starting...
+0 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 0 0 0 0 1 0 1 1 1 1 0 0 0 1 0]
+scoring metric: precision, score: 0.5 
+>>>
+predicted correctly / predicted_in_total = 9 / 23
+<<<
+[CV 1/5] END classifier=RandomForestClassifier(random_state=42), classifier__n_jobs=-1;, score=0.500 total time=  19.9s
+1 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 0 0 0 1 1 1 1 0 1 1 1 1 0 1 1 1 1 1 1 0 1 0]
+scoring metric: precision, score: 0.75 
+>>>
+predicted correctly / predicted_in_total = 17 / 23
+<<<
+[CV 2/5] END classifier=RandomForestClassifier(random_state=42), classifier__n_jobs=-1;, score=0.750 total time=   0.7s
+2 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 0 1 0 0 1 1 1 1 1 0 1 1 1 1 0 1 1 1]
+scoring metric: precision, score: 0.47058823529411764 
+>>>
+predicted correctly / predicted_in_total = 8 / 22
+<<<
+[CV 3/5] END classifier=RandomForestClassifier(random_state=42), classifier__n_jobs=-1;, score=0.471 total time=   1.1s
+3 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [0 1 0 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: precision, score: 0.5263157894736842 
+>>>
+predicted correctly / predicted_in_total = 10 / 22
+<<<
+[CV 4/5] END classifier=RandomForestClassifier(random_state=42), classifier__n_jobs=-1;, score=0.526 total time=   0.8s
+4 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 0 0 1 0 1 1 1 1 1 1 1 1 0 0 0 0]
+scoring metric: precision, score: 0.6428571428571429 
+>>>
+predicted correctly / predicted_in_total = 12 / 22
+<<<
+New improvement!
+New best score is 0.5779522335249889
+In parameter choice num 0 / 9 avg score was: 0.5779522335249889.
+updating 2023-08-06 13_11_32_precision_10_RF_VANILA\search_statistics.txt...
+statistics file updated successfully with new improvement in score message!
+Best parameter choice score by now is 0.5779522335249889
+In parameter choice num 0 / 9 avg score was: 0.5779522335249889.
+[CV 5/5] END classifier=RandomForestClassifier(random_state=42), classifier__n_jobs=-1;, score=0.643 total time=   0.7s
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Parameter choice num 1 / 9 - starting...
+5 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 0 0 0 0 1 0 1 1 1 1 0 0 0 1 0]
+scoring metric: precision, score: 0.5 
+>>>
+predicted correctly / predicted_in_total = 9 / 23
+<<<
+[CV 1/5] END classifier=RandomForestClassifier(n_jobs=-1, random_state=42), classifier__n_jobs=-1;, score=0.500 total time=   0.4s
+6 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 0 0 0 1 1 1 1 0 1 1 1 1 0 1 1 1 1 1 1 0 1 0]
+scoring metric: precision, score: 0.75 
+>>>
+predicted correctly / predicted_in_total = 17 / 23
+<<<
+[CV 2/5] END classifier=RandomForestClassifier(n_jobs=-1, random_state=42), classifier__n_jobs=-1;, score=0.750 total time=   0.5s
+7 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 0 1 0 0 1 1 1 1 1 0 1 1 1 1 0 1 1 1]
+scoring metric: precision, score: 0.47058823529411764 
+>>>
+predicted correctly / predicted_in_total = 8 / 22
+<<<
+[CV 3/5] END classifier=RandomForestClassifier(n_jobs=-1, random_state=42), classifier__n_jobs=-1;, score=0.471 total time=   0.4s
+8 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [0 1 0 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: precision, score: 0.5263157894736842 
+>>>
+predicted correctly / predicted_in_total = 10 / 22
+<<<
+[CV 4/5] END classifier=RandomForestClassifier(n_jobs=-1, random_state=42), classifier__n_jobs=-1;, score=0.526 total time=   0.5s
+9 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 0 0 1 0 1 1 1 1 1 1 1 1 0 0 0 0]
+scoring metric: precision, score: 0.6428571428571429 
+>>>
+predicted correctly / predicted_in_total = 12 / 22
+<<<
+Best parameter choice score by now is 0.5779522335249889
+In parameter choice num 1 / 9 avg score was: 0.5779522335249889.
+[CV 5/5] END classifier=RandomForestClassifier(n_jobs=-1, random_state=42), classifier__n_jobs=-1;, score=0.643 total time=   0.7s
+-----------------------
+ New cv report 
+-----------------------
+* Classifier: 
+ RandomForestClassifier(n_jobs=-1, random_state=42)
+* User arguments: 
+ {'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'precision', 'both': True, 'cv': 5, 'n_iter': 10, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True, 'lite_mode': True, 'test_size': 0.15, 'stdout_to_file': True, 'significant': False, 'output_folder_label': '_precision_10_RF_VANILA', 'beta': 0.5}
+* Pipeline details: 
+ Pipeline(steps=[('scaler', StandardScaler()),
+                ('classifier',
+                 RandomForestClassifier(n_jobs=-1, random_state=42))])
+* Best Hyperparametes picked in cross validation: (cv's best score): 
+ {'classifier__n_jobs': -1, 'classifier': RandomForestClassifier(n_jobs=-1, random_state=42)}
+* Scorer_used: precision
+* CV mean_test_score precision ( over 5 folds - (cv's best score for best hyperparametes): 0.578 +/- 0.104 (see score func in hyperparams)  
+
+* Confusion matrix: 
+ [[10 34]
+ [22 46]]
+[[TN FP
+[FN TP]]
+* Response rate:  0.6071428571428571
+* Precision:  0.575
+* Recall:  0.6764705882352942
+* Accuracy:  0.5
+* F1:  0.6216216216216216
+* F-Beta (beta = 0.5):  0.5927835051546392
+train CV report saved to   2023-08-06 13_11_32_precision_10_RF_VANILA\tuning.csv
+-----------------------
+ End of cv report 
+----------------------- 
+
+
+
+* Confusion matrix: 
+ [[44  0]
+ [ 0 68]]
+[[TN FP
+[FN TP]]
+* Precision:  1.0
+* Recall:  1.0
+* Accuracy:  1.0
+* F1:  1.0
+* F-Beta (beta = 0.5):  1.0
+-----------------------
+ End of train report 
+----------------------- 
+
+
+
+* Confusion matrix: 
+ [[1 7]
+ [5 7]]
+[[TN FP
+[FN TP]]
+* Precision:  0.5
+* Recall:  0.5833333333333334
+* Accuracy:  0.4
+* F1:  0.5384615384615384
+* F-Beta (beta = 0.5):  0.5147058823529412
+-----------------------
+ End of test report 
+----------------------- 
+
+
+
+<<<<<<<<<<<<<<<<<<<<< GSCVrunner.py finished successfuly<<<<<<<<<<<<<<<<<<<<<

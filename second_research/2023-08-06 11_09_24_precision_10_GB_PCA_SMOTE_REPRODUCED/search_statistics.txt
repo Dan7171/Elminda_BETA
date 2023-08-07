@@ -1,0 +1,2 @@
+In parameter choice num 0 / 9 avg score was: 0.7147186147186148.
+

@@ -1,0 +1,6 @@
+In parameter choice num 0 / 299 avg score was: 0.48126984126984124.
+
+In parameter choice num 1 / 299 avg score was: 0.5463903743315508.
+
+In parameter choice num 2 / 299 avg score was: 0.570530303030303.
+

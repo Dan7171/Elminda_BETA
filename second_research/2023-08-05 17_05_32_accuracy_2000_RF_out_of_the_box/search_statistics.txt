@@ -1,0 +1,2 @@
+In parameter choice num 0 / 1999 avg score was: 0.4988142292490118.
+

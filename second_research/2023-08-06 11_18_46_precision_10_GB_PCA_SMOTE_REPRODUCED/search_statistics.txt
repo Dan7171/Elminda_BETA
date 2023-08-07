@@ -1,0 +1,6 @@
+In parameter choice num 0 / 9 avg score was: 0.6164502164502164.
+
+In parameter choice num 1 / 9 avg score was: 0.703976023976024.
+
+In parameter choice num 5 / 9 avg score was: 0.7136363636363636.
+

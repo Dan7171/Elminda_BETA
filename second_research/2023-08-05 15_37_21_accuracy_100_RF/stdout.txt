@@ -1,0 +1,241 @@
+Feature (contributor) i = 0: name =  gender, Value (contribution) = 0.0021058946353893545
+Feature (contributor) i = 1: name =  Treatment_group, Value (contribution) = 0.0020518874857216587
+Feature (contributor) i = 2: name =  age, Value (contribution) = 0.001851337240251837
+Feature (contributor) i = 3: name =  Pair_Mean_Power_Abs_Delta_C3-C4, Value (contribution) = 0.001807828159706584
+Feature (contributor) i = 4: name =  Pair_Mean_Power_Abs_Delta_T7-T8, Value (contribution) = 0.0017363739257925848
+Feature (contributor) i = 5: name =  Pair_Mean_Power_Abs_Theta_O1-O2, Value (contribution) = 0.001732879840948623
+Feature (contributor) i = 6: name =  Pair_Mean_Power_Abs_Alpha_Fp1-Fp2, Value (contribution) = 0.0017018704264862112
+Feature (contributor) i = 7: name =  Pair_Mean_Power_Abs_Alpha_O1-O2, Value (contribution) = 0.001693704427651174
+Feature (contributor) i = 8: name =  Pair_Mean_Power_Abs_Beta1_C3-C4, Value (contribution) = 0.0016920170118519787
+Feature (contributor) i = 9: name =  Pair_Mean_Power_Abs_Delta_P7-P8, Value (contribution) = 0.0016685349681015223
+Feature (contributor) i = 10: name =  Pair_Mean_Power_Abs_Delta_F3-F4, Value (contribution) = 0.001665144595378701
+Feature (contributor) i = 11: name =  Pair_Mean_Power_Abs_Delta_P3-P4, Value (contribution) = 0.0016520818464100728
+Feature (contributor) i = 12: name =  Pair_Mean_Power_Abs_Alpha_C3-C4, Value (contribution) = 0.001651050169342051
+Feature (contributor) i = 13: name =  Pair_Mean_Power_Abs_Alpha_T7-T8, Value (contribution) = 0.001647060935768041
+Feature (contributor) i = 14: name =  Pair_Mean_Power_Abs_Beta2_P3-P4, Value (contribution) = 0.0016390205593269926
+Feature (contributor) i = 15: name =  Pair_Mean_Power_Abs_Delta_O1-O2, Value (contribution) = 0.0016341426441661574
+Feature (contributor) i = 16: name =  Pair_Mean_Power_Abs_Beta1_P3-P4, Value (contribution) = 0.001633432757597799
+Feature (contributor) i = 17: name =  Pair_Mean_Power_Abs_Alpha_F7-F8, Value (contribution) = 0.0016152111041327145
+Feature (contributor) i = 18: name =  Pair_Mean_Power_Abs_Beta2_Fp1-Fp2, Value (contribution) = 0.0015890605680069154
+Feature (contributor) i = 19: name =  Pair_Mean_Power_Abs_Beta2_T7-T8, Value (contribution) = 0.001588227521768447
+Feature (contributor) i = 20: name =  Pair_Mean_Power_Abs_Alpha_P3-P4, Value (contribution) = 0.0015791672980584974
+Feature (contributor) i = 21: name =  Pair_Mean_Power_Abs_Theta_F3-F4, Value (contribution) = 0.0015748451888878644
+Feature (contributor) i = 22: name =  Pair_Mean_Power_Abs_Beta2_F3-F4, Value (contribution) = 0.001570859481429018
+Feature (contributor) i = 23: name =  Pair_Mean_Power_Abs_Theta_T7-T8, Value (contribution) = 0.001557088226125485
+Feature (contributor) i = 24: name =  Pair_Mean_Power_Abs_Theta_P7-P8, Value (contribution) = 0.0015439921955894586
+Feature (contributor) i = 25: name =  Pair_Mean_Power_Abs_Beta2_O1-O2, Value (contribution) = 0.00153932780002266
+Feature (contributor) i = 26: name =  Pair_Mean_Power_Abs_Alpha_P7-P8, Value (contribution) = 0.0015319547239885482
+Feature (contributor) i = 27: name =  Pair_Mean_Power_Abs_Delta_Fp1-Fp2, Value (contribution) = 0.0015286442060356085
+Feature (contributor) i = 28: name =  Pair_Mean_Power_Abs_Alpha_F3-F4, Value (contribution) = 0.0015257601996988858
+Feature (contributor) i = 29: name =  Pair_Mean_Power_Abs_Theta_F7-F8, Value (contribution) = 0.0015194073746689933
+Feature (contributor) i = 30: name =  Pair_Mean_Power_Abs_Beta2_C3-C4, Value (contribution) = 0.0015182245580535486
+Feature (contributor) i = 31: name =  Pair_Mean_Power_Abs_Beta1_F3-F4, Value (contribution) = 0.001513095722920061
+Feature (contributor) i = 32: name =  Pair_Mean_Power_Abs_Theta_Fp1-Fp2, Value (contribution) = 0.0015012916631047405
+Feature (contributor) i = 33: name =  Pair_Mean_Power_Abs_Theta_P3-P4, Value (contribution) = 0.0014939707932431954
+Feature (contributor) i = 34: name =  Pair_Mean_Power_Abs_Theta_C3-C4, Value (contribution) = 0.001493282674272676
+Feature (contributor) i = 35: name =  Pair_Mean_Power_Abs_Delta_F7-F8, Value (contribution) = 0.0014867099459089888
+Feature (contributor) i = 36: name =  Pair_Mean_Power_Abs_Beta1_Fp1-Fp2, Value (contribution) = 0.0014765103090242204
+Feature (contributor) i = 37: name =  Pair_Mean_Power_Abs_Beta1_F7-F8, Value (contribution) = 0.0014692958026841633
+Feature (contributor) i = 38: name =  Pair_Mean_Power_Abs_Beta1_T7-T8, Value (contribution) = 0.0014562996024506697
+Feature (contributor) i = 39: name =  Pair_Mean_Power_Abs_Beta1_O1-O2, Value (contribution) = 0.0014155266929333336
+Feature (contributor) i = 40: name =  Pair_Mean_Power_Abs_Beta2_P7-P8, Value (contribution) = 0.0014105644351281484
+Feature (contributor) i = 41: name =  Pair_Mean_Power_Abs_Beta1_P7-P8, Value (contribution) = 0.0014054536021678753
+Feature (contributor) i = 42: name =  Single_Mean_Power_Abs_Beta2_FC6, Value (contribution) = 0.0013729288716454052
+Feature (contributor) i = 43: name =  Ratio_Relative_Power_Norm_Delta Over Theta_F3, Value (contribution) = 0.0013208150178233545
+Feature (contributor) i = 44: name =  Pair_Mean_Power_Abs_Beta2_F7-F8, Value (contribution) = 0.001314261905909634
+Feature (contributor) i = 45: name =  Ratio_Relative_Power_Norm_Delta Over Theta_F7, Value (contribution) = 0.0012747366645268537
+Feature (contributor) i = 46: name =  Ratio_Relative_Power_Norm_Beta1 Over Beta2_T8, Value (contribution) = 0.0012659438290795284
+Feature (contributor) i = 47: name =  Ratio_Relative_Power_Norm_Delta Over Theta_AFz, Value (contribution) = 0.001245427462052133
+Feature (contributor) i = 48: name =  Single_Mean_Power_Abs_Beta2_Fp2, Value (contribution) = 0.0012202324286928355
+Feature (contributor) i = 49: name =  Single_Mean_Power_Abs_Beta2_T8, Value (contribution) = 0.0012114965951543174
+Feature (contributor) i = 50: name =  Ratio_Relative_Power_Norm_Delta Over Theta_Fpz, Value (contribution) = 0.0011792433387784384
+Feature (contributor) i = 51: name =  Ratio_Relative_Power_Norm_Beta1 Over Beta2_T7, Value (contribution) = 0.0011785635463623268
+Feature (contributor) i = 52: name =  Ratio_Relative_Power_Norm_Delta Over Beta2_F8, Value (contribution) = 0.0011435504730508592
+Feature (contributor) i = 53: name =  Ratio_Relative_Power_Norm_Delta Over Theta_CP2, Value (contribution) = 0.0011159136471456167
+Feature (contributor) i = 54: name =  Single_Mean_Power_Abs_Delta_T7, Value (contribution) = 0.001115283546833511
+Feature (contributor) i = 55: name =  Single_Mean_Power_Abs_Alpha_Iz, Value (contribution) = 0.0011050369247654075
+Feature (contributor) i = 56: name =  Single_Mean_Power_Abs_Beta2_T7, Value (contribution) = 0.0011015536028994744
+Feature (contributor) i = 57: name =  Ratio_Relative_Power_Norm_Delta Over Theta_T7, Value (contribution) = 0.0010905721209587532
+Feature (contributor) i = 58: name =  Ratio_Relative_Power_Norm_Delta Over Beta2_T7, Value (contribution) = 0.0010896817959442887
+Feature (contributor) i = 59: name =  Ratio_Relative_Power_Norm_Delta Over Theta_F8, Value (contribution) = 0.0010855831894956275
+Feature (contributor) i = 60: name =  Ratio_Relative_Power_Norm_Delta Over Theta_Fp2, Value (contribution) = 0.0010838519884798494
+Feature (contributor) i = 61: name =  Single_Mean_Power_Abs_Delta_F7, Value (contribution) = 0.0010757178972000327
+Feature (contributor) i = 62: name =  Ratio_Relative_Power_Norm_Delta Over Theta_FT7, Value (contribution) = 0.0010586798890246589
+Feature (contributor) i = 63: name =  Single_Mean_Power_Abs_Beta2_PO8, Value (contribution) = 0.0010572214682928035
+Feature (contributor) i = 64: name =  Single_Relative_Power_Norm_Delta_Fp2, Value (contribution) = 0.0010557893490677158
+Feature (contributor) i = 65: name =  Ratio_Relative_Power_Norm_Delta Over Theta_O1, Value (contribution) = 0.0010550106807713801
+Feature (contributor) i = 66: name =  Ratio_Relative_Power_Norm_Delta Over Theta_FT8, Value (contribution) = 0.0010542731931650281
+Feature (contributor) i = 67: name =  Ratio_Relative_Power_Norm_Delta Over Theta_Fp1, Value (contribution) = 0.0010541274771763444
+Feature (contributor) i = 68: name =  Ratio_Relative_Power_Norm_Delta Over Theta_AF8, Value (contribution) = 0.0010500548945521027
+Feature (contributor) i = 69: name =  Ratio_Relative_Power_Norm_Delta Over Beta2_AFz, Value (contribution) = 0.001048792390170516
+Feature (contributor) i = 70: name =  Single_Relative_Power_Norm_Beta2_Fp1, Value (contribution) = 0.0010485725401358226
+Feature (contributor) i = 71: name =  Ratio_Relative_Power_Norm_Delta Over Theta_AF7, Value (contribution) = 0.00104350580218013
+Feature (contributor) i = 72: name =  Single_Mean_Power_Abs_Delta_F8, Value (contribution) = 0.0010343849214386536
+Feature (contributor) i = 73: name =  Single_Mean_Power_Abs_Delta_F3, Value (contribution) = 0.0010265430312611653
+Feature (contributor) i = 74: name =  Single_Relative_Power_Norm_Theta_T8, Value (contribution) = 0.0010223071385021506
+Feature (contributor) i = 75: name =  Ratio_Relative_Power_Norm_Alpha Over Beta1_T7, Value (contribution) = 0.0010211202822109126
+Feature (contributor) i = 76: name =  Single_Mean_Power_Abs_Beta1_T8, Value (contribution) = 0.0010189000527151444
+Feature (contributor) i = 77: name =  Ratio_Relative_Power_Norm_Delta Over Beta1_F8, Value (contribution) = 0.0010182373648112352
+Feature (contributor) i = 78: name =  Single_Mean_Power_Abs_Delta_FC5, Value (contribution) = 0.001017578215009824
+Feature (contributor) i = 79: name =  Ratio_Relative_Power_Norm_Delta Over Beta1_AF7, Value (contribution) = 0.0010091401893275011
+Feature (contributor) i = 80: name =  Ratio_Relative_Power_Norm_Alpha Over Beta2_T8, Value (contribution) = 0.0010083299763065498
+Feature (contributor) i = 81: name =  Single_Mean_Power_Abs_Beta2_Fp1, Value (contribution) = 0.0010011981178412925
+Feature (contributor) i = 82: name =  Single_Mean_Power_Abs_Beta2_Fpz, Value (contribution) = 0.0010010035780529428
+Feature (contributor) i = 83: name =  Ratio_Relative_Power_Norm_Delta Over Beta2_F7, Value (contribution) = 0.0009987184322225165
+Feature (contributor) i = 84: name =  Single_Relative_Power_Norm_Alpha_T8, Value (contribution) = 0.0009974049019639403
+Feature (contributor) i = 85: name =  Single_Relative_Power_Norm_Beta2_T7, Value (contribution) = 0.0009937430481444748
+Feature (contributor) i = 86: name =  Single_Mean_Power_Abs_Delta_CP6, Value (contribution) = 0.0009932071611631413
+Feature (contributor) i = 87: name =  Single_Relative_Power_Norm_Delta_F8, Value (contribution) = 0.000993186960347959
+Feature (contributor) i = 88: name =  Ratio_Relative_Power_Norm_Delta Over Beta2_AF7, Value (contribution) = 0.0009902080322854393
+Feature (contributor) i = 89: name =  Single_Relative_Power_Norm_Delta_Fpz, Value (contribution) = 0.0009897064091752604
+Feature (contributor) i = 90: name =  Ratio_Relative_Power_Norm_Beta1 Over Beta2_C4, Value (contribution) = 0.0009874425148618813
+Feature (contributor) i = 91: name =  Ratio_Relative_Power_Norm_Beta1 Over Beta2_FT8, Value (contribution) = 0.0009857674438499828
+Feature (contributor) i = 92: name =  Single_Relative_Power_Norm_Delta_Fp1, Value (contribution) = 0.0009839468864338969
+Feature (contributor) i = 93: name =  Ratio_Relative_Power_Norm_Alpha Over Beta1_T8, Value (contribution) = 0.0009824760660575955
+Feature (contributor) i = 94: name =  Ratio_Relative_Power_Norm_Delta Over Alpha_AFz, Value (contribution) = 0.0009819030397457626
+Feature (contributor) i = 95: name =  Single_Relative_Power_Norm_Theta_Fp2, Value (contribution) = 0.0009802129608226895
+Feature (contributor) i = 96: name =  Single_Mean_Power_Abs_Beta1_T7, Value (contribution) = 0.0009771480957707535
+Feature (contributor) i = 97: name =  Single_Mean_Power_Abs_Delta_Fpz, Value (contribution) = 0.0009751213926317657
+Feature (contributor) i = 98: name =  Single_Relative_Power_Norm_Theta_Fpz, Value (contribution) = 0.0009743741722968738
+Feature (contributor) i = 99: name =  Single_Mean_Power_Abs_Alpha_O1, Value (contribution) = 0.0009717925740851899
+top_k_contribution sum : 0.1295195588108673
+=> 100 most contributing features (out of 1388 features in total) are explaining  0.12952 of variance
+In X_train, 65 principal components explain over 99% of variance
+
+In X_train, 17 principal components explain over 90% of variance
+
+**************************************************
+Distribution of categorical variables in data:**************************************************
+Gender:
+X['gender'].value_counts(): 
+0    78
+1    54
+Name: gender, dtype: int64
+X_train['gender'].value_counts():
+0    67
+1    45
+Name: gender, dtype: int64
+X_test['gender'].value_counts():
+0    11
+1     9
+Name: gender, dtype: int64
+
+**************************************************
+Treatment_group (coil):
+X['Treatment_group'].value_counts():
+ 0    75
+1    57
+Name: Treatment_group, dtype: int64
+X_train['Treatment_group'].value_counts():
+0    65
+1    47
+Name: Treatment_group, dtype: int64
+X_test['Treatment_group'].value_counts():
+1    10
+0    10
+Name: Treatment_group, dtype: int64
+Response to treatment:
+
+**************************************************
+['6-weeks_HDRS21_class'].value_counts():
+1    80
+0    52
+Name: 6-weeks_HDRS21_class, dtype: int64
+y_train['6-weeks_HDRS21_class'].value_counts():
+1    68
+0    44
+Name: 6-weeks_HDRS21_class, dtype: int64
+y_test['6-weeks_HDRS21_class'].value_counts():
+1    12
+0     8
+Name: 6-weeks_HDRS21_class, dtype: int64
+
+**************************************************
+Principal components:
+
+K = 100  best of X train (SelectKbest)
+On X train:
+100 Feature scores:
+
+i = 0
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_AF3
+score (f_classif)  0.3246290405264094
+p_val  0.5700007351066192
+i = 1
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_AF4
+score (f_classif)  0.07047727901974517
+p_val  0.7911400152261124
+i = 2
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_AF8
+score (f_classif)  nan
+p_val  nan
+i = 3
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_AFz
+score (f_classif)  0.25052107094659143
+p_val  0.6177083786757656
+i = 4
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_F4
+score (f_classif)  1.3727277281416566
+p_val  0.2438752918228698
+i = 5
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_F6
+score (f_classif)  0.09418119589883657
+p_val  0.7595076347475447
+i = 6
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_F7
+score (f_classif)  0.00807102578373944
+p_val  0.9285786210058733
+i = 7
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_F8
+score (f_classif)  0.021199505185704043
+p_val  0.8845032458838895
+i = 8
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_FC5
+score (f_classif)  0.0033048714411789246
+p_val  0.9542607547635634
+i = 9
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_FC6
+score (f_classif)  0.21179682762825575
+p_val  0.6462711284724331
+i = 10
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_Fp1
+score (f_classif)  0.10743700322887696
+p_val  0.7437041871375144
+i = 11
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_Fp2
+score (f_classif)  0.611232043689827
+p_val  0.43600388591853745
+i = 12
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_Fpz
+score (f_classif)  0.040120150297738535
+p_val  0.8416156955925442
+i = 13
+feature  Ratio_Relative_Power_Norm_Delta Over Alpha_F8
+score (f_classif)  0.5584013242427265
+p_val  0.45649947936536805
+i = 14
+feature  Ratio_Relative_Power_Norm_Delta Over Alpha_T7
+score (f_classif)  0.09216149445181285
+p_val  0.7620204968169277
+i = 15
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_C1
+score (f_classif)  0.007480548008302884
+p_val  0.9312340174124936
+i = 16
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_C2
+score (f_classif)  0.19836329864746546
+p_val  0.6569204757282983
+i = 17
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_C3
+score (f_classif)  0.35968658048126145
+p_val  0.5499137567387348
+i = 18
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_C4
+score (f_classif)  0.41668586906675464
+p_val  0.5199396074105977
+i = 19
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_C5
+score (f_classif)  0.021683187796113192
+p_val  0.8832025771455397
+i = 20
+feature  

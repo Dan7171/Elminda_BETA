@@ -1,0 +1,205 @@
+~~~~~~~~~~ RANDOMIZED SEARCH CV ~~~~~~~~~~
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Parameter choice num 0 / 9 - starting...
+0 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [0 0 0 1 1 0 1 0 0 1 0 1 0 1 1 1 1 1 1 1 0 0 0]
+scoring metric: precision, score: 0.6666666666666666 
+>>>
+predicted correctly / predicted_in_total = 13 / 23
+<<<
+[CV 1/5] END classifier=GradientBoostingClassifier(random_state=42), classifier__learning_rate=0.0001, classifier__max_depth=100, classifier__max_features=None, classifier__min_samples_leaf=27, classifier__min_samples_split=82, classifier__n_estimators=20, classifier__subsample=0.8, pca__n_components=52;, score=0.667 total time=   1.1s
+1 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [0 0 0 0 1 0 1 1 1 1 1 0 1 1 1 1 1 1 0 1 1 1 1]
+scoring metric: precision, score: 0.75 
+>>>
+predicted correctly / predicted_in_total = 17 / 23
+<<<
+[CV 2/5] END classifier=GradientBoostingClassifier(random_state=42), classifier__learning_rate=0.0001, classifier__max_depth=100, classifier__max_features=None, classifier__min_samples_leaf=27, classifier__min_samples_split=82, classifier__n_estimators=20, classifier__subsample=0.8, pca__n_components=52;, score=0.750 total time=   0.7s
+2 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [0 0 1 1 0 1 0 0 1 0 1 0 1 1 1 1 0 1 0 1 0 1]
+scoring metric: precision, score: 0.6666666666666666 
+>>>
+predicted correctly / predicted_in_total = 13 / 22
+<<<
+[CV 3/5] END classifier=GradientBoostingClassifier(random_state=42), classifier__learning_rate=0.0001, classifier__max_depth=100, classifier__max_features=None, classifier__min_samples_leaf=27, classifier__min_samples_split=82, classifier__n_estimators=20, classifier__subsample=0.8, pca__n_components=52;, score=0.667 total time=   0.7s
+3 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [0 0 0 1 0 1 0 0 1 0 1 0 1 0 1 0 1 1 1 0 1 1]
+scoring metric: precision, score: 0.36363636363636365 
+>>>
+predicted correctly / predicted_in_total = 6 / 22
+<<<
+[CV 4/5] END classifier=GradientBoostingClassifier(random_state=42), classifier__learning_rate=0.0001, classifier__max_depth=100, classifier__max_features=None, classifier__min_samples_leaf=27, classifier__min_samples_split=82, classifier__n_estimators=20, classifier__subsample=0.8, pca__n_components=52;, score=0.364 total time=   0.6s
+4 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 0 1 0 1 0 0 1 0 1 0 0 1 0 1 1 0 0 1 1 0]
+scoring metric: precision, score: 0.9090909090909091 
+>>>
+predicted correctly / predicted_in_total = 17 / 22
+<<<
+New improvement!
+New best score is 0.6712121212121211
+In parameter choice num 0 / 9 avg score was: 0.6712121212121211.
+updating 2023-08-06 11_52_05_precision_10_GB_PCA_SMOTE_REPRODUCED\search_statistics.txt...
+statistics file updated successfully with new improvement in score message!
+Best parameter choice score by now is 0.6712121212121211
+In parameter choice num 0 / 9 avg score was: 0.6712121212121211.
+[CV 5/5] END classifier=GradientBoostingClassifier(random_state=42), classifier__learning_rate=0.0001, classifier__max_depth=100, classifier__max_features=None, classifier__min_samples_leaf=27, classifier__min_samples_split=82, classifier__n_estimators=20, classifier__subsample=0.8, pca__n_components=52;, score=0.909 total time=   0.7s
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Parameter choice num 1 / 9 - starting...
+5 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [0 0 0 1 1 0 1 0 0 1 0 1 0 1 1 1 1 0 1 1 0 0 0]
+scoring metric: precision, score: 0.7272727272727273 
+>>>
+predicted correctly / predicted_in_total = 14 / 23
+<<<
+[CV 1/5] END classifier=GradientBoostingClassifier(learning_rate=0.0001, max_depth=100,
+                           min_samples_leaf=27, min_samples_split=82,
+                           n_estimators=20, random_state=42, subsample=0.8), classifier__learning_rate=0.0001, classifier__max_depth=100, classifier__max_features=None, classifier__min_samples_leaf=27, classifier__min_samples_split=82, classifier__n_estimators=20, classifier__subsample=0.8, pca__n_components=52;, score=0.727 total time=   0.7s
+6 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [0 0 0 0 1 0 1 1 0 1 1 0 1 0 0 1 1 1 0 1 1 1 0]
+scoring metric: precision, score: 0.75 
+>>>
+predicted correctly / predicted_in_total = 15 / 23
+<<<
+[CV 2/5] END classifier=GradientBoostingClassifier(learning_rate=0.0001, max_depth=100,
+                           min_samples_leaf=27, min_samples_split=82,
+                           n_estimators=20, random_state=42, subsample=0.8), classifier__learning_rate=0.0001, classifier__max_depth=100, classifier__max_features=None, classifier__min_samples_leaf=27, classifier__min_samples_split=82, classifier__n_estimators=20, classifier__subsample=0.8, pca__n_components=52;, score=0.750 total time=   0.6s
+7 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [0 0 1 1 0 1 0 0 1 0 1 0 1 1 1 1 0 1 0 1 0 1]
+scoring metric: precision, score: 0.6666666666666666 
+>>>
+predicted correctly / predicted_in_total = 13 / 22
+<<<
+[CV 3/5] END classifier=GradientBoostingClassifier(learning_rate=0.0001, max_depth=100,
+                           min_samples_leaf=27, min_samples_split=82,
+                           n_estimators=20, random_state=42, subsample=0.8), classifier__learning_rate=0.0001, classifier__max_depth=100, classifier__max_features=None, classifier__min_samples_leaf=27, classifier__min_samples_split=82, classifier__n_estimators=20, classifier__subsample=0.8, pca__n_components=52;, score=0.667 total time=   0.7s
+8 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [0 0 0 1 0 1 0 0 1 0 1 1 1 0 1 0 1 1 1 0 1 1]
+scoring metric: precision, score: 0.4166666666666667 
+>>>
+predicted correctly / predicted_in_total = 7 / 22
+<<<
+[CV 4/5] END classifier=GradientBoostingClassifier(learning_rate=0.0001, max_depth=100,
+                           min_samples_leaf=27, min_samples_split=82,
+                           n_estimators=20, random_state=42, subsample=0.8), classifier__learning_rate=0.0001, classifier__max_depth=100, classifier__max_features=None, classifier__min_samples_leaf=27, classifier__min_samples_split=82, classifier__n_estimators=20, classifier__subsample=0.8, pca__n_components=52;, score=0.417 total time=   0.6s
+9 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 0 1 0 1 0 0 1 0 1 0 0 1 0 1 1 0 0 1 1 0]
+scoring metric: precision, score: 0.9090909090909091 
+>>>
+predicted correctly / predicted_in_total = 17 / 22
+<<<
+New improvement!
+New best score is 0.693939393939394
+In parameter choice num 1 / 9 avg score was: 0.693939393939394.
+updating 2023-08-06 11_52_05_precision_10_GB_PCA_SMOTE_REPRODUCED\search_statistics.txt...
+statistics file updated successfully with new improvement in score message!
+Best parameter choice score by now is 0.693939393939394
+In parameter choice num 1 / 9 avg score was: 0.693939393939394.
+[CV 5/5] END classifier=GradientBoostingClassifier(learning_rate=0.0001, max_depth=100,
+                           min_samples_leaf=27, min_samples_split=82,
+                           n_estimators=20, random_state=42, subsample=0.8), classifier__learning_rate=0.0001, classifier__max_depth=100, classifier__max_features=None, classifier__min_samples_leaf=27, classifier__min_samples_split=82, classifier__n_estimators=20, classifier__subsample=0.8, pca__n_components=52;, score=0.909 total time=   0.7s
+-----------------------
+ New cv report 
+-----------------------
+* Classifier: 
+ GradientBoostingClassifier(learning_rate=0.0001, max_depth=100,
+                           min_samples_leaf=27, min_samples_split=82,
+                           n_estimators=20, random_state=42, subsample=0.8)
+* User arguments: 
+ {'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'precision', 'both': True, 'cv': 5, 'n_iter': 10, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True, 'lite_mode': True, 'test_size': 0.15, 'stdout_to_file': True, 'significant': False, 'output_folder_label': '_precision_10_GB_PCA_SMOTE_REPRODUCED', 'beta': 0.5}
+* Pipeline details: 
+ Pipeline(steps=[('smote', SMOTE(random_state=42, sampling_strategy='minority')),
+                ('scaler', StandardScaler()), ('pca', PCA()),
+                ('classifier',
+                 GradientBoostingClassifier(learning_rate=0.0001, max_depth=100,
+                                            min_samples_leaf=27,
+                                            min_samples_split=82,
+                                            n_estimators=20, random_state=42,
+                                            subsample=0.8))])
+* Best Hyperparametes picked in cross validation: (cv's best score): 
+ {'pca__n_components': 52, 'classifier__subsample': 0.8, 'classifier__n_estimators': 20, 'classifier__min_samples_split': 82, 'classifier__min_samples_leaf': 27, 'classifier__max_features': None, 'classifier__max_depth': 100, 'classifier__learning_rate': 0.0001, 'classifier': GradientBoostingClassifier(learning_rate=0.0001, max_depth=100,
+                           min_samples_leaf=27, min_samples_split=82,
+                           n_estimators=20, random_state=42, subsample=0.8)}
+* Scorer_used: precision
+* CV mean_test_score precision ( over 5 folds - (cv's best score for best hyperparametes): 0.694 +/- 0.160 (see score func in hyperparams)  
+
+* Confusion matrix: 
+ [[24 20]
+ [26 42]]
+[[TN FP
+[FN TP]]
+* Response rate:  0.6071428571428571
+* Precision:  0.6774193548387096
+* Recall:  0.6176470588235294
+* Accuracy:  0.5892857142857143
+* F1:  0.6461538461538462
+* F-Beta (beta = 0.5):  0.6645569620253164
+train CV report saved to   2023-08-06 11_52_05_precision_10_GB_PCA_SMOTE_REPRODUCED\tuning.csv
+-----------------------
+ End of cv report 
+----------------------- 
+
+
+
+* Confusion matrix: 
+ [[37  7]
+ [36 32]]
+[[TN FP
+[FN TP]]
+* Precision:  0.8205128205128205
+* Recall:  0.47058823529411764
+* Accuracy:  0.6160714285714286
+* F1:  0.5981308411214953
+* F-Beta (beta = 0.5):  0.7142857142857142
+-----------------------
+ End of train report 
+----------------------- 
+
+
+
+* Confusion matrix: 
+ [[4 4]
+ [7 5]]
+[[TN FP
+[FN TP]]
+* Precision:  0.5555555555555556
+* Recall:  0.4166666666666667
+* Accuracy:  0.45
+* F1:  0.4761904761904762
+* F-Beta (beta = 0.5):  0.5208333333333334
+-----------------------
+ End of test report 
+----------------------- 
+
+
+
+<<<<<<<<<<<<<<<<<<<<< GSCVrunner.py finished successfuly<<<<<<<<<<<<<<<<<<<<<

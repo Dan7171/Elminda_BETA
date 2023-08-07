@@ -1,0 +1,4 @@
+In parameter choice num 0 / 19 avg score was: 0.4909090909090909.
+
+In parameter choice num 1 / 19 avg score was: 0.5347826086956522.
+

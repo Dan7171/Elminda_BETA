@@ -1,0 +1,4 @@
+In parameter choice num 0 / 1 avg score was: 0.6520965309200604.
+
+In parameter choice num 1 / 1 avg score was: 0.6597285067873303.
+

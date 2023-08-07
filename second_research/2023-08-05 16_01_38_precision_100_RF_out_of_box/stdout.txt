@@ -1,0 +1,680 @@
+Feature (contributor) i = 0: name =  gender, Value (contribution) = 0.0021058946353893545
+Feature (contributor) i = 1: name =  Treatment_group, Value (contribution) = 0.0020518874857216587
+Feature (contributor) i = 2: name =  age, Value (contribution) = 0.001851337240251837
+Feature (contributor) i = 3: name =  Pair_Mean_Power_Abs_Delta_C3-C4, Value (contribution) = 0.001807828159706584
+Feature (contributor) i = 4: name =  Pair_Mean_Power_Abs_Delta_T7-T8, Value (contribution) = 0.0017363739257925848
+Feature (contributor) i = 5: name =  Pair_Mean_Power_Abs_Theta_O1-O2, Value (contribution) = 0.001732879840948623
+Feature (contributor) i = 6: name =  Pair_Mean_Power_Abs_Alpha_Fp1-Fp2, Value (contribution) = 0.0017018704264862112
+Feature (contributor) i = 7: name =  Pair_Mean_Power_Abs_Alpha_O1-O2, Value (contribution) = 0.001693704427651174
+Feature (contributor) i = 8: name =  Pair_Mean_Power_Abs_Beta1_C3-C4, Value (contribution) = 0.0016920170118519787
+Feature (contributor) i = 9: name =  Pair_Mean_Power_Abs_Delta_P7-P8, Value (contribution) = 0.0016685349681015223
+Feature (contributor) i = 10: name =  Pair_Mean_Power_Abs_Delta_F3-F4, Value (contribution) = 0.001665144595378701
+Feature (contributor) i = 11: name =  Pair_Mean_Power_Abs_Delta_P3-P4, Value (contribution) = 0.0016520818464100728
+Feature (contributor) i = 12: name =  Pair_Mean_Power_Abs_Alpha_C3-C4, Value (contribution) = 0.001651050169342051
+Feature (contributor) i = 13: name =  Pair_Mean_Power_Abs_Alpha_T7-T8, Value (contribution) = 0.001647060935768041
+Feature (contributor) i = 14: name =  Pair_Mean_Power_Abs_Beta2_P3-P4, Value (contribution) = 0.0016390205593269926
+Feature (contributor) i = 15: name =  Pair_Mean_Power_Abs_Delta_O1-O2, Value (contribution) = 0.0016341426441661574
+Feature (contributor) i = 16: name =  Pair_Mean_Power_Abs_Beta1_P3-P4, Value (contribution) = 0.001633432757597799
+Feature (contributor) i = 17: name =  Pair_Mean_Power_Abs_Alpha_F7-F8, Value (contribution) = 0.0016152111041327145
+Feature (contributor) i = 18: name =  Pair_Mean_Power_Abs_Beta2_Fp1-Fp2, Value (contribution) = 0.0015890605680069154
+Feature (contributor) i = 19: name =  Pair_Mean_Power_Abs_Beta2_T7-T8, Value (contribution) = 0.001588227521768447
+Feature (contributor) i = 20: name =  Pair_Mean_Power_Abs_Alpha_P3-P4, Value (contribution) = 0.0015791672980584974
+Feature (contributor) i = 21: name =  Pair_Mean_Power_Abs_Theta_F3-F4, Value (contribution) = 0.0015748451888878644
+Feature (contributor) i = 22: name =  Pair_Mean_Power_Abs_Beta2_F3-F4, Value (contribution) = 0.001570859481429018
+Feature (contributor) i = 23: name =  Pair_Mean_Power_Abs_Theta_T7-T8, Value (contribution) = 0.001557088226125485
+Feature (contributor) i = 24: name =  Pair_Mean_Power_Abs_Theta_P7-P8, Value (contribution) = 0.0015439921955894586
+Feature (contributor) i = 25: name =  Pair_Mean_Power_Abs_Beta2_O1-O2, Value (contribution) = 0.00153932780002266
+Feature (contributor) i = 26: name =  Pair_Mean_Power_Abs_Alpha_P7-P8, Value (contribution) = 0.0015319547239885482
+Feature (contributor) i = 27: name =  Pair_Mean_Power_Abs_Delta_Fp1-Fp2, Value (contribution) = 0.0015286442060356085
+Feature (contributor) i = 28: name =  Pair_Mean_Power_Abs_Alpha_F3-F4, Value (contribution) = 0.0015257601996988858
+Feature (contributor) i = 29: name =  Pair_Mean_Power_Abs_Theta_F7-F8, Value (contribution) = 0.0015194073746689933
+Feature (contributor) i = 30: name =  Pair_Mean_Power_Abs_Beta2_C3-C4, Value (contribution) = 0.0015182245580535486
+Feature (contributor) i = 31: name =  Pair_Mean_Power_Abs_Beta1_F3-F4, Value (contribution) = 0.001513095722920061
+Feature (contributor) i = 32: name =  Pair_Mean_Power_Abs_Theta_Fp1-Fp2, Value (contribution) = 0.0015012916631047405
+Feature (contributor) i = 33: name =  Pair_Mean_Power_Abs_Theta_P3-P4, Value (contribution) = 0.0014939707932431954
+Feature (contributor) i = 34: name =  Pair_Mean_Power_Abs_Theta_C3-C4, Value (contribution) = 0.001493282674272676
+Feature (contributor) i = 35: name =  Pair_Mean_Power_Abs_Delta_F7-F8, Value (contribution) = 0.0014867099459089888
+Feature (contributor) i = 36: name =  Pair_Mean_Power_Abs_Beta1_Fp1-Fp2, Value (contribution) = 0.0014765103090242204
+Feature (contributor) i = 37: name =  Pair_Mean_Power_Abs_Beta1_F7-F8, Value (contribution) = 0.0014692958026841633
+Feature (contributor) i = 38: name =  Pair_Mean_Power_Abs_Beta1_T7-T8, Value (contribution) = 0.0014562996024506697
+Feature (contributor) i = 39: name =  Pair_Mean_Power_Abs_Beta1_O1-O2, Value (contribution) = 0.0014155266929333336
+Feature (contributor) i = 40: name =  Pair_Mean_Power_Abs_Beta2_P7-P8, Value (contribution) = 0.0014105644351281484
+Feature (contributor) i = 41: name =  Pair_Mean_Power_Abs_Beta1_P7-P8, Value (contribution) = 0.0014054536021678753
+Feature (contributor) i = 42: name =  Single_Mean_Power_Abs_Beta2_FC6, Value (contribution) = 0.0013729288716454052
+Feature (contributor) i = 43: name =  Ratio_Relative_Power_Norm_Delta Over Theta_F3, Value (contribution) = 0.0013208150178233545
+Feature (contributor) i = 44: name =  Pair_Mean_Power_Abs_Beta2_F7-F8, Value (contribution) = 0.001314261905909634
+Feature (contributor) i = 45: name =  Ratio_Relative_Power_Norm_Delta Over Theta_F7, Value (contribution) = 0.0012747366645268537
+Feature (contributor) i = 46: name =  Ratio_Relative_Power_Norm_Beta1 Over Beta2_T8, Value (contribution) = 0.0012659438290795284
+Feature (contributor) i = 47: name =  Ratio_Relative_Power_Norm_Delta Over Theta_AFz, Value (contribution) = 0.001245427462052133
+Feature (contributor) i = 48: name =  Single_Mean_Power_Abs_Beta2_Fp2, Value (contribution) = 0.0012202324286928355
+Feature (contributor) i = 49: name =  Single_Mean_Power_Abs_Beta2_T8, Value (contribution) = 0.0012114965951543174
+Feature (contributor) i = 50: name =  Ratio_Relative_Power_Norm_Delta Over Theta_Fpz, Value (contribution) = 0.0011792433387784384
+Feature (contributor) i = 51: name =  Ratio_Relative_Power_Norm_Beta1 Over Beta2_T7, Value (contribution) = 0.0011785635463623268
+Feature (contributor) i = 52: name =  Ratio_Relative_Power_Norm_Delta Over Beta2_F8, Value (contribution) = 0.0011435504730508592
+Feature (contributor) i = 53: name =  Ratio_Relative_Power_Norm_Delta Over Theta_CP2, Value (contribution) = 0.0011159136471456167
+Feature (contributor) i = 54: name =  Single_Mean_Power_Abs_Delta_T7, Value (contribution) = 0.001115283546833511
+Feature (contributor) i = 55: name =  Single_Mean_Power_Abs_Alpha_Iz, Value (contribution) = 0.0011050369247654075
+Feature (contributor) i = 56: name =  Single_Mean_Power_Abs_Beta2_T7, Value (contribution) = 0.0011015536028994744
+Feature (contributor) i = 57: name =  Ratio_Relative_Power_Norm_Delta Over Theta_T7, Value (contribution) = 0.0010905721209587532
+Feature (contributor) i = 58: name =  Ratio_Relative_Power_Norm_Delta Over Beta2_T7, Value (contribution) = 0.0010896817959442887
+Feature (contributor) i = 59: name =  Ratio_Relative_Power_Norm_Delta Over Theta_F8, Value (contribution) = 0.0010855831894956275
+Feature (contributor) i = 60: name =  Ratio_Relative_Power_Norm_Delta Over Theta_Fp2, Value (contribution) = 0.0010838519884798494
+Feature (contributor) i = 61: name =  Single_Mean_Power_Abs_Delta_F7, Value (contribution) = 0.0010757178972000327
+Feature (contributor) i = 62: name =  Ratio_Relative_Power_Norm_Delta Over Theta_FT7, Value (contribution) = 0.0010586798890246589
+Feature (contributor) i = 63: name =  Single_Mean_Power_Abs_Beta2_PO8, Value (contribution) = 0.0010572214682928035
+Feature (contributor) i = 64: name =  Single_Relative_Power_Norm_Delta_Fp2, Value (contribution) = 0.0010557893490677158
+Feature (contributor) i = 65: name =  Ratio_Relative_Power_Norm_Delta Over Theta_O1, Value (contribution) = 0.0010550106807713801
+Feature (contributor) i = 66: name =  Ratio_Relative_Power_Norm_Delta Over Theta_FT8, Value (contribution) = 0.0010542731931650281
+Feature (contributor) i = 67: name =  Ratio_Relative_Power_Norm_Delta Over Theta_Fp1, Value (contribution) = 0.0010541274771763444
+Feature (contributor) i = 68: name =  Ratio_Relative_Power_Norm_Delta Over Theta_AF8, Value (contribution) = 0.0010500548945521027
+Feature (contributor) i = 69: name =  Ratio_Relative_Power_Norm_Delta Over Beta2_AFz, Value (contribution) = 0.001048792390170516
+Feature (contributor) i = 70: name =  Single_Relative_Power_Norm_Beta2_Fp1, Value (contribution) = 0.0010485725401358226
+Feature (contributor) i = 71: name =  Ratio_Relative_Power_Norm_Delta Over Theta_AF7, Value (contribution) = 0.00104350580218013
+Feature (contributor) i = 72: name =  Single_Mean_Power_Abs_Delta_F8, Value (contribution) = 0.0010343849214386536
+Feature (contributor) i = 73: name =  Single_Mean_Power_Abs_Delta_F3, Value (contribution) = 0.0010265430312611653
+Feature (contributor) i = 74: name =  Single_Relative_Power_Norm_Theta_T8, Value (contribution) = 0.0010223071385021506
+Feature (contributor) i = 75: name =  Ratio_Relative_Power_Norm_Alpha Over Beta1_T7, Value (contribution) = 0.0010211202822109126
+Feature (contributor) i = 76: name =  Single_Mean_Power_Abs_Beta1_T8, Value (contribution) = 0.0010189000527151444
+Feature (contributor) i = 77: name =  Ratio_Relative_Power_Norm_Delta Over Beta1_F8, Value (contribution) = 0.0010182373648112352
+Feature (contributor) i = 78: name =  Single_Mean_Power_Abs_Delta_FC5, Value (contribution) = 0.001017578215009824
+Feature (contributor) i = 79: name =  Ratio_Relative_Power_Norm_Delta Over Beta1_AF7, Value (contribution) = 0.0010091401893275011
+Feature (contributor) i = 80: name =  Ratio_Relative_Power_Norm_Alpha Over Beta2_T8, Value (contribution) = 0.0010083299763065498
+Feature (contributor) i = 81: name =  Single_Mean_Power_Abs_Beta2_Fp1, Value (contribution) = 0.0010011981178412925
+Feature (contributor) i = 82: name =  Single_Mean_Power_Abs_Beta2_Fpz, Value (contribution) = 0.0010010035780529428
+Feature (contributor) i = 83: name =  Ratio_Relative_Power_Norm_Delta Over Beta2_F7, Value (contribution) = 0.0009987184322225165
+Feature (contributor) i = 84: name =  Single_Relative_Power_Norm_Alpha_T8, Value (contribution) = 0.0009974049019639403
+Feature (contributor) i = 85: name =  Single_Relative_Power_Norm_Beta2_T7, Value (contribution) = 0.0009937430481444748
+Feature (contributor) i = 86: name =  Single_Mean_Power_Abs_Delta_CP6, Value (contribution) = 0.0009932071611631413
+Feature (contributor) i = 87: name =  Single_Relative_Power_Norm_Delta_F8, Value (contribution) = 0.000993186960347959
+Feature (contributor) i = 88: name =  Ratio_Relative_Power_Norm_Delta Over Beta2_AF7, Value (contribution) = 0.0009902080322854393
+Feature (contributor) i = 89: name =  Single_Relative_Power_Norm_Delta_Fpz, Value (contribution) = 0.0009897064091752604
+Feature (contributor) i = 90: name =  Ratio_Relative_Power_Norm_Beta1 Over Beta2_C4, Value (contribution) = 0.0009874425148618813
+Feature (contributor) i = 91: name =  Ratio_Relative_Power_Norm_Beta1 Over Beta2_FT8, Value (contribution) = 0.0009857674438499828
+Feature (contributor) i = 92: name =  Single_Relative_Power_Norm_Delta_Fp1, Value (contribution) = 0.0009839468864338969
+Feature (contributor) i = 93: name =  Ratio_Relative_Power_Norm_Alpha Over Beta1_T8, Value (contribution) = 0.0009824760660575955
+Feature (contributor) i = 94: name =  Ratio_Relative_Power_Norm_Delta Over Alpha_AFz, Value (contribution) = 0.0009819030397457626
+Feature (contributor) i = 95: name =  Single_Relative_Power_Norm_Theta_Fp2, Value (contribution) = 0.0009802129608226895
+Feature (contributor) i = 96: name =  Single_Mean_Power_Abs_Beta1_T7, Value (contribution) = 0.0009771480957707535
+Feature (contributor) i = 97: name =  Single_Mean_Power_Abs_Delta_Fpz, Value (contribution) = 0.0009751213926317657
+Feature (contributor) i = 98: name =  Single_Relative_Power_Norm_Theta_Fpz, Value (contribution) = 0.0009743741722968738
+Feature (contributor) i = 99: name =  Single_Mean_Power_Abs_Alpha_O1, Value (contribution) = 0.0009717925740851899
+top_k_contribution sum : 0.1295195588108673
+=> 100 most contributing features (out of 1388 features in total) are explaining  0.12952 of variance
+In X_train, 65 principal components explain over 99% of variance
+
+In X_train, 17 principal components explain over 90% of variance
+
+**************************************************
+Distribution of categorical variables in data:**************************************************
+Gender:
+X['gender'].value_counts(): 
+0    78
+1    54
+Name: gender, dtype: int64
+X_train['gender'].value_counts():
+0    67
+1    45
+Name: gender, dtype: int64
+X_test['gender'].value_counts():
+0    11
+1     9
+Name: gender, dtype: int64
+
+**************************************************
+Treatment_group (coil):
+X['Treatment_group'].value_counts():
+ 0    75
+1    57
+Name: Treatment_group, dtype: int64
+X_train['Treatment_group'].value_counts():
+0    65
+1    47
+Name: Treatment_group, dtype: int64
+X_test['Treatment_group'].value_counts():
+1    10
+0    10
+Name: Treatment_group, dtype: int64
+Response to treatment:
+
+**************************************************
+['6-weeks_HDRS21_class'].value_counts():
+1    80
+0    52
+Name: 6-weeks_HDRS21_class, dtype: int64
+y_train['6-weeks_HDRS21_class'].value_counts():
+1    68
+0    44
+Name: 6-weeks_HDRS21_class, dtype: int64
+y_test['6-weeks_HDRS21_class'].value_counts():
+1    12
+0     8
+Name: 6-weeks_HDRS21_class, dtype: int64
+
+**************************************************
+Principal components:
+
+K = 100  best of X train (SelectKbest)
+On X train:
+100 Feature scores:
+
+i = 0
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_AF3
+score (f_classif)  0.3246290405264094
+p_val  0.5700007351066192
+i = 1
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_AF4
+score (f_classif)  0.07047727901974517
+p_val  0.7911400152261124
+i = 2
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_AF8
+score (f_classif)  nan
+p_val  nan
+i = 3
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_AFz
+score (f_classif)  0.25052107094659143
+p_val  0.6177083786757656
+i = 4
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_F4
+score (f_classif)  1.3727277281416566
+p_val  0.2438752918228698
+i = 5
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_F6
+score (f_classif)  0.09418119589883657
+p_val  0.7595076347475447
+i = 6
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_F7
+score (f_classif)  0.00807102578373944
+p_val  0.9285786210058733
+i = 7
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_F8
+score (f_classif)  0.021199505185704043
+p_val  0.8845032458838895
+i = 8
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_FC5
+score (f_classif)  0.0033048714411789246
+p_val  0.9542607547635634
+i = 9
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_FC6
+score (f_classif)  0.21179682762825575
+p_val  0.6462711284724331
+i = 10
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_Fp1
+score (f_classif)  0.10743700322887696
+p_val  0.7437041871375144
+i = 11
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_Fp2
+score (f_classif)  0.611232043689827
+p_val  0.43600388591853745
+i = 12
+feature  Ratio_Relative_Power_Norm_Beta1 Over Beta2_Fpz
+score (f_classif)  0.040120150297738535
+p_val  0.8416156955925442
+i = 13
+feature  Ratio_Relative_Power_Norm_Delta Over Alpha_F8
+score (f_classif)  0.5584013242427265
+p_val  0.45649947936536805
+i = 14
+feature  Ratio_Relative_Power_Norm_Delta Over Alpha_T7
+score (f_classif)  0.09216149445181285
+p_val  0.7620204968169277
+i = 15
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_C1
+score (f_classif)  0.007480548008302884
+p_val  0.9312340174124936
+i = 16
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_C2
+score (f_classif)  0.19836329864746546
+p_val  0.6569204757282983
+i = 17
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_C3
+score (f_classif)  0.35968658048126145
+p_val  0.5499137567387348
+i = 18
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_C4
+score (f_classif)  0.41668586906675464
+p_val  0.5199396074105977
+i = 19
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_C5
+score (f_classif)  0.021683187796113192
+p_val  0.8832025771455397
+i = 20
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_C6
+score (f_classif)  0.31570109700006466
+p_val  0.5753457338823459
+i = 21
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_CP1
+score (f_classif)  0.09890440275097259
+p_val  0.7537440926976884
+i = 22
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_CP2
+score (f_classif)  0.28837263779626865
+p_val  0.5923498240518266
+i = 23
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_CP3
+score (f_classif)  0.14991055318103433
+p_val  0.6993689385201506
+i = 24
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_CP4
+score (f_classif)  0.013367797761442007
+p_val  0.908165154672545
+i = 25
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_CP5
+score (f_classif)  0.021744257612495904
+p_val  0.8830394128402451
+i = 26
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_CP6
+score (f_classif)  0.01487049207529199
+p_val  0.9031653705865065
+i = 27
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_CPz
+score (f_classif)  0.029707845176557113
+p_val  0.8634715211920707
+i = 28
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_Cz
+score (f_classif)  0.1229021573973518
+p_val  0.7265783931410437
+i = 29
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_F4
+score (f_classif)  0.15450063233102312
+p_val  0.6950317012159153
+i = 30
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_FC1
+score (f_classif)  2.2139374095153928
+p_val  0.13963035060385373
+i = 31
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_FC4
+score (f_classif)  0.007420115882294902
+p_val  0.9315116506991318
+i = 32
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_O2
+score (f_classif)  0.008993995314767474
+p_val  0.9246170968906324
+i = 33
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_P1
+score (f_classif)  2.9537372473201517
+p_val  0.08849241312470318
+i = 34
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_P10
+score (f_classif)  0.8448453677952567
+p_val  0.3600258297936457
+i = 35
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_P2
+score (f_classif)  0.02288280967497695
+p_val  0.8800392918465723
+i = 36
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_P5
+score (f_classif)  1.279927677394679
+p_val  0.26037293219005214
+i = 37
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_P6
+score (f_classif)  0.3830485234440815
+p_val  0.5372558413958126
+i = 38
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_P7
+score (f_classif)  0.09982270265151283
+p_val  0.7526412021236157
+i = 39
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_P8
+score (f_classif)  0.5922340068847269
+p_val  0.443205955248396
+i = 40
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_P9
+score (f_classif)  1.026656820666615
+p_val  0.3131687273827017
+i = 41
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_PO4
+score (f_classif)  0.048988108374674634
+p_val  0.8252438327602143
+i = 42
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_PO7
+score (f_classif)  0.3592990442182714
+p_val  0.5501284143105534
+i = 43
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_PO8
+score (f_classif)  0.02963208381701832
+p_val  0.8636439905466792
+i = 44
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_Pz
+score (f_classif)  1.0733796060706349
+p_val  0.3024555347293313
+i = 45
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_TP7
+score (f_classif)  1.2004023393732732
+p_val  0.2756343044117599
+i = 46
+feature  Ratio_Relative_Power_Norm_Delta Over Beta1_TP8
+score (f_classif)  0.6061808668213781
+p_val  0.4379010296532744
+i = 47
+feature  Ratio_Relative_Power_Norm_Delta Over Beta2_CP1
+score (f_classif)  0.6198155004792892
+p_val  0.4328089032599005
+i = 48
+feature  Ratio_Relative_Power_Norm_Delta Over Beta2_CP2
+score (f_classif)  0.31787914676219997
+p_val  0.5740326570854241
+i = 49
+feature  Ratio_Relative_Power_Norm_Delta Over Beta2_CPz
+score (f_classif)  0.8871351782486535
+p_val  0.34831877249368026
+i = 50
+feature  Ratio_Relative_Power_Norm_Delta Over Beta2_O1
+score (f_classif)  0.6081476081924301
+p_val  0.4371608440466198
+i = 51
+feature  Ratio_Relative_Power_Norm_Delta Over Beta2_O2
+score (f_classif)  0.4750189379974068
+p_val  0.49213850578249296
+i = 52
+feature  Ratio_Relative_Power_Norm_Delta Over Beta2_P1
+score (f_classif)  0.5639791908800263
+p_val  0.4542649710689003
+i = 53
+feature  Ratio_Relative_Power_Norm_Delta Over Beta2_P10
+score (f_classif)  0.43224843954790676
+p_val  0.5122611126796156
+i = 54
+feature  Ratio_Relative_Power_Norm_Delta Over Beta2_P2
+score (f_classif)  0.5021484819098868
+p_val  0.48005666858997065
+i = 55
+feature  Ratio_Relative_Power_Norm_Delta Over Beta2_P8
+score (f_classif)  1.1314788525685266
+p_val  0.2897896414232276
+i = 56
+feature  Ratio_Relative_Power_Norm_Delta Over Beta2_PO8
+score (f_classif)  1.5270278515443005
+p_val  0.2191915643987699
+i = 57
+feature  Ratio_Relative_Power_Norm_Delta Over Beta2_Pz
+score (f_classif)  0.8094010013424463
+p_val  0.3702627037006776
+i = 58
+feature  Ratio_Relative_Power_Norm_Delta Over Beta2_TP8
+score (f_classif)  1.4830855721766198
+p_val  0.22589823408534432
+i = 59
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_AF3
+score (f_classif)  0.8469938140659374
+p_val  0.359418068212765
+i = 60
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_AF4
+score (f_classif)  0.923588547563315
+p_val  0.33864225843882423
+i = 61
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_AF7
+score (f_classif)  1.6256661365333906
+p_val  0.20499000416828564
+i = 62
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_AF8
+score (f_classif)  0.9556099486281194
+p_val  0.33044043250718824
+i = 63
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_AFz
+score (f_classif)  0.6950700613852162
+p_val  0.40625193500168844
+i = 64
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_F1
+score (f_classif)  0.8175254382402486
+p_val  0.3678806120099045
+i = 65
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_F2
+score (f_classif)  1.1049231636949615
+p_val  0.2954919749004726
+i = 66
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_F3
+score (f_classif)  1.1953123084620867
+p_val  0.2766491132880853
+i = 67
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_F4
+score (f_classif)  1.4247158982611896
+p_val  0.23519662670945152
+i = 68
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_F5
+score (f_classif)  1.624682952292298
+p_val  0.20512602411829697
+i = 69
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_F6
+score (f_classif)  1.0533302115300007
+p_val  0.30699297128607184
+i = 70
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_F8
+score (f_classif)  1.7711542906160922
+p_val  0.18599132634557294
+i = 71
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_FC1
+score (f_classif)  1.0333579561612785
+p_val  0.31160195461669055
+i = 72
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_FC2
+score (f_classif)  0.9760669296833715
+p_val  0.3253399387600261
+i = 73
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_FC3
+score (f_classif)  1.566316644338317
+p_val  0.21339769017744917
+i = 74
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_FC5
+score (f_classif)  1.0923326730823475
+p_val  0.29824623932471667
+i = 75
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_FCz
+score (f_classif)  1.9020377796087604
+p_val  0.17064809263263309
+i = 76
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_FT7
+score (f_classif)  1.649197397078836
+p_val  0.20176638985141465
+i = 77
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_FT8
+score (f_classif)  0.8729979203666373
+p_val  0.3521732272526804
+i = 78
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_Fp1
+score (f_classif)  1.378013343870327
+p_val  0.24297516267265662
+i = 79
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_Fz
+score (f_classif)  2.1574641634496596
+p_val  0.14473269107494963
+i = 80
+feature  Ratio_Relative_Power_Norm_Theta Over Alpha_T7
+score (f_classif)  0.4410448497139571
+p_val  0.508008246193987
+i = 81
+feature  Single_Relative_Power_Norm_Delta_C2
+score (f_classif)  0.6986990447565604
+p_val  0.40503320464972126
+i = 82
+feature  Single_Relative_Power_Norm_Delta_CP2
+score (f_classif)  0.4088437570092108
+p_val  0.523886315470352
+i = 83
+feature  Single_Relative_Power_Norm_Delta_CPz
+score (f_classif)  0.6224380587691671
+p_val  0.4318398689610349
+i = 84
+feature  Single_Relative_Power_Norm_Delta_Iz
+score (f_classif)  1.9459136587294712
+p_val  0.16583821275172744
+i = 85
+feature  Single_Relative_Power_Norm_Delta_O1
+score (f_classif)  1.5329109279904618
+p_val  0.21831203998505824
+i = 86
+feature  Single_Relative_Power_Norm_Delta_O2
+score (f_classif)  1.4820216585221673
+p_val  0.2260636719330829
+i = 87
+feature  Single_Relative_Power_Norm_Delta_Oz
+score (f_classif)  1.5769538543700767
+p_val  0.2118608280682034
+i = 88
+feature  Single_Relative_Power_Norm_Delta_P1
+score (f_classif)  2.1238443673783873
+p_val  0.14787103697604992
+i = 89
+feature  Single_Relative_Power_Norm_Delta_P10
+score (f_classif)  0.8476033838565341
+p_val  0.3592458898905937
+i = 90
+feature  Single_Relative_Power_Norm_Delta_P2
+score (f_classif)  2.13920843005073
+p_val  0.14642728927049917
+i = 91
+feature  Single_Relative_Power_Norm_Delta_P3
+score (f_classif)  1.7883458645160104
+p_val  0.1838865626223028
+i = 92
+feature  Single_Relative_Power_Norm_Delta_P5
+score (f_classif)  1.9751603053394657
+p_val  0.16271924812611502
+i = 93
+feature  Single_Relative_Power_Norm_Delta_P8
+score (f_classif)  1.1384691150322594
+p_val  0.28831222818949664
+i = 94
+feature  Single_Relative_Power_Norm_Delta_PO3
+score (f_classif)  1.4161023713301466
+p_val  0.23660802344338908
+i = 95
+feature  Single_Relative_Power_Norm_Delta_PO4
+score (f_classif)  0.09264275338872548
+p_val  0.7614190150121256
+i = 96
+feature  Single_Relative_Power_Norm_Delta_PO7
+score (f_classif)  0.8394048754083256
+p_val  0.3615712591731116
+i = 97
+feature  Single_Relative_Power_Norm_Delta_PO8
+score (f_classif)  0.11453953727483446
+p_val  0.7356790922172189
+i = 98
+feature  Single_Relative_Power_Norm_Delta_POz
+score (f_classif)  2.0420563386064146
+p_val  0.15583633461150623
+i = 99
+feature  Single_Relative_Power_Norm_Delta_Pz
+score (f_classif)  2.0942940351554493
+p_val  0.1506938550789249
+~~~~~~~~~~ RANDOMIZED SEARCH CV ~~~~~~~~~~
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Parameter choice num 0 / 99 - starting...
+0 / 499 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 1 1 1 1 0 0 0 0 1 0 1 1 1 1 0 0 0 1 0]
+scoring metric: precision, score: 0.5 
+>>>
+predicted correctly / predicted_in_total = 9 / 23
+<<<
+[CV 1/5] END classifier=RandomForestClassifier(random_state=42), classifier__n_jobs=-1;, score=0.500 total time=  31.8s
+1 / 499 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 0 0 0 1 1 1 1 0 1 1 1 1 0 1 1 1 1 1 1 0 1 0]
+scoring metric: precision, score: 0.75 
+>>>
+predicted correctly / predicted_in_total = 17 / 23
+<<<
+[CV 2/5] END classifier=RandomForestClassifier(random_state=42), classifier__n_jobs=-1;, score=0.750 total time=   0.6s
+2 / 499 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 0 1 0 0 1 1 1 1 1 0 1 1 1 1 0 1 1 1]
+scoring metric: precision, score: 0.47058823529411764 
+>>>
+predicted correctly / predicted_in_total = 8 / 22
+<<<
+[CV 3/5] END classifier=RandomForestClassifier(random_state=42), classifier__n_jobs=-1;, score=0.471 total time=   0.5s
+3 / 499 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [0 1 0 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+scoring metric: precision, score: 0.5263157894736842 
+>>>
+predicted correctly / predicted_in_total = 10 / 22
+<<<
+[CV 4/5] END classifier=RandomForestClassifier(random_state=42), classifier__n_jobs=-1;, score=0.526 total time=   0.6s
+4 / 499 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 1 1 0 0 1 0 1 1 1 1 1 1 1 1 0 0 0 0]
+scoring metric: precision, score: 0.6428571428571429 
+>>>
+predicted correctly / predicted_in_total = 12 / 22
+<<<
+New improvement!
+New best score is 0.5779522335249889
+In parameter choice num 0 / 99 avg score was: 0.5779522335249889.
+updating 2023-08-05 16_01_38_precision_100_RF_out_of_box\search_statistics.txt...
+statistics file updated successfully with new improvement in score message!
+Best parameter choice score by now is 0.5779522335249889
+In parameter choice num 0 / 99 avg score was: 0.5779522335249889.
+[CV 5/5] END classifier=RandomForestClassifier(random_state=42), classifier__n_jobs=-1;, score=0.643 total time=   0.6s
+-----------------------
+ New CV report 
+-----------------------
+* Classifier: 
+ RandomForestClassifier(n_jobs=-1, random_state=42)
+* User arguments: 
+ {'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'precision', 'both': True, 'cv': 5, 'n_iter': 100, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True, 'lite_mode': True, 'test_size': 0.15, 'stdout_to_file': True, 'significant': False, 'output_folder_label': '_precision_100_RF_out_of_box'}
+* Pipeline details: 
+ Pipeline(steps=[('scaler', StandardScaler()),
+                ('classifier',
+                 RandomForestClassifier(n_jobs=-1, random_state=42))])
+* Best Hyperparametes picked in cross validation: (cv's best score): 
+ {'classifier__n_jobs': -1, 'classifier': RandomForestClassifier(n_jobs=-1, random_state=42)}
+* Scorer_used: precision
+* CV Score (cv's best score for best hyperparametes): 0.578 +/- 0.104 (see score func in hyperparams)  
+
+* Confusion matrix: 
+ [[44  0]
+ [ 0 68]]
+[[TN FP
+[FN TP]]
+* Response rate:  0.6071428571428571
+* CV Precision:  1.0
+* CV Recall:  1.0
+* CV Accuracy:  1.0
+* CV F1:  1.0
+train CV report saved to   2023-08-05 16_01_38_precision_100_RF_out_of_box\tuning.csv
+predicted_probs:
+ [0.14 0.25 0.87 0.87 0.9  0.3  0.27 0.85 0.22 0.9  0.77 0.24 0.23 0.82
+ 0.84 0.89 0.28 0.39 0.87 0.87 0.32 0.09 0.84 0.23 0.94 0.78 0.17 0.93
+ 0.92 0.26 0.81 0.19 0.26 0.93 0.2  0.89 0.76 0.94 0.88 0.99 0.92 0.93
+ 0.85 0.2  0.89 0.76 0.19 0.26 0.31 0.93 0.77 0.23 0.83 0.79 0.93 0.79
+ 0.92 0.19 0.85 0.81 0.88 0.2  0.16 0.87 0.82 0.97 0.86 0.78 0.87 0.85
+ 0.86 0.88 0.35 0.24 0.83 0.86 0.23 0.8  0.84 0.93 0.76 0.84 0.25 0.87
+ 0.92 0.16 0.26 0.14 0.16 0.21 0.87 0.18 0.3  0.8  0.81 0.9  0.85 0.12
+ 0.82 0.14 0.88 0.22 0.17 0.77 0.32 0.91 0.32 0.17 0.18 0.86 0.87 0.96]
+-----------------------
+ End of CV report 
+----------------------- 
+
+
+
+* Confusion matrix: 
+ [[1 7]
+ [5 7]]
+[[TN FP
+[FN TP]]
+* CV Precision:  0.5
+* CV Recall:  0.5833333333333334
+* CV Accuracy:  0.4
+* CV F1:  0.5384615384615384
+predicted_probs:
+ [0.6  0.75 0.75 0.8  0.66 0.49 0.4  0.73 0.37 0.46 0.62 0.52 0.62 0.32
+ 0.9  0.71 0.64 0.59 0.6  0.44]
+-----------------------
+ End of CV report 
+----------------------- 
+
+
+
+<<<<<<<<<<<<<<<<<<<<< GSCVrunner.py finished successfuly<<<<<<<<<<<<<<<<<<<<<

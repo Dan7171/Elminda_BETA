@@ -1,0 +1,9 @@
+date,classifier,pipe_named_steps,best_params,selected_features,user_inputs,responders_rate,X_train_size(num of rows in cv input df),scorer_used,scorer_score_mean,scorer_score_std,accuracy,precision,recall,f1,confusion_matrix,param_grid_searched_at
+2023-08-06,"RandomForestClassifier(max_depth=75, max_features=2, min_samples_leaf=5,
+                       min_samples_split=7, n_jobs=-1, random_state=42)","{'scaler': StandardScaler(), 'pca': PCA(), 'classifier': RandomForestClassifier(max_depth=75, max_features=2, min_samples_leaf=5,
+                       min_samples_split=7, n_jobs=-1, random_state=42)}","{'pca__n_components': 71, 'classifier__n_jobs': -1, 'classifier__min_samples_split': 7, 'classifier__min_samples_leaf': 5, 'classifier__max_features': 2, 'classifier__max_depth': 75, 'classifier': RandomForestClassifier(max_depth=75, max_features=2, min_samples_leaf=5,
+                       min_samples_split=7, n_jobs=-1, random_state=42)}",,"{'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'roc-auc', 'both': True, 'cv': 5, 'n_iter': 10, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True, 'lite_mode': True, 'test_size': 0.15, 'stdout_to_file': False, 'significant': False, 'output_folder_label': '_roc-auc_10_RF_REPRODUCED', 'beta': 0.5}",0.6071428571428571,112,roc-auc,0.0,0.0,0.6071428571428571,0.6071428571428571,1.0,0.7555555555555554,"[[ 0 44]
+ [ 0 68]]
+[[TN FP
+[FN TP]]","{'pca__n_components': [71], 'classifier__n_jobs': [-1], 'classifier__max_depth': [75], 'classifier__max_features': [2, 10, 100, 'auto'], 'classifier__min_samples_split': [7], 'classifier__min_samples_leaf': [5], 'classifier': [RandomForestClassifier(max_depth=75, max_features=2, min_samples_leaf=5,
+                       min_samples_split=7, n_jobs=-1, random_state=42)]}"

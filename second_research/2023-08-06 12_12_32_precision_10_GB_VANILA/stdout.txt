@@ -1,0 +1,180 @@
+~~~~~~~~~~ RANDOMIZED SEARCH CV ~~~~~~~~~~
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Parameter choice num 0 / 9 - starting...
+0 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 0 1 1 0 0 0 1 0 1 0 1 1 1 1 0 0 1 1 0]
+scoring metric: precision, score: 0.5 
+>>>
+predicted correctly / predicted_in_total = 9 / 23
+<<<
+[CV 1/5] END classifier=GradientBoostingClassifier(random_state=42);, score=0.500 total time=  10.4s
+1 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 0 0 0 1 1 1 1 0 1 1 1 1 0 1 1 1 1 1 1 0 1 0]
+scoring metric: precision, score: 0.75 
+>>>
+predicted correctly / predicted_in_total = 17 / 23
+<<<
+[CV 2/5] END classifier=GradientBoostingClassifier(random_state=42);, score=0.750 total time=  10.5s
+2 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 0 1 0 0 1 1 1 1 1 0 1 1 1 1 0 1 1 1]
+scoring metric: precision, score: 0.47058823529411764 
+>>>
+predicted correctly / predicted_in_total = 8 / 22
+<<<
+[CV 3/5] END classifier=GradientBoostingClassifier(random_state=42);, score=0.471 total time=  24.5s
+3 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [0 0 0 1 1 1 1 0 1 0 1 1 1 1 1 0 1 0 1 1 1 1]
+scoring metric: precision, score: 0.5333333333333333 
+>>>
+predicted correctly / predicted_in_total = 10 / 22
+<<<
+[CV 4/5] END classifier=GradientBoostingClassifier(random_state=42);, score=0.533 total time=  11.5s
+4 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 0 1 0 0 0 0 1 1 1 0 1 1 1 1 0 0 0 0]
+scoring metric: precision, score: 0.5454545454545454 
+>>>
+predicted correctly / predicted_in_total = 9 / 22
+<<<
+New improvement!
+New best score is 0.5598752228163992
+In parameter choice num 0 / 9 avg score was: 0.5598752228163992.
+updating 2023-08-06 12_12_32_precision_10_GB_PCA_SMOTE_REPRODUCED\search_statistics.txt...
+statistics file updated successfully with new improvement in score message!
+Best parameter choice score by now is 0.5598752228163992
+In parameter choice num 0 / 9 avg score was: 0.5598752228163992.
+[CV 5/5] END classifier=GradientBoostingClassifier(random_state=42);, score=0.545 total time=  11.4s
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Parameter choice num 1 / 9 - starting...
+5 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 1 1 1 0 0 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 1]
+fold's predicted y
+ [1 1 1 1 0 1 1 0 0 0 1 0 1 0 1 1 1 1 0 0 1 1 0]
+scoring metric: precision, score: 0.5 
+>>>
+predicted correctly / predicted_in_total = 9 / 23
+<<<
+[CV 1/5] END classifier=GradientBoostingClassifier(random_state=42);, score=0.500 total time=  11.8s
+6 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 0 1 1 0 1 0 0 1 0 1 1 1 1 1 1 1 1 0 1 1]
+fold's predicted y
+ [1 0 0 0 1 1 1 1 0 1 1 1 1 0 1 1 1 1 1 1 0 1 0]
+scoring metric: precision, score: 0.75 
+>>>
+predicted correctly / predicted_in_total = 17 / 23
+<<<
+[CV 2/5] END classifier=GradientBoostingClassifier(random_state=42);, score=0.750 total time=  11.0s
+7 / 49 splits counted in cross val search 
+fold's true y 
+ [0 0 0 1 1 0 1 1 1 1 1 0 1 1 1 0 0 1 1 1 0 0]
+fold's predicted y
+ [1 1 1 1 0 1 0 0 1 1 1 1 1 0 1 1 1 1 0 1 1 1]
+scoring metric: precision, score: 0.47058823529411764 
+>>>
+predicted correctly / predicted_in_total = 8 / 22
+<<<
+[CV 3/5] END classifier=GradientBoostingClassifier(random_state=42);, score=0.471 total time=  11.8s
+8 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0]
+fold's predicted y
+ [0 0 0 1 1 1 1 0 1 0 1 1 1 1 1 0 1 0 1 1 1 1]
+scoring metric: precision, score: 0.5333333333333333 
+>>>
+predicted correctly / predicted_in_total = 10 / 22
+<<<
+[CV 4/5] END classifier=GradientBoostingClassifier(random_state=42);, score=0.533 total time=  24.6s
+9 / 49 splits counted in cross val search 
+fold's true y 
+ [1 1 1 1 1 1 1 0 1 0 1 0 0 1 0 1 0 0 0 1 1 1]
+fold's predicted y
+ [1 1 1 0 0 1 0 0 0 0 1 1 1 0 1 1 1 1 0 0 0 0]
+scoring metric: precision, score: 0.5454545454545454 
+>>>
+predicted correctly / predicted_in_total = 9 / 22
+<<<
+Best parameter choice score by now is 0.5598752228163992
+In parameter choice num 1 / 9 avg score was: 0.5598752228163992.
+[CV 5/5] END classifier=GradientBoostingClassifier(random_state=42);, score=0.545 total time=  12.8s
+-----------------------
+ New cv report 
+-----------------------
+* Classifier: 
+ GradientBoostingClassifier(random_state=42)
+* User arguments: 
+ {'rs': 42, 'X_version': 1, 'split_rows': 'normal', 'drop_out_correlated': False, 'age_under_50': False, 'debug': False, 'exhaustive_grid_search': False, 'classification_type': 'normal', 'scoring_method': 'precision', 'both': True, 'cv': 5, 'n_iter': 10, 'n_jobs': 1, 'use_gamma_columns': True, 'classification': True, 'lite_mode': True, 'test_size': 0.15, 'stdout_to_file': True, 'significant': False, 'output_folder_label': '_precision_10_GB_PCA_SMOTE_REPRODUCED', 'beta': 0.5}
+* Pipeline details: 
+ Pipeline(steps=[('scaler', StandardScaler()),
+                ('classifier', GradientBoostingClassifier(random_state=42))])
+* Best Hyperparametes picked in cross validation: (cv's best score): 
+ {'classifier': GradientBoostingClassifier(random_state=42)}
+* Scorer_used: precision
+* CV mean_test_score precision ( over 5 folds - (cv's best score for best hyperparametes): 0.560 +/- 0.099 (see score func in hyperparams)  
+
+* Confusion matrix: 
+ [[12 32]
+ [27 41]]
+[[TN FP
+[FN TP]]
+* Response rate:  0.6071428571428571
+* Precision:  0.5616438356164384
+* Recall:  0.6029411764705882
+* Accuracy:  0.4732142857142857
+* F1:  0.5815602836879432
+* F-Beta (beta = 0.5):  0.5694444444444444
+train CV report saved to   2023-08-06 12_12_32_precision_10_GB_PCA_SMOTE_REPRODUCED\tuning.csv
+-----------------------
+ End of cv report 
+----------------------- 
+
+
+
+* Confusion matrix: 
+ [[44  0]
+ [ 0 68]]
+[[TN FP
+[FN TP]]
+* Precision:  1.0
+* Recall:  1.0
+* Accuracy:  1.0
+* F1:  1.0
+* F-Beta (beta = 0.5):  1.0
+-----------------------
+ End of train report 
+----------------------- 
+
+
+
+* Confusion matrix: 
+ [[2 6]
+ [4 8]]
+[[TN FP
+[FN TP]]
+* Precision:  0.5714285714285714
+* Recall:  0.6666666666666666
+* Accuracy:  0.5
+* F1:  0.6153846153846153
+* F-Beta (beta = 0.5):  0.588235294117647
+-----------------------
+ End of test report 
+----------------------- 
+
+
+
+<<<<<<<<<<<<<<<<<<<<< GSCVrunner.py finished successfuly<<<<<<<<<<<<<<<<<<<<<

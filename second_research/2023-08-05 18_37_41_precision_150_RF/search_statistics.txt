@@ -1,0 +1,18 @@
+In parameter choice num 0 / 149 avg score was: 0.5558441558441558.
+
+In parameter choice num 5 / 149 avg score was: 0.5571046600458365.
+
+In parameter choice num 6 / 149 avg score was: 0.566955266955267.
+
+In parameter choice num 8 / 149 avg score was: 0.5859125188536953.
+
+In parameter choice num 11 / 149 avg score was: 0.5879564879564879.
+
+In parameter choice num 35 / 149 avg score was: 0.5940170940170939.
+
+In parameter choice num 38 / 149 avg score was: 0.6112665112665112.
+
+In parameter choice num 77 / 149 avg score was: 0.6141753671165435.
+
+In parameter choice num 92 / 149 avg score was: 0.6189372718784483.
+
