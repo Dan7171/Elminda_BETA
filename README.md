@@ -1,6 +1,7 @@
 # Investigating Advanced ML Algorithms for Determining the Efficacy of TMS Treatment in MDD Patients
 
 ![Project Logo](sagol_logo.jpg)
+
 ![Project Logo](FireFly_white_400.png)
 
  
@@ -21,16 +22,13 @@ Despite the increasing adoption of TMS in clinical settings, there is still a ne
 
 ## Project Overview
 
-The primary objective of this research project is to investigate the application of advanced Machine Learning (ML) algorithms for predicting the efficacy of TMS treatment in MDD patients. By leveraging  datasets containing demographic, clinical, and neuroimaging information, we aim to develop predictive models that can accurately assess the likelihood of positive treatment outcomes.
-## Disclaimer
-
-All code, files, and content within this repository were written and tested solely by me, Dan Evron. As the only project owner and primary contributor, I hold full rights and ownership of this project. However, it's important to note that some code contributions were made by Firefly-Neuroscience (Offir and Gil) under a specific agreement.
+The primary objective of this research project is to investigate the application of advanced Machine Learning (ML) algorithms for predicting the efficacy of TMS treatment in MDD patients. By leveraging  datasets containing demographic, clinical, and neuroimaging information, we aim to develop predictive models that can accurately assess the likelih
 
 ## Usage and Permissions
 
-1. Any usage, reproduction, or distribution of the code in this repository that falls under the terms of the agreement between the involved parties (e.g., Firefly-Neuroscience, TAU, and myself) is permitted and regulated by the terms of that agreement.
+1. Any usage, reproduction, or distribution of the code in this repository that falls under the terms of the agreement between the involved parties (e.g., Firefly-Neuroscience, TAU, and myself Dan Evron) is permitted and regulated by the terms of that agreement.
 
-2. For any usage not explicitly covered by the aforementioned agreement, you must seek comprehensive permission from me, Dan Evron, the sole project owner, before using any code or files from this repository.
+2. For any usage not explicitly covered by the aforementioned agreement, you must seek comprehensive permission from me, Dan Evron, the project owner, before using any code or files from this repository.
 
 3. Unauthorized usage or distribution of the code without my explicit permission or violating the agreed terms with other parties will be considered a violation of rights and subject to legal action if necessary.
 
