@@ -2,7 +2,7 @@
 
 ![Project Logo](sagol_logo.jpg)
 
-![image](https://github.com/Dan7171/Elminda_BETA/assets/103898362/8ce291cf-082a-4800-ac08-2bade30413fa)
+![image](https://github.com/Dan7171/Elminda_BETA/assets/103898362/349730bc-9e1d-4c6c-83b6-88b317f42719)
 
 ## Introduction
 
