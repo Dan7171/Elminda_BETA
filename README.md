@@ -1,6 +1,7 @@
 # Investigating Advanced ML Algorithms for Determining the Efficacy of TMS Treatment in MDD Patients
 
 ![Project Logo](sagol_logo.jpg)
+
 ![image](https://github.com/Dan7171/Elminda_BETA/assets/103898362/8ce291cf-082a-4800-ac08-2bade30413fa)
 
 ## Introduction
@@ -50,7 +51,7 @@ params for your pipeline and predict y values (responsive/non-responsive) on tes
 5. At second_research directory you'll see a new directory with current time. It contains graphs, results and important files describe your search train and prediction results
 
 Running in cloud (google colab):
-1. Upload the notebook: grid_search_runner.ipynb
+1. Upload the notebook grid_search_runner.ipynb to your colab user. It founds in this project's master branch.  
 2. run steps 2 and 3 from previous section
 
 
