@@ -50,7 +50,7 @@ params for your pipeline and predict y values (responsive/non-responsive) on tes
 5. At second_research directory you'll see a new directory with current time. It contains graphs, results and important files describe your search train and prediction results
 
 Running in cloud (google colab):
-1. Upload the notebook [Grid_Search_Refit_Predict.ipynb](..%2F..%2F..%2FDownloads%2FGrid_Search_Refit_Predict.ipynb)
+1. Upload the notebook: grid_search_runner.ipynb
 2. run steps 2 and 3 from previous section
 
 
