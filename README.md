@@ -1,10 +1,8 @@
 # Investigating Advanced ML Algorithms for Determining the Efficacy of TMS Treatment in MDD Patients
 
 ![Project Logo](sagol_logo.jpg)
+![image](https://github.com/Dan7171/Elminda_BETA/assets/103898362/8ce291cf-082a-4800-ac08-2bade30413fa)
 
-![Project Logo](FireFly_white_400.png)
-
- 
 ## Introduction
 
 This project is a brief description of your project and its purpose. It was developed as part of 0368352201 - Workshop on Computational Methods in Brain Research with the invaluable support and guidance from the following individuals:
