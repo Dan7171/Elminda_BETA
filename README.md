@@ -127,7 +127,8 @@ Right click and:
 ![img_25.png](img_25.png)
 
 #### Colab:
-![img_26.png](img_26.png)
+![1693581866792](image/README/1693581866792.png)
+
 
 #### This will trigger the cv grid search. The expected output is a directory with all relevant files and scores from cross validation.
 
