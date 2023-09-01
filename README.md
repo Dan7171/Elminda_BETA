@@ -32,27 +32,145 @@ The primary objective of this research project is to investigate the application
 3. Unauthorized usage or distribution of the code without my explicit permission or violating the agreed terms with other parties will be considered a violation of rights and subject to legal action if necessary.
 
 ## Getting Started
-Running locally:
-Requirements: 1. python 3.8 and above 2. All installed packages 
-Steps:
-1. Open your project in pycharm or similar (important to select the repository and not a subdir)
-2. Set your running configuration parameters for running in second_research\runArguments.py
-3. Go to second_research\GSCVrunner_new.py and under next two if statements set your wanted param_pipe_list of the 
-grid and pipe you want to run grid search on:
+### Requirements
+#### Option 1: Running locally
+    1. python 3.8 and above 
+    2. All installed libraries
+
+#### Option 2: Running in cloud (google colab)
+    1.Open your google drive and login to your account
+https://drive.google.com
+
+    2. click "New" -> "Folder upload"
+![img_16.png](img_16.png)
+![img_15.png](img_15.png)
+    
+    3. Select the project repostioty (upload may take a few minutes...)
+![img_17.png](img_17.png)
 
 
-if args['classification']: 
+    4.Open google colab: https://colab.research.google.com/?utm_source=scs-index
+    5. Upload the notebook from the repository called "grid_search_runner.ipynb" to your  
+    select "File"-> "Upload notebook"
+![img_14.png](img_14.png)
 
-    if args['lite_mode']:
+    4. Uplolad th "grid_search_runner.ipynb" from this repository. It should look like that:
+![img_22.png](img_22.png)
+    
+    5. Run first cell (press the play button)
+![img_19.png](img_19.png)
 
-       param_pipe_list = # set a list of param pipe list here
-4. run second_research\GSCVrunner_new.py. This will trigger the cv grid search, find best
-params for your pipeline and predict y values (responsive/non-responsive) on test set.
-5. At second_research directory you'll see a new directory with current time. It contains graphs, results and important files describe your search train and prediction results
+    6. Run second cell
+![img_20.png](img_20.png)
 
-Running in cloud (google colab):
-1. Upload the notebook grid_search_runner.ipynb to your colab user. It founds in this project's master branch.  
-2. run steps 2 and 3 from previous section
+    7. Run third cell
+![img_21.png](img_21.png)
+
+    8. Follow all "Running Steps" below. Treat Elminda_BETA as the folder which has just opened at your left
+![img_23.png](img_23.png)
+### Running steps:
+
+###  1. Set your configuration parameters for the run in Elminda_BETA\second_research\runArguments.py
+#### These parameters define the setup of your grid search run, and determine the conditions your search will run under. 
+##### Example:
+![img_29.png](img_29.png)
+![img_28.png](img_28.png)
+
+We have just defined in this example a GSCV run with next attributes:
+
+* 10 iterations (n_iter) of search
+* 5 folds (cv) per iteration
+* Both datasets (both:True) to use all data from both research centers (Israel and USA) in our analysis
+* precision (scoring_method) as out scorer for evaluating performance in cross validation 
+* all possible features in our initial dataset (X_version: 1) for cross validation (further processing steps during cv such as dimension reduction may still appear)
+* fixed random state for future replication of experiments (rs:42)
+* all subjects at once in the input dataframe for grid search (split_row: normal)
+* test size to be  15% of all data (test_size:0.15) 
+* directing our standard output to a file (stdout_to_file:True) - the file will be part of the output folder of this running session. 
+* I also added the option to tag output folder not just by timestamp, n_iter and soring_method (explained in next sections), but also adding free text as the suffix of folder name (free_text=_GB_TUNED). 
+* All other parameters should not be changed, they are there for code-legacy but it's recommended to consider removing them in next version updates (changes are at your own risk!)
+
+### 2.Select classifier and pipeline and 'tune' your hyper parameters
+####  Go to second_research\GSCVrunner_new.py and under next two if statements set your wanted param_pipe_list of the grid and pipe you want to run grid with.
+
+
+    if args['classification']:
+        if args['lite_mode']:
+            param_pipe_list = %PLACE HOLDER FOR YOUR INPUT%
+###### Example:
+
+![img_6.png](img_6.png)
+
+
+You should also configure the grid of parameters properly, so it will match your needs (depends on search space you are interested at) and on pipeline.
+###### Example:
+![img_7.png](img_7.png)
+![img_9.png](img_9.png)
+In this example we have arbitrarily selected Classifier #6 which is GradientBoosting.   
+
+![img_10.png](img_10.png)
+### 3.
+### If working locally -> run second_research\GSCVrunner_new.py
+
+### If working from google-colab -> press run the last cell
+
+
+#### Locally:
+
+![img_24.png](img_24.png)
+
+Right click and:
+
+![img_25.png](img_25.png)
+
+#### Colab:
+![img_26.png](img_26.png)
+
+#### This will trigger the cv grid search. The expected output is a directory with all relevant files and scores from cross validation.
+
+### 4.Check out your output directory
+#### At second_research directory you'll see a new directory with the label of current GSCV run with next format:
+%Current timestamp(YYYY-MM-DD-HH-MM-SS)%\_%Scorer chosen for cross validation (passed in config file)%\_%Number of iterations in CV%\_%Free text (optional)%.
+
+It contains graphs, results and important files describe your search train and prediction results.
+##### Examples:
+
+2023-08-07 11_14_25_precision_1_GB_TUNED
+
+This directory contains artifacts produced during grid search run, such as: main python file (GSCVrunner_new.py) and config file (runArguments.py) used (for replication in case of need), graphs, output log if required in config (stdout.txt),data copies,  and other statistics. 
+
+![img_1.png](img_1.png)
+
+
+Plots:
+
+![img_2.png](img_2.png)
+
+
+Output log of cross-validation grid search process:
+
+![img_3.png](img_3.png)
+
+In the output log, 3 "reports" will be printed at the end each of following steps: 1. grid search 2. re-training and predicting on train set (just for the record) 3. prediction on unseen test set (this step was added to the code just recently, so we can perform a (single) test for each reported pipeline in paper).
+The confusion matrix and ROC-AUC plots at the output folder are based on these reports, as well as the tuning.csv file in output dir which is based on the first report only. It saves results of cross validation.
+
+First report - cv:
+
+![img_11.png](img_11.png)
+
+
+First report- exported to tuning.csv:
+
+![img_13.png](img_13.png)
+
+Second and third reports - train and test:
+
+![img_12.png](img_12.png)
+
+Older search results are available for your convenience in experiment_results_archive directory.
+
+ 
+
 
 
 ## Contact

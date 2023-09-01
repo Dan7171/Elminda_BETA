@@ -34,7 +34,7 @@ args = {
 
     "cv": 5,  # param for cv
 
-    "n_iter": 1, # param for randomized cv - num of combinations to try in randomized search
+    "n_iter": 10, # param for randomized cv - num of combinations to try in randomized search
 
     "n_jobs":1,
     # num of threads each model is generating to speed up grid search. Changes can cause unexpected behaviour

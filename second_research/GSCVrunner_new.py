@@ -649,7 +649,6 @@ if args['classification']:
     }
     # GRADIENT BOOSTING + pca
     param6a = {
-
         'pca__n_components': [54], 'classifier__subsample': [0.8], 'classifier__n_estimators': [20],
          'classifier__min_samples_split': [82],
         'classifier__min_samples_leaf': [27],
@@ -973,21 +972,19 @@ for config in splits:
             print("p_val ", selector.pvalues_[i])
 
     if args['classification']:
-        if args['lite_mode']:  # just for debugging. using one small grid
+        if args['lite_mode']:
+            param_pipe_list = [[param6a, pipe_smote_6a]]  # Set your param and pipe for search here!
             # param_pipe_list = [[param2a,pipe_smote_2a]]
             # param_pipe_list = [[param3a, pipe_smote_3a]] # CHECKED
             # param_pipe_list = [[param5a, pipe_smote_5a]]
             # param_pipe_list = [[param5a, pipe5a]]
             # param_pipe_list = [[param5a,pipe_smote_5a]]
-
             # param_pipe_list = [[param5b,pipe_smote_5b]]
-
             # param_pipe_list = [[param5, pipe5]]
-
             # param_pipe_list = [[param7a,pipe7a]]
             # param_pipe_list = [[param7a,pipe_smote_7a]]
             # param_pipe_list = [[param_6_classifier_only,pipe6_classifier_only  ]]
-            param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
+            # param_pipe_list = [[param6a, pipe_smote_6a]] # CHECKED
             # param_pipe_list = [[param7a, pipe_smote_7a]] # CATBOOST
             # param_pipe_list = [[param8a, pipe_smote_8a]]  # CHECKED
             # param_pipe_list = [[param8, pipe8_classifier_only]]

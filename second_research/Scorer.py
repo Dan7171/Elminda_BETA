@@ -9,7 +9,7 @@ def scorer():
     return make_scorer(CV_Score)
 	
 	
-def print_precission_and_recall(search,cv)
+def print_precission_and_recall(search,cv):
 
     yp = []
     yt = []
