@@ -93,7 +93,7 @@ We have just defined in this example a GSCV run with next attributes:
 * I also added the option to tag output folder not just by timestamp, n_iter and soring_method (explained in next sections), but also adding free text as the suffix of folder name (free_text=_GB_TUNED). 
 * All other parameters should not be changed, they are there for code-legacy but it's recommended to consider removing them in next version updates (changes are at your own risk!)
 
-### 2.Select classifier and pipeline and 'tune' your hyper parameters
+### 2. Select classifier and pipeline and 'tune' your hyper parameters
 ####  Go to second_research\GSCVrunner_new.py and under next two if statements set your wanted param_pipe_list of the grid and pipe you want to run grid with.
 
 
@@ -149,7 +149,7 @@ Plots:
 
 ![img_2.png](img_2.png)
 
-
+![1693580621497](image/README/1693580621497.png)
 Output log of cross-validation grid search process:
 
 ![img_3.png](img_3.png)
