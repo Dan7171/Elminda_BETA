@@ -68,6 +68,9 @@ https://drive.google.com
 
     8. Follow all "Running Steps" below. Treat Elminda_BETA as the folder which has just opened at your left
 ![img_23.png](img_23.png)
+
+## Demonstration of using the system
+
 ### Running steps:
 
 ###  1. Set your configuration parameters for the run in Elminda_BETA\second_research\runArguments.py
